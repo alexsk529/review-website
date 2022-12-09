@@ -1,6 +1,8 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
+import session from 'express-session';
+import passport from 'passport';
 import db from './db.js';
 import authRouter from "./routes/auth.route.js";
 import reviewRouter from "./routes/review.route.js";
@@ -8,6 +10,7 @@ import commentRouter from "./routes/comment.route.js";
 import adminRouter from "./routes/admin.route.js";
 import authorRouter from "./routes/author.route.js";
 import workRouter from "./routes/work.route.js";
+import logger from 'morgan';
 
 dotenv.config();
 const app = express();
@@ -17,8 +20,15 @@ app.use(cors({
     origin: "*"
 }));
 
-app.use(express.json());
 
+app.use(express.json());
+app.use(session({
+    secret:'review-website',
+    resave: false,
+    saveUninitialized: false
+}));
+app.use(passport.authenticate('session'));
+app.use(logger('dev'));
 app.use('/api/auth', authRouter);
 app.use('/api/review', reviewRouter);
 app.use('/api/comment', commentRouter);

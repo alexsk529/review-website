@@ -1,10 +1,22 @@
 
 CREATE TABLE author (
     author_name VARCHAR(50) PRIMARY KEY,
-    likes SMALLINT,
-    created_at TIMESTAMP,
-    last_login TIMESTAMP
+    likes SMALLINT DEFAULT 0,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    last_login TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    provider VARCHAR NOT NULL,
+    subject VARCHAR NOT NULL,
+    UNIQUE (provider, subject)
 );
+
+--CREATE TABLE federated_credential (
+--    id SERIAL PRIMARY KEY,
+--    author_name VARCHAR(50),
+--    FOREIGN KEY (author_name) REFERENCES author (author_name),
+--    provider VARCHAR NOT NULL,
+--    subject VARCHAR NOT NULL,
+--    UNIQUE (subject)
+--);
 
 CREATE TABLE work (
     work_name VARCHAR(50) PRIMARY KEY,
