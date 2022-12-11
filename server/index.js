@@ -11,6 +11,8 @@ import adminRouter from "./routes/admin.route.js";
 import authorRouter from "./routes/author.route.js";
 import workRouter from "./routes/work.route.js";
 import logger from 'morgan';
+import cookieParser from 'cookie-parser';
+import bodyParser from 'body-parser';
 
 dotenv.config();
 const app = express();
@@ -19,7 +21,8 @@ const PORT = process.env.PORT || 5000;
 app.use(cors({
     origin: "*"
 }));
-
+app.use(cookieParser())
+app.use(bodyParser.urlencoded({extended: true}))
 
 app.use(express.json());
 app.use(session({

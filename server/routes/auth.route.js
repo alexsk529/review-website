@@ -1,9 +1,11 @@
 import {Router} from 'express';
 import passport from 'passport';
-import GoogleStrategyInstance from '../auth-strategy/google.js'
+import GoogleStrategy from '../auth-strategy/google.js'
+import VkStrategy from '../auth-strategy/vkontakte.js'
 
 const authRouter = Router();
-passport.use(GoogleStrategyInstance);
+passport.use(GoogleStrategy);
+passport.use(VkStrategy);
 passport.serializeUser((user,cb) => {
     process.nextTick(()=> {
         cb(null, {username: user.author_name, id: user.subject})
@@ -23,7 +25,7 @@ authRouter.get('/oauth2/redirect/google', passport.authenticate('google', { fail
     })
 
 authRouter.get('/vkontakte', passport.authenticate('vkontakte'));
-authRouter.get('/auth/vkontakte/callback',
+authRouter.get('/vkontakte/callback',
     passport.authenticate('vkontakte', {
         failureRedirect: '/',
         failureMessage: true
@@ -32,5 +34,13 @@ authRouter.get('/auth/vkontakte/callback',
         res.redirect('/~' + req.user.username)
     }
 )
+
+authRouter.post('/logout', (req, res, next) => {
+    req.logout((err)=> {
+        if (err) return next(err);
+        res.redirect('/')
+    })
+})
+
 
 export default authRouter

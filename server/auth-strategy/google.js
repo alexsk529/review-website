@@ -13,7 +13,6 @@ export default new GoogleStrategy({
     async function verify(issuer, profile, cb) {
     try {
         const cred = await db.query('SELECT * FROM author WHERE provider = $1 AND subject = $2', [issuer, profile.id])
-        console.log('CRED: ', cred.rows[0])
         if (!cred.rows[0]) {
             await db.query('INSERT INTO author(author_name, provider, subject) VALUES($1, $2, $3)',
                 [profile.displayName, issuer, profile.id], (err) => {
@@ -24,7 +23,6 @@ export default new GoogleStrategy({
                 subject: profile.id,
                 author_name: profile.displayName
             }
-            console.log('user is: ', user)
             return cb(null, user)
         } else {
             await db.query('UPDATE author SET last_login=CURRENT_TIMESTAMP where subject=$1', [cred.rows[0].subject], (err)=>{
