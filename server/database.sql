@@ -1,22 +1,14 @@
 
 CREATE TABLE author (
-    author_name VARCHAR(50) PRIMARY KEY,
+    author_name VARCHAR(50) NOT NULL,
+    email VARCHAR(50) PRIMARY KEY,
     likes SMALLINT DEFAULT 0,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    last_login TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    last_login TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     provider VARCHAR NOT NULL,
     subject VARCHAR NOT NULL,
     UNIQUE (provider, subject)
 );
-
---CREATE TABLE federated_credential (
---    id SERIAL PRIMARY KEY,
---    author_name VARCHAR(50),
---    FOREIGN KEY (author_name) REFERENCES author (author_name),
---    provider VARCHAR NOT NULL,
---    subject VARCHAR NOT NULL,
---    UNIQUE (subject)
---);
 
 CREATE TABLE work (
     work_name VARCHAR(50) PRIMARY KEY,
@@ -30,8 +22,8 @@ CREATE TABLE review (
     category VARCHAR(50),
     rate SMALLINT,
     created_at TIMESTAMP,
-    author_name VARCHAR(50),
-    FOREIGN KEY (author_name) REFERENCES author (author_name),
+    email VARCHAR(50),
+    FOREIGN KEY (email) REFERENCES author (email),
     work_name VARCHAR(50),
     FOREIGN KEY (work_name) REFERENCES work (work_name)
 );
@@ -52,8 +44,8 @@ CREATE TABLE comments (
     comment_id SERIAL PRIMARY KEY,
     created_at TIMESTAMP,
     comment VARCHAR,
-    author_name VARCHAR(30),
-    FOREIGN KEY (author_name) REFERENCES author (author_name),
+    email VARCHAR(30),
+    FOREIGN KEY (email) REFERENCES author (email),
     review_id SMALLINT,
     FOREIGN KEY (review_id) REFERENCES review (review_id)
 );

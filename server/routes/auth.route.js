@@ -18,20 +18,25 @@ passport.deserializeUser((user, cb) => {
     })
 })
 
-authRouter.get('/google', passport.authenticate('google'));
+authRouter.get('/google', passport.authenticate('google', {
+    scope: ['email', 'profile']
+}));
 authRouter.get('/oauth2/redirect/google', passport.authenticate('google', { failureRedirect: '/', failureMessage: true }),
     function (req, res) {
-        res.redirect(`/${req.user.subject}`)
+        res.redirect(`/${req.user.email}`)
     })
 
-authRouter.get('/vkontakte', passport.authenticate('vkontakte'));
+authRouter.get('/vkontakte', passport.authenticate('vkontakte', {
+    scope: ['email'],
+    profileFields: ['email']
+}));
 authRouter.get('/vkontakte/callback',
     passport.authenticate('vkontakte', {
         failureRedirect: '/',
         failureMessage: true
     }),
     function (req, res) {
-        res.redirect('/~' + req.user.username)
+        res.redirect(`/${req.user.email}`)
     }
 )
 

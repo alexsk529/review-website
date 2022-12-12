@@ -14,14 +14,14 @@ export default new GoogleStrategy({
     try {
         const cred = await db.query('SELECT * FROM author WHERE provider = $1 AND subject = $2', [issuer, profile.id])
         if (!cred.rows[0]) {
-            await db.query('INSERT INTO author(author_name, provider, subject) VALUES($1, $2, $3)',
-                [profile.displayName, issuer, profile.id], (err) => {
+            await db.query('INSERT INTO author(author_name, email, provider, subject) VALUES($1, $2, $3, $4)',
+                [profile.displayName, profile.emails[0].value, issuer, profile.id], (err) => {
                 if (err) return cb (err)
                 })
 
             const user = {
                 subject: profile.id,
-                author_name: profile.displayName
+                email: profile.emails[0].value
             }
             return cb(null, user)
         } else {
@@ -29,7 +29,7 @@ export default new GoogleStrategy({
                if (err) return cb(err)
             })
             try {
-                const user = await db.query('SELECT author_name, subject FROM author WHERE subject=$1', [cred.rows[0].subject])
+                const user = await db.query('SELECT email, subject FROM author WHERE subject=$1', [cred.rows[0].subject])
                 if (!user) return cb(null, false);
                 return cb(null, user.rows[0]);
             } catch (err) {
