@@ -5,7 +5,7 @@ import ReviewController from "../controllers/ReviewController.js";
 const reviewRouter = Router();
 
 reviewRouter.get('/', ReviewController.getReviews);
-reviewRouter.get('/bestrate')
+reviewRouter.get('/best-rate')
 reviewRouter.get('/:id');
 reviewRouter.post('/create');
 reviewRouter.patch('/:id');

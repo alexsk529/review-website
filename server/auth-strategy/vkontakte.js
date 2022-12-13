@@ -20,7 +20,8 @@ export default new VkStrategy({
 
                 const user = {
                     subject: profile.id,
-                    email: profile.emails[0].value
+                    email: profile.emails[0].value,
+                    role: 'user'
                 }
                 return cb(null, user)
             } else {
@@ -28,7 +29,7 @@ export default new VkStrategy({
                     if (err) return cb(err)
                 })
                 try {
-                    const user = await db.query('SELECT email, subject FROM author WHERE subject=$1', [cred.rows[0].subject])
+                    const user = await db.query('SELECT email, subject, role FROM author WHERE subject=$1', [cred.rows[0].subject])
                     if (!user) return cb(null, false);
                     return cb(null, user.rows[0]);
                 } catch (err) {

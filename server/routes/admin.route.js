@@ -1,5 +1,4 @@
 import {Router} from 'express';
-import {check} from "express-validator";
 import AdminController from "../controllers/AdminController.js";
 
 const adminRouter = Router();
