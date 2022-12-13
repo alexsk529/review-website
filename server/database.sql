@@ -7,7 +7,8 @@ CREATE TABLE author (
     last_login TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     provider VARCHAR NOT NULL,
     subject VARCHAR NOT NULL,
-    UNIQUE (provider, subject)
+    UNIQUE (provider, subject),
+    role VARCHAR(10) DEFAULT 'user'
 );
 
 CREATE TABLE work (
@@ -17,14 +18,14 @@ CREATE TABLE work (
 
 CREATE TABLE review (
     review_id SERIAL PRIMARY KEY,
-    review_title VARCHAR(50),
-    content VARCHAR,
-    category VARCHAR(50),
-    rate SMALLINT,
-    created_at TIMESTAMP,
+    review_title VARCHAR(50) NOT NULL,
+    content VARCHAR NOT NULL,
+    category VARCHAR(50) NOT NULL,
+    rate SMALLINT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     email VARCHAR(50),
     FOREIGN KEY (email) REFERENCES author (email),
-    work_name VARCHAR(50),
+    work_name VARCHAR(50) NOT NULL,
     FOREIGN KEY (work_name) REFERENCES work (work_name)
 );
 

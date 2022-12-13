@@ -8,7 +8,7 @@ passport.use(GoogleStrategy);
 passport.use(VkStrategy);
 passport.serializeUser((user,cb) => {
     process.nextTick(()=> {
-        cb(null, {username: user.author_name, id: user.subject})
+        cb(null, {email: user.email, id: user.subject, role: user.role})
     })
 })
 
@@ -23,7 +23,7 @@ authRouter.get('/google', passport.authenticate('google', {
 }));
 authRouter.get('/oauth2/redirect/google', passport.authenticate('google', { failureRedirect: '/', failureMessage: true }),
     function (req, res) {
-        res.redirect(`/${req.user.email}`)
+        res.redirect(`/`)
     })
 
 authRouter.get('/vkontakte', passport.authenticate('vkontakte', {
@@ -36,7 +36,7 @@ authRouter.get('/vkontakte/callback',
         failureMessage: true
     }),
     function (req, res) {
-        res.redirect(`/${req.user.email}`)
+        res.redirect(`/`)
     }
 )
 

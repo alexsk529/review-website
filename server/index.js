@@ -33,15 +33,28 @@ app.use(session({
 app.use(passport.authenticate('session'));
 app.use(logger('dev'));
 app.use('/api/auth', authRouter);
-app.use('/api/review', reviewRouter);
+app.use('/api/review', function(req, res, next) {
+    //console.log(req)
+    console.log(req.isAuthenticated());
+    
+    if (req.user) {
+        const user = req.user;
+        console.log({user});
+    }
+    const {socket, baseUrl, params, sessionID, login,
+        isAuthenticated, cookies, session, logOut, isUnauthenticated,
+        signedCookies, sessionStore, logIn, logout} = req;
+    //console.log({baseUrl, params, sessionID, login, isAuthenticated, cookies, session, logOut, isUnauthenticated, signedCookies, sessionStore, logIn, logout})
+    //console.log(Object.keys(req))
+    next()
+}, reviewRouter);
 app.use('/api/comment', commentRouter);
 app.use('/api/admin', adminRouter);
 app.use('/api/author', authorRouter);
 app.use('/api/work', workRouter);
 
 app.get('/', async (req,res) => {
-    const result = await db.query('SELECT * FROM tag')
-    res.send(result.rows[0])
+    res.send(req.user)
 })
 
 app.post('/author', async (req,res) => {
