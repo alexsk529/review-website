@@ -3,7 +3,6 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import session from 'express-session';
 import passport from 'passport';
-import db from './db.js';
 import logger from 'morgan';
 import SQliteStore from 'connect-sqlite3';
 
@@ -38,10 +37,14 @@ app.use(passport.authenticate('session'));
 app.use(logger('dev'));
 
 app.use('/', mainRouter);
+app.get('/123', (req, res) => {
+    //res.send(Object.keys(req));
+    res.send({session: req.session, id: req.sessionID, user: req.user})
+})
 app.use('/api/auth', authRouter);
 app.use('/api/review', mustAuthenticated, reviewRouter);
 app.use('/api/comment', commentRouter);
-app.use('/api/admin', mustBeAdmin, adminRouter);
+app.use('/api/admin',mustAuthenticated, mustBeAdmin, adminRouter);
 app.use('/api/author', mustAuthenticated, authorRouter);
 app.use('/api/work', mustAuthenticated, workRouter);
 

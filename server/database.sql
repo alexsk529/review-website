@@ -8,19 +8,20 @@ CREATE TABLE author (
     provider VARCHAR NOT NULL,
     subject VARCHAR NOT NULL,
     UNIQUE (provider, subject),
-    role VARCHAR(10) DEFAULT 'user'
+    role VARCHAR(10) DEFAULT 'user',
+    status VARCHAR(10) DEFAULT 'unblocked'
 );
 
 CREATE TABLE work (
     work_name VARCHAR(50) PRIMARY KEY,
-    work_rate SMALLINT
+    work_rate SMALLINT,
+    category VARCHAR(50) NOT NULL,
 );
 
 CREATE TABLE review (
     review_id SERIAL PRIMARY KEY,
     review_title VARCHAR(50) NOT NULL,
     content VARCHAR NOT NULL,
-    category VARCHAR(50) NOT NULL,
     rate SMALLINT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     email VARCHAR(50),
@@ -28,7 +29,7 @@ CREATE TABLE review (
     work_name VARCHAR(50) NOT NULL,
     FOREIGN KEY (work_name) REFERENCES work (work_name)
 );
-
+ 
 
 CREATE TABLE tag (
     tag_name VARCHAR(50) PRIMARY KEY

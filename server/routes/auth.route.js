@@ -29,7 +29,7 @@ authRouter.get('/oauth2/redirect/google', passport.authenticate('google', { fail
 authRouter.get('/vkontakte', passport.authenticate('vkontakte', {
     scope: ['email'],
     profileFields: ['email']
-}));
+})); 
 authRouter.get('/vkontakte/callback',
     passport.authenticate('vkontakte', {
         failureRedirect: '/',

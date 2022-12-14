@@ -1,17 +1,26 @@
 import {Router} from 'express';
-import {check} from "express-validator";
+import { cloudinary } from '../cloudinary.js'
+
 import ReviewController from "../controllers/ReviewController.js";
 
 const reviewRouter = Router();
 
-reviewRouter.get('/', ReviewController.getReviews);
-reviewRouter.get('/best-rate')
 reviewRouter.get('/:id');
-reviewRouter.post('/create');
+reviewRouter.get('/searchby/:tag', ReviewController.getReviews)
+reviewRouter.post('/create', ReviewController.createReview);
 reviewRouter.patch('/:id');
-reviewRouter.delete('/:id');
-reviewRouter.post('/image');
-reviewRouter.get('/image');
+reviewRouter.delete('/:id', ReviewController.deleteReview);
+reviewRouter.post('/image', async (req,res) => {
+    const {image} = req.body;
+    const result = await cloudinary.uploader.upload(image, {
+        folder: reviews,
+    })
+    res.status(201).send({message: 'The image has been uploaded', public_id: result.public_id});
+});
+reviewRouter.get('/image', (req, res)=> {
+    console.log(cloudinary.config());
+    res.end();
+});
 
 
 export default reviewRouter
