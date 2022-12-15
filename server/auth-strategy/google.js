@@ -1,5 +1,5 @@
 import GoogleStrategy from 'passport-google-oidc';
-import db from '../db.js';
+import {db} from '../db.js';
 import dotenv from 'dotenv';
 
 dotenv.config()

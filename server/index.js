@@ -17,6 +17,8 @@ import workRouter from "./routes/work.route.js";
 import mustAuthenticated from './middleware/authMiddleware.js';
 import mustBeAdmin from './middleware/adminMiddleware.js';
 
+import {db} from './db.js';
+
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -48,6 +50,17 @@ app.use('/api/admin',mustAuthenticated, mustBeAdmin, adminRouter);
 app.use('/api/author', mustAuthenticated, authorRouter);
 app.use('/api/work', mustAuthenticated, workRouter);
 
+// const {Author, Review, Comments, Work, ReviewTag, Tag} = models;
+
+async function sync() {
+    try {
+        await db.sync({alter:true})
+        console.log('All models have been synchronized');
+    } catch(e) {
+        console.log(e);
+    }
+}
+
 async function start() {
     try {
 
@@ -58,5 +71,7 @@ async function start() {
         console.log(e)
     }
 }
+
+sync();
 
 start();

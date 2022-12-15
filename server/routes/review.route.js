@@ -15,7 +15,11 @@ reviewRouter.post('/image', async (req,res) => {
     const result = await cloudinary.uploader.upload(image, {
         folder: reviews,
     })
-    res.status(201).send({message: 'The image has been uploaded', public_id: result.public_id});
+    res.status(201).send({
+        message: 'The image has been uploaded', 
+        public_id: result.public_id, 
+        url: result.secure_url
+    });
 });
 reviewRouter.get('/image', (req, res)=> {
     console.log(cloudinary.config());

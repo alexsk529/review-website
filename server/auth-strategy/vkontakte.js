@@ -1,5 +1,5 @@
 import {Strategy as VkStrategy} from 'passport-vkontakte';
-import db from '../db.js';
+import {db} from '../db.js';
 import dotenv from 'dotenv';
 
 dotenv.config()
