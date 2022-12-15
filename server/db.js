@@ -4,7 +4,8 @@ import {Sequelize, DataTypes} from 'sequelize';
 const db = new Sequelize('postgres://pyzrbyqn:800XiuGqvT5ifiXRGFHV4c9WN2VBwGDn@dumbo.db.elephantsql.com/pyzrbyqn', {
     dialect: 'postgres',
     define: {
-        freezeTableName: true
+        freezeTableName: true,
+        underscored: true
     }
 })
 
@@ -66,7 +67,8 @@ const Comments = db.define('comments', {
         defaultValue: db.literal('CURRENT_TIMESTAMP')
     },
     comment: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        allowNull: false
     },
     email: {
         type: DataTypes.STRING(50)
@@ -114,10 +116,16 @@ const Review = db.define('review', {
 const Work = db.define('work', {
     work_name: {
         type: DataTypes.STRING(50),
-        allowNull: false
+        allowNull: false,
+        primaryKey: true
     },
     work_rate: {
-        type: DataTypes.INTEGER
+        type: DataTypes.INTEGER,
+        defaultValue: 0
+    },
+    likes_num: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0
     },
     category: {
         type: DataTypes.STRING(30),
@@ -130,7 +138,8 @@ const Work = db.define('work', {
 const Tag = db.define('tag', {
     tag_name: {
         type: DataTypes.STRING(30),
-        allowNull: false  
+        allowNull: false,
+        primaryKey: true  
     }
 },{
     timestamps: false
@@ -138,16 +147,43 @@ const Tag = db.define('tag', {
 
 const ReviewTag = db.define('review_tags',{
     review_id: {
-        type: DataTypes.INTEGER
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+            model: Review,
+            key: 'review_id'
+        }
     },
     tag_name: {
         type: DataTypes.STRING(30),
-        allowNull: false
+        allowNull: false,
+        references: {
+            model: Tag,
+            key: 'tag_name'
+        }
     }
 }, {
     timestamps: false
 })
 
-export { db, Author, Review, Comments, Work, ReviewTag, Tag };
+Author.hasMany(Comments, {foreignKey: 'email'});
+Comments.belongsTo(Author, {foreignKey: 'email'});
+
+Author.hasMany(Review, {foreignKey: 'email'});
+Review.belongsTo(Author, {foreignKey: 'email'});
+
+Review.hasMany(Comments, {foreignKey: 'review_id'});
+Comments.belongsTo(Review, {foreignKey: 'review_id'});
+
+Work.hasMany(Review, {foreignKey: 'work_name'});
+Review.belongsTo(Work, {foreignKey: 'work_name'});
+
+Review.belongsToMany(Tag, {through: ReviewTag, foreignKey: 'review_id'});
+Tag.belongsToMany(Review, {through: ReviewTag, foreignKey: 'tag_name'});
+
+
+
+
+export { db, Author, Comments, Review, Work, Tag, ReviewTag };
 
 
