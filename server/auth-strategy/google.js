@@ -20,7 +20,8 @@ export default new GoogleStrategy({
                 },
                 raw: true
             })
-            if (!cred[0]) {
+            console.log('cred: ', cred);
+            if (!cred) {
                 try {
                     await Author.create({
                         author_name: profile.displayName,
@@ -48,16 +49,15 @@ export default new GoogleStrategy({
                         }
                     })
                     
-                    const user = Author.findAll({
-                        attributes: ['email', 'subject', 'role']
-                    }, {
+                    const user = await Author.findAll({
+                        attributes: ['email', 'subject', 'role'],
                         where: {
                             subject: cred[0].subject
                         },
                         raw: true
                     })
-                    console.log(user[0]);
-                    if (!user[0]) return cb(null, false);
+                    console.log('user from DB:', user);
+                    if (!user) return cb(null, false);
                     return cb(null, user[0]);
 
                 } catch(err) {

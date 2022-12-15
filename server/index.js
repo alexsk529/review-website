@@ -38,11 +38,11 @@ app.use(session({
 app.use(passport.authenticate('session'));
 app.use(logger('dev'));
 
-// app.use('/', mainRouter);
-app.use('/', (req, res) => {
-    console.log('user: ', req.user);
-    res.end()
-});
+app.use('/', mainRouter);
+// app.use('/', (req, res) => {
+//     console.log('user: ', req.user);
+//     res.end()
+// });
 app.get('/123', (req, res) => {
     //res.send(Object.keys(req));
     res.send({session: req.session, id: req.sessionID, user: req.user})

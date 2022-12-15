@@ -18,7 +18,7 @@ passport.deserializeUser((user, cb) => {
     })
 })
 
-authRouter.get('/google', (req,res,next)=> {console.log('sdfdsf'), next();}, passport.authenticate('google', {
+authRouter.get('/google', passport.authenticate('google', {
     scope: ['email', 'profile']
 }));
 authRouter.get('/oauth2/redirect/google', passport.authenticate('google', { failureRedirect: '/', failureMessage: true }),
