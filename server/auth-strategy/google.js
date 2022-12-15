@@ -11,7 +11,6 @@ export default new GoogleStrategy({
     scope: ['profile']
     },
     async function verify(issuer, profile, cb) {
-        console.log('start');
         try {
             const cred = await Author.findAll({
                 where: {
@@ -20,7 +19,6 @@ export default new GoogleStrategy({
                 },
                 raw: true
             })
-            console.log('cred: ', cred);
             if (!cred) {
                 try {
                     await Author.create({
@@ -56,7 +54,6 @@ export default new GoogleStrategy({
                         },
                         raw: true
                     })
-                    console.log('user from DB:', user);
                     if (!user) return cb(null, false);
                     return cb(null, user[0]);
 

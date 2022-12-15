@@ -1,5 +1,5 @@
 import {Strategy as VkStrategy} from 'passport-vkontakte';
-import {db} from '../db.js';
+import {db, Author} from '../db.js';
 import dotenv from 'dotenv';
 
 dotenv.config()
@@ -11,13 +11,25 @@ export default new VkStrategy({
 },
     async function verify(accessToken, refreshToken, params, profile, cb) {
         try {
-            const cred = await db.query('SELECT * FROM author WHERE provider = $1 AND subject = $2', [profile.provider, profile.id])
-            if (!cred.rows[0]) {
-                await db.query('INSERT INTO author(author_name, email, provider, subject) VALUES($1, $2, $3, $4)',
-                    [profile.displayName, profile.emails[0].value, profile.provider, profile.id], (err) => {
-                        if (err) return cb (err)
+            const cred = await Author.findAll({
+                where: {
+                    provider: profile.provider,
+                    subject: String(profile.id)
+                },
+                raw: true
+            })
+            console.log(cred[0]);
+            if (!cred) {
+                try{
+                    await Author.create({
+                        author_name: profile.displayName,
+                        email: profile.emails[0].value,
+                        provider: profile.provider,
+                        subject: profile.id
                     })
-
+                } catch(e) {
+                    return cb(e)
+                }
                 const user = {
                     subject: profile.id,
                     email: profile.emails[0].value,
@@ -25,15 +37,26 @@ export default new VkStrategy({
                 }
                 return cb(null, user)
             } else {
-                await db.query('UPDATE author SET last_login=CURRENT_TIMESTAMP where subject=$1', [cred.rows[0].subject], (err)=>{
-                    if (err) return cb(err)
-                })
-                try {
-                    const user = await db.query('SELECT email, subject, role FROM author WHERE subject=$1', [cred.rows[0].subject])
+                try{ 
+                    await Author.update({
+                        last_login: db.literal('CURRENT_TIMESTAMP')
+                    }, {
+                        where: {
+                            subject: cred[0].subject
+                        }
+                    })
+
+                    const user = await Author.findAll({
+                        attributes: ['email', 'subject', 'role'],
+                        where: {
+                            subject: cred[0].subject
+                        },
+                        raw: true
+                    })
                     if (!user) return cb(null, false);
-                    return cb(null, user.rows[0]);
-                } catch (err) {
-                    return cb(err)
+                    return cb(null, user[0])
+                } catch(e) {
+                    return cb(e)
                 }
             }
         } catch (err) {
