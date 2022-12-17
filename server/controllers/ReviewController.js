@@ -1,36 +1,39 @@
-import {db} from '../db.js';
+import {db, Author, ReviewTag, Review, Comments, Work, Tag} from '../db.js';
 
 class ReviewController {
-    async getReviews (req, res) {
+    async getReviews (req, res, { bestRate, tag }) {
         try {
-            let tag = '';
-            if (Object.keys(req.params).length !== 0) tag = req.params.tag.slice(1)
-            let url = '';
-            if (req.url.length > 1) url = req.url.slice(1);
-            const reviews = await db.query(`
-            SELECT 
-            r.review_title as title, r.content as content, r.rate as rate, r.created_at as date,
-            w.work_name as work, w.work_rate as work_rate, w.category as category, 
-            a.email as email, a.author_name as name, a.likes as likes, 
-            t.tag_name as tag
-            FROM review as r 
-            JOIN author as a 
-            ON r.email=a.email
-            JOIN work as w
-            ON w.work_name=r.work_name
-            JOIN review_tags as t
-            ON t.review_id=r.review_id
-            ${url='best-rate' ? 'ORDER BY r.rate DESC' : ''}
-            ${tag ? `WHERE tag=${tag}` : ''}            
-            ;`)
-            if (req.isAuthenticated) res.send({isAuthenticated: true, data: reviews.rows[0]});
-            else res.send({data: reviews.rows[0]});
-            //res.end()
+            const order = ['created_at', 'DESC'];
+            if (bestRate) order = ['rate', 'DESC'];
+            const reviews = await Review.findAll({
+                attributes: ['review_title', 'content', 'rate', 'created_at'],
+                include: [
+                    {
+                        model: Author,
+                        attributes: ['email', 'author_name', 'likes'],
+                        required: true
+                    },
+                    {
+                        model: Work,
+                        required: true
+                    },
+                    {
+                        model: Tag,
+                        where: {
+                            tag_name: tag
+                        }
+                    }
+                ],
+                order: order,
+                raw: true
+            })
+            const data = JSON.parse(JSON.stringify(reviews));
+            res.send({isAuthenticated: req.isAuthenticated(), data: reviews[0]})
         } catch (e) {
-            console.log(e.message)
+            console.log(e);
         }
     }
-
+    
     async createReview (req, res) {
         try {
             const {
@@ -42,35 +45,36 @@ class ReviewController {
                 tags
             } = req.body;
             const {email} = req.user;
-            await db.query(`
-            INSERT INTO work(work_name, category)
-            SELECT $1, $2
-            WHERE NOT EXISTS (SELECT 1 
-                              FROM work
-                              WHERE work_name=$1);
-            `, [work, category])
-            const id = await db.query(`
-                INSERT INTO review(work_name, email, review_title, content, rate)
-                VALUES($1, $2, $3, $4, $5)
-                RETURNING review_id
-            `, [work, email, title, content, rate])
-            tags.forEach(async (tag) => {
-                await db.query(`
-                INSERT INTO tag(tag_name)
-                SELECT $1
-                WHERE NOT EXISTS (SELECT 1
-                                  FROM tag
-                                  WHERE tag_name=$1)
-                `, [tag])
-                await db.query(`
-                INSERT INTO review_tags(review_id, tag_name)
-                SELECT $1, $2
-                WHERE NOT EXISTS (SELECT 1
-                                  FROM review_tags
-                                  WHERE review_id=$1 AND tag_name=$2)
-                `, [id, tag])
+            await Work.findOrCreate({
+                where: {
+                    work_name: work
+                },
+                defaults: {
+                    work_name: work,
+                category: category
+                }
             })
-            res.status(201).send({})
+            const review = Review.create({
+                work_name: work,
+                email: email,
+                review_title: title,
+                content: content,
+                rate: rate
+            },{
+                raw: true
+            })
+            const id = review.review_id;
+            tags.forEach(async (tag) => {
+                await Tag.findOrCreate({
+                    where: {
+                        tag_name: tag
+                    },
+                    defaults: {
+                        tag_name: tag
+                    }
+                })
+            })
+            res.status(201).send({message: 'The review has been created'})
         } catch (e) {
             console.log(e)
         }
@@ -78,9 +82,22 @@ class ReviewController {
 
     async deleteReview (req, res) {
         const id = req.params.id.slice(1);
-        await db.query('DELETE FROM review_tags WHERE review_id=$1', [id]);
-        await db.query('DELETE FROM comments WHERE review_id=$1', [id]);
-        await db.query('DELETE FROM review WHERE review_id=$1', [id])
+        await ReviewTag.destroy({
+            where: {
+                review_id: id
+            }
+        });
+        await Comments.destroy({
+            where: {
+                review_id: id
+            }
+        });
+        await Review.destroy({
+            where: {
+                review_id: id
+            }
+        });
+        res.status(204).send({message: 'The review has been deleted'})
     }
 
  }

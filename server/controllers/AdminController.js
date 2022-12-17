@@ -1,10 +1,10 @@
-import {db} from '../db.js';
+import {Author, Comments, db, Review, ReviewTag} from '../db.js';
 
 class AdminController {
     async getAuthors (req, res) {
         try {
-            const authors = await db.query('SELECT * FROM author')
-            res.send(authors.rows)
+            const authors = await Author.findAll({raw: true})
+            res.send(authors[0])
         } catch (e) {
             console.log(e)
         }
@@ -12,11 +12,11 @@ class AdminController {
 
     async deleteAuthor (req, res) {
         const email = req.params.id.slice(1);
-        const reviewId = db.query('SELECT review_id FROM review WHERE email=$1', [email]);
-        await db.query('DELETE FROM review_tags WHERE review_id=$1', [reviewId]);
-        await db.query('DELETE FROM comments WHERE review_id=$1', [reviewId]);
-        await db.query('DELETE FROM review WHERE review_id=$1', [reviewId]);
-        await db.query('DELETE FROM author WHERE email=$1', [email])
+        const reviewId = Review.findOne({where: {email: email}});
+        await ReviewTag.destroy({where: {review_id: reviewId}});
+        await Comments.destroy({where: {review_id: reviewId}});
+        await Review.destroy({where: {review_id: reviewId}});
+        await Author.destroy({where: {review_id: reviewId}});
         res.send('Author has been deleted')
     }
 }
