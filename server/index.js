@@ -26,7 +26,9 @@ const PORT = process.env.PORT || 5000;
 const sessionStore = SQliteStore(session);
 
 app.use(cors({
-    origin: "*"
+    origin: process.env.FRONT_END_URL || 'http://localhost:3000',
+    methods: 'GET, HEAD, PUT, PATCH, POST, DELETE',
+    credentials: true
 }));
 
 app.use(express.json());
@@ -40,8 +42,8 @@ app.use(passport.authenticate('session'));
 app.use(logger('dev'));
 
 app.use('/', mainRouter);
-app.get('/123', (req, res) => {
-    res.send({session: req.session, id: req.sessionID, user: req.user})
+app.get('/api/get-user',mustAuthenticated, (req, res) => {
+    res.send(req.isAuthenticated())
 })
 app.use('/api/auth', authRouter);
 app.use('/api/review', mustAuthenticated, reviewRouter);
@@ -53,7 +55,6 @@ app.use('/api/work', mustAuthenticated, workRouter);
 
 async function start() {
     try {
-
         app.listen(PORT, () => {
             console.log(`Server started on port ${PORT}`)
         })

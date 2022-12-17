@@ -10,10 +10,11 @@ import Menu from '@mui/material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import MoreIcon from '@mui/icons-material/MoreVert';
-import { Typography } from '@mui/material';
+import { Tooltip, Typography } from '@mui/material';
 
 import { Icon44LogoVk } from '@vkontakte/icons';
 import GoogleIcon from '@mui/icons-material/Google';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 import LangSwitch from './LangSwitch.jsx';
 import ThemeSwitch from './ThemeSwitch.jsx';
@@ -67,10 +68,25 @@ export default function Navbar() {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
-    const [isAuth, setIsAuth] = React.useState(false)
+    const [user, setUser] = React.useState();
+    React.useEffect(()=> {
+        axios.get('/api/get-user', {withCredentials: true})
+        .then(res => res.data && setUser(res.data))
+    }, [])
   
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+
+    const handlerAuthClick = (provider) => () => {
+       window.open(`${process.env.REACT_APP_URL || 'http://localhost:5000'}/api/auth/${provider}`,'_self')
+    }
+
+    const handlerLogOut = async () => {
+        await axios.post('/api/auth/logout', {withCredentials: true})
+            .then(res => {
+                console.log('response ', res);
+            })
+    }
 
     const handleProfileMenuOpen = (event) => {
         setAnchorEl(event.currentTarget);
@@ -150,8 +166,13 @@ export default function Navbar() {
                     </Search>
                     <Box sx={{ flexGrow: 1 }} />
                     {
-                        isAuth ?
+                        user ?
                         <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+                            <Tooltip title="LOG OUT">
+                                <IconButton onClick={handlerLogOut} color='error'>
+                                    <LogoutIcon/>
+                                </IconButton>
+                            </Tooltip>
                             <IconButton
                             size="large"
                             edge="end"
@@ -159,9 +180,9 @@ export default function Navbar() {
                             aria-controls={menuId}
                             aria-haspopup="true"
                             onClick={handleProfileMenuOpen}
-                            color="inherit"
+                            color="primary"
                             >
-                            <AccountCircle />
+                                <AccountCircle />
                             </IconButton>
                         </Box> :
                         <Box sx={{ display: { xs: 'none', md: 'flex', alignItems: 'center' } }}>
@@ -173,16 +194,22 @@ export default function Navbar() {
                             >
                                 LOG IN
                             </Typography>
-                            <IconButton color="error">
+                            <IconButton 
+                                color="error"
+                                onClick={handlerAuthClick('google')}
+                            >
                                 <GoogleIcon/>
                             </IconButton>
-                            <IconButton color='primary'>
+                            <IconButton 
+                                color='primary'
+                                onClick={handlerAuthClick('vkontakte')}
+                            >
                                 <Icon44LogoVk/>
                             </IconButton>
                         </Box>
                     }
                     {
-                        isAuth ?
+                        user ?
                         <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
                             <IconButton
                             size="large"
@@ -196,10 +223,16 @@ export default function Navbar() {
                             </IconButton>
                         </Box> :
                         <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
-                            <IconButton color="error">
+                            <IconButton 
+                                color="error"
+                                onClick={handlerAuthClick('google')}
+                            >
                                 <GoogleIcon/>
                             </IconButton>
-                            <IconButton color='primary'>
+                            <IconButton 
+                                color='primary'
+                                onClick={handlerAuthClick('vkontakte')}
+                            >
                                 <Icon44LogoVk/>
                             </IconButton>
                         </Box>

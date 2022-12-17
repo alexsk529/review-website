@@ -21,9 +21,9 @@ passport.deserializeUser((user, cb) => {
 authRouter.get('/google', passport.authenticate('google', {
     scope: ['email', 'profile']
 }));
-authRouter.get('/oauth2/redirect/google', passport.authenticate('google', { failureRedirect: '/', failureMessage: true }),
+authRouter.get('/oauth2/redirect/google', passport.authenticate('google', { failureRedirect: process.env.FRONT_END_URL || 'http://localhost:3000', failureMessage: true }),
     function (req, res) {
-        res.redirect(`/`)
+        res.redirect(process.env.FRONT_END_URL || 'http://localhost:3000')
     })
 
 authRouter.get('/vkontakte', passport.authenticate('vkontakte', {
@@ -32,19 +32,21 @@ authRouter.get('/vkontakte', passport.authenticate('vkontakte', {
 })); 
 authRouter.get('/vkontakte/callback',
     passport.authenticate('vkontakte', {
-        failureRedirect: '/',
+        failureRedirect: process.env.FRONT_END_URL || 'http://localhost:3000',
         failureMessage: true
     }),
     function (req, res) {
-        res.redirect(`/`)
+        res.redirect(process.env.FRONT_END_URL || 'http://localhost:3000')
     }
 )
 
-authRouter.post('/logout', (req, res, next) => {
-    req.logout((err)=> {
-        if (err) return next(err);
-        res.redirect('/')
-    })
+authRouter.post('/logout', async (req, res, next) => {
+    // req.logout(req.user, (err)=> {
+    //     if (err) return next(err);
+    // })
+    req.session.destroy((err) => {
+        res.clearCookie('connect.sid');
+    });
 })
 
 

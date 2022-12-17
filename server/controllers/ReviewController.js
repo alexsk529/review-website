@@ -1,7 +1,7 @@
 import {db, Author, ReviewTag, Review, Comments, Work, Tag} from '../db.js';
 
 class ReviewController {
-    async getReviews (req, res, { bestRate, tag }) {
+    async getReviews (req, res, { bestRate}) {
         try {
             const order = ['created_at', 'DESC'];
             if (bestRate) order = ['rate', 'DESC'];
@@ -19,12 +19,9 @@ class ReviewController {
                     },
                     {
                         model: Tag,
-                        where: {
-                            tag_name: tag
-                        }
                     }
                 ],
-                order: order,
+                order: [order],
                 raw: true
             })
             const data = JSON.parse(JSON.stringify(reviews));

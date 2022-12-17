@@ -10,7 +10,7 @@ export async function sync() {
 }
 
 export async function select() {
-    const authors = await  Author.findAll({
+    const authors = await Author.findAll({
         where: {
         email: 'alexskv529@gmail.com'
         },
