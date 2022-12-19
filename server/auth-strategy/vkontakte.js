@@ -18,7 +18,6 @@ export default new VkStrategy({
                 },
                 raw: true
             })
-            console.log(cred[0]);
             if (!cred) {
                 try{
                     await Author.create({
@@ -35,6 +34,7 @@ export default new VkStrategy({
                     email: profile.emails[0].value,
                     role: 'user'
                 }
+                console.log(user);
                 return cb(null, user)
             } else {
                 try{ 
@@ -54,6 +54,7 @@ export default new VkStrategy({
                         raw: true
                     })
                     if (!user) return cb(null, false);
+                    console.log(user[0]);
                     return cb(null, user[0])
                 } catch(e) {
                     return cb(e)

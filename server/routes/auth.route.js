@@ -10,14 +10,17 @@ dotenv.config();
 const redirectURL = process.env.FRONT_END_URL || 'http://localhost:3000';
 passport.use(GoogleStrategy);
 passport.use(VkStrategy);
+
 passport.serializeUser((user,cb) => {
     process.nextTick(()=> {
+        console.log('serialize');
         cb(null, {email: user.email, id: user.subject, role: user.role})
     })
 })
 
 passport.deserializeUser((user, cb) => {
     process.nextTick(()=> {
+        console.log('deserialize');
         return cb(null, user);
     })
 })
@@ -25,7 +28,11 @@ passport.deserializeUser((user, cb) => {
 authRouter.get('/google', passport.authenticate('google', {
     scope: ['email', 'profile']
 }));
-authRouter.get('/oauth2/redirect/google', passport.authenticate('google', { failureRedirect: redirectURL, failureMessage: true }),
+authRouter.get('/oauth2/redirect/google', 
+    passport.authenticate('google', { 
+        failureRedirect: redirectURL, 
+        failureMessage: true 
+    }),
     function (req, res) {
         res.redirect(redirectURL)
     })
@@ -50,7 +57,6 @@ authRouter.post('/logout', async (req, res, next) => {
     })
     res.clearCookie('connect.sid');
     res.send({isAuth: req.isAuthenticated(), user: req.user})
-    
 })
 
 

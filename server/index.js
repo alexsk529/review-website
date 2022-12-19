@@ -19,30 +19,42 @@ import mustBeAdmin from './middleware/adminMiddleware.js';
 
 import { sync, select } from './void.js'
 
-
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
+const redirectURL = process.env.FRONT_END_URL || 'http://localhost:3000';
+const domain = process.env.DOMAIN || '.localhost';
 const sessionStore = SQliteStore(session);
 
 app.use(cors({
-    origin:[process.env.FRONT_END_URL,'http://localhost:3000', 'http://localhost:5000'], 
+    origin:[redirectURL, 'http://localhost:5000'], 
     methods: 'GET, HEAD, PUT, PATCH, POST, DELETE',
     credentials: true
 }));
 
+app.use((req,res,next) => {
+    res.setHeader('Access-Control-Allow-Origin', redirectURL);
+    next();
+})
 app.use(express.json());
 app.use(session({
     secret:'review-website',
     resave: false,
     saveUninitialized: false,
-    store: new sessionStore({db: 'sessions.db', dir: './'})
+    store: new sessionStore({db: 'sessions.db', dir: './'}),
+    cookie: {
+        domain: domain,
+        sameSite: 'none',
+        secure: true
+    }
 }));
+app.use(passport.initialize())
 app.use(passport.authenticate('session'));
 app.use(logger('dev'));
 
 app.use('/', mainRouter);
 app.get('/api/get-user', (req, res) => {
+    console.log('inside callback:  ', req.user);
     res.send(req.user)
 })
 app.use('/api/auth', authRouter);
@@ -57,7 +69,6 @@ async function start() {
     try {
         app.listen(PORT, () => {
             console.log(`Server started on port ${PORT}`)
-            console.log('env:', process.env);
         })
     } catch (e) {
         console.log(e)
