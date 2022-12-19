@@ -57,6 +57,7 @@ async function start() {
     try {
         app.listen(PORT, () => {
             console.log(`Server started on port ${PORT}`)
+            console.log('env:', process.env);
         })
     } catch (e) {
         console.log(e)

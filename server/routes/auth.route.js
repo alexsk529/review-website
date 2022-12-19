@@ -1,9 +1,13 @@
 import {Router} from 'express';
 import passport from 'passport';
+import dotenv from 'dotenv';
+
 import GoogleStrategy from '../auth-strategy/google.js'
 import VkStrategy from '../auth-strategy/vkontakte.js'
 
 const authRouter = Router();
+dotenv.config();
+const redirectURL = process.env.FRONT_END_URL || 'http://localhost:3000';
 passport.use(GoogleStrategy);
 passport.use(VkStrategy);
 passport.serializeUser((user,cb) => {
@@ -21,9 +25,9 @@ passport.deserializeUser((user, cb) => {
 authRouter.get('/google', passport.authenticate('google', {
     scope: ['email', 'profile']
 }));
-authRouter.get('/oauth2/redirect/google', passport.authenticate('google', { failureRedirect: process.env.FRONT_END_URL || 'http://localhost:3000', failureMessage: true }),
+authRouter.get('/oauth2/redirect/google', passport.authenticate('google', { failureRedirect: redirectURL, failureMessage: true }),
     function (req, res) {
-        res.redirect(process.env.FRONT_END_URL || 'http://localhost:3000')
+        res.redirect(redirectURL)
     })
 
 authRouter.get('/vkontakte', passport.authenticate('vkontakte', {
@@ -32,11 +36,11 @@ authRouter.get('/vkontakte', passport.authenticate('vkontakte', {
 })); 
 authRouter.get('/vkontakte/callback',
     passport.authenticate('vkontakte', {
-        failureRedirect: process.env.FRONT_END_URL || 'http://localhost:3000',
+        failureRedirect: redirectURL,
         failureMessage: true
     }),
     function (req, res) {
-        res.redirect(process.env.FRONT_END_URL || 'http://localhost:3000')
+        res.redirect(redirectURL)
     }
 )
 

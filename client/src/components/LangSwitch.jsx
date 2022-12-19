@@ -16,6 +16,7 @@ export default function LangSwitch() {
       exclusive
       onChange={handleChange}
       aria-label="Platform"
+      sx = {{mr: 4}}
     >
       <ToggleButton value="RU">RU</ToggleButton>
       <ToggleButton value="EN">EN</ToggleButton>

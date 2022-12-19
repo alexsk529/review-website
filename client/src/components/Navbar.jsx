@@ -160,7 +160,6 @@ export default function Navbar() {
             <AppBar position="static" color="">
                 <Toolbar>
                     <LangSwitch/>
-                    <Box sx={{ flexGrow: 0.1 }} />
                     <ThemeSwitch/>
                     <Search>
                         <SearchIconWrapper>
