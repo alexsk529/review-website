@@ -41,12 +41,12 @@ authRouter.get('/vkontakte/callback',
 )
 
 authRouter.post('/logout', async (req, res, next) => {
-    // req.logout(req.user, (err)=> {
-    //     if (err) return next(err);
-    // })
-    req.session.destroy((err) => {
-        res.clearCookie('connect.sid');
-    });
+    req.logout(req.user, (err)=> {
+        if (err) return next(err);
+    })
+    res.clearCookie('connect.sid');
+    res.send({isAuth: req.isAuthenticated(), user: req.user})
+    
 })
 
 

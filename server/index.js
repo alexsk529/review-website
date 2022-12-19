@@ -26,7 +26,7 @@ const PORT = process.env.PORT || 5000;
 const sessionStore = SQliteStore(session);
 
 app.use(cors({
-    origin: process.env.FRONT_END_URL || 'http://localhost:3000',
+    origin:[process.env.FRONT_END_URL,'http://localhost:3000', 'http://localhost:5000'], 
     methods: 'GET, HEAD, PUT, PATCH, POST, DELETE',
     credentials: true
 }));
@@ -42,8 +42,8 @@ app.use(passport.authenticate('session'));
 app.use(logger('dev'));
 
 app.use('/', mainRouter);
-app.get('/api/get-user',mustAuthenticated, (req, res) => {
-    res.send(req.isAuthenticated())
+app.get('/api/get-user', (req, res) => {
+    res.send(req.user)
 })
 app.use('/api/auth', authRouter);
 app.use('/api/review', mustAuthenticated, reviewRouter);

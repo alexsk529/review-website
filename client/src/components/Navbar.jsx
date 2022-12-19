@@ -24,9 +24,9 @@ import axios from '../axios.js';
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
-    backgroundColor: alpha(theme.palette.common.white, 0.15),
+    backgroundColor: alpha(theme.palette.common.black, 0.15),
     '&:hover': {
-      backgroundColor: alpha(theme.palette.common.white, 0.25),
+      backgroundColor: alpha(theme.palette.common.black, 0.25),
     },
     marginRight: theme.spacing(2),
     marginLeft: 0,
@@ -68,43 +68,28 @@ export default function Navbar() {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
-    const [user, setUser] = React.useState();
-    React.useEffect(()=> {
-        axios.get('/api/get-user', {withCredentials: true})
-        .then(res => res.data && setUser(res.data))
-    }, [])
-  
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
-    const handlerAuthClick = (provider) => () => {
-       window.open(`${process.env.REACT_APP_URL || 'http://localhost:5000'}/api/auth/${provider}`,'_self')
-    }
-
-    const handlerLogOut = async () => {
-        await axios.post('/api/auth/logout', {withCredentials: true})
-            .then(res => {
-                console.log('response ', res);
-            })
-    }
-
+    
     const handleProfileMenuOpen = (event) => {
         setAnchorEl(event.currentTarget);
     };
-
+    
     const handleMobileMenuClose = () => {
         setMobileMoreAnchorEl(null);
     };
-
-    const handleMenuClose = () => {
+    
+    const handleMenuClose = (post) => {
         setAnchorEl(null);
         handleMobileMenuClose();
+        if (post) handlerLogOut();
     };
-
+    
     const handleMobileMenuOpen = (event) => {
         setMobileMoreAnchorEl(event.currentTarget);
     };
-
+    
     const menuId = 'primary-search-account-menu';
     const renderMenu = (
         <Menu
@@ -126,34 +111,56 @@ export default function Navbar() {
             <MenuItem onClick={handleMenuClose}>Личный кабинет</MenuItem>
         </Menu>
     );
-
+    
     const mobileMenuId = 'primary-search-account-menu-mobile';
     const renderMobileMenu = (
-      <Menu
+        <Menu
         anchorEl={mobileMoreAnchorEl}
         anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'right',
+            vertical: 'top',
+            horizontal: 'right',
         }}
         id={mobileMenuId}
         keepMounted
         transformOrigin={{
-          vertical: 'top',
-          horizontal: 'right',
+            vertical: 'top',
+            horizontal: 'right',
         }}
         open={isMobileMenuOpen}
         onClose={handleMobileMenuClose}
-      >
+        >
             <MenuItem onClick={handleMenuClose}>Профиль</MenuItem>
             <MenuItem onClick={handleMenuClose}>Личный кабинет</MenuItem>
+            <MenuItem onClick={()=> handleMenuClose(true)}>Выйти</MenuItem>
       </Menu>
     );    
+
+    const [user, setUser] = React.useState();
+    React.useEffect(()=> {
+        axios.get('/api/get-user', {withCredentials: true})
+        .then(res => res.data && setUser(res.data))
+        .catch(e => console.log(e))
+    }, [])
+    
+    const handlerAuthClick = (provider) => () => {
+       window.open(`${process.env.REACT_APP_URL || 'http://localhost:5000'}/api/auth/${provider}`,'_self')
+    }
+
+    const handlerLogOut = async () => {
+        await axios.post('/api/auth/logout',{}, {withCredentials: true})
+            .then(res => {
+                console.log('response ', res);
+                setUser(res.data.user)
+            })
+            .catch(e=> console.log(e))
+    }
 
     return (
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="static" color="">
                 <Toolbar>
                     <LangSwitch/>
+                    <Box sx={{ flexGrow: 0.1 }} />
                     <ThemeSwitch/>
                     <Search>
                         <SearchIconWrapper>
@@ -187,10 +194,11 @@ export default function Navbar() {
                         </Box> :
                         <Box sx={{ display: { xs: 'none', md: 'flex', alignItems: 'center' } }}>
                             <Typography
-                                variant="h6"
+                                variant="body1"
                                 noWrap
                                 component="div"
-                                sx={{ display: { xs: 'none', sm: 'block' } }}
+                                sx={{ display: { xs: 'none', sm: 'block' }, mr: 1 }}
+                                color='primary'
                             >
                                 LOG IN
                             </Typography>
