@@ -2,6 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import session from 'express-session';
+import cookieParser from 'cookie-parser';
 import passport from 'passport';
 import logger from 'morgan';
 import SQliteStore from 'connect-sqlite3';
@@ -23,8 +24,10 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 const redirectURL = process.env.FRONT_END_URL || 'http://localhost:3000';
-const domain = process.env.DOMAIN || '.localhost';
+const domain = process.env.DOMAIN;
 const sessionStore = SQliteStore(session);
+
+app.set('trust proxy', 1)
 
 app.use(cors({
     origin:[redirectURL, 'http://localhost:5000'], 
@@ -36,25 +39,31 @@ app.use((req,res,next) => {
     res.setHeader('Access-Control-Allow-Origin', redirectURL);
     next();
 })
+
+let cookiesConfigs = {}
 app.use(express.json());
+if (domain) cookiesConfigs = {
+        sameSite: 'none', 
+        secure: true,
+        httpOnly: true
+    }
+
+app.use(cookieParser())    
 app.use(session({
     secret:'review-website',
     resave: false,
     saveUninitialized: false,
     store: new sessionStore({db: 'sessions.db', dir: './'}),
-    cookie: {
-        domain: domain,
-        sameSite: 'none',
-        secure: true
-    }
+    cookie: cookiesConfigs
 }));
+
 app.use(passport.initialize())
 app.use(passport.authenticate('session'));
 app.use(logger('dev'));
 
 app.use('/', mainRouter);
-app.get('/api/get-user', (req, res) => {
-    console.log('inside callback:  ', req.user);
+app.get('/api/get-user', mustAuthenticated, (req, res) => {
+    console.log('req.user:  ', req.user);
     res.send(req.user)
 })
 app.use('/api/auth', authRouter);
@@ -64,11 +73,11 @@ app.use('/api/admin',mustAuthenticated, mustBeAdmin, adminRouter);
 app.use('/api/author', mustAuthenticated, authorRouter);
 app.use('/api/work', mustAuthenticated, workRouter);
 
-
 async function start() {
     try {
         app.listen(PORT, () => {
             console.log(`Server started on port ${PORT}`)
+            console.log('redirectURL: ', redirectURL);
         })
     } catch (e) {
         console.log(e)

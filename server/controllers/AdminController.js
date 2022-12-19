@@ -4,7 +4,7 @@ class AdminController {
     async getAuthors (req, res) {
         try {
             const authors = await Author.findAll({raw: true})
-            res.send(authors[0])
+            res.send(authors)
         } catch (e) {
             console.log(e)
         }

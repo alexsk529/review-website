@@ -1,12 +1,10 @@
 import {Router} from 'express';
 import passport from 'passport';
-import dotenv from 'dotenv';
 
 import GoogleStrategy from '../auth-strategy/google.js'
 import VkStrategy from '../auth-strategy/vkontakte.js'
 
 const authRouter = Router();
-dotenv.config();
 const redirectURL = process.env.FRONT_END_URL || 'http://localhost:3000';
 passport.use(GoogleStrategy);
 passport.use(VkStrategy);
@@ -31,10 +29,12 @@ authRouter.get('/google', passport.authenticate('google', {
 authRouter.get('/oauth2/redirect/google', 
     passport.authenticate('google', { 
         failureRedirect: redirectURL, 
-        failureMessage: true 
+        failureMessage: true,
+        successRedirect: redirectURL 
     }),
     function (req, res) {
-        res.redirect(redirectURL)
+        console.log('Uset: ', req.user);
+        res.send('Thank you for signing in')
     })
 
 authRouter.get('/vkontakte', passport.authenticate('vkontakte', {
@@ -44,10 +44,12 @@ authRouter.get('/vkontakte', passport.authenticate('vkontakte', {
 authRouter.get('/vkontakte/callback',
     passport.authenticate('vkontakte', {
         failureRedirect: redirectURL,
-        failureMessage: true
+        failureMessage: true,
+        successRedirect: redirectURL 
     }),
     function (req, res) {
-        res.redirect(redirectURL)
+        console.log('Uset: ', req.user);
+        res.send('Thank you for signing in')
     }
 )
 

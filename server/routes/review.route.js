@@ -5,7 +5,7 @@ import ReviewController from "../controllers/ReviewController.js";
 
 const reviewRouter = Router();
 
-reviewRouter.get('/:id');
+reviewRouter.get('/get/:id');
 reviewRouter.get('/searchby/:tag', ReviewController.getReviews)
 reviewRouter.post('/create', ReviewController.createReview);
 reviewRouter.patch('/:id');
