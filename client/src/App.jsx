@@ -1,44 +1,32 @@
 import './App.css';
-import Navbar from './components/Navbar.jsx';
+import MainPage from './pages/MainPage.jsx';
 import { NavContext } from './context/NavContext.js';
 import { useNav } from './hooks/nav.hook.js';
 
 function App() {
 
   const {
-    mobileMoreAnchorEl,
-    isMobileMenuOpen,
-    handleMobileMenuOpen,
-    handleMobileMenuClose,
-    anchorEl,
-    isMenuOpen,
-    handleMenuOpen,
-    handleMenuClose,
+    menuMob,
+    menuDesk,
     handleLogOut,
-    handleProfile,
-    handleYourSpace,
     user,
-    setUser
+    setUser,
+    popupProfile,
+    handleYourSpace
   } = useNav();
 
   return (
     <div className="App">
       <NavContext.Provider value={{
-        mobileMoreAnchorEl,
-        isMobileMenuOpen,
-        handleMobileMenuOpen,
-        handleMobileMenuClose,
-        anchorEl,
-        isMenuOpen,
-        handleMenuOpen,
-        handleMenuClose,
+        menuMob,
+        menuDesk,
         handleLogOut,
-        handleProfile,
-        handleYourSpace,
         user,
-        setUser
+        setUser,
+        popupProfile,
+        handleYourSpace
       }}>
-        <Navbar />
+        <MainPage />
       </NavContext.Provider>
     </div>
   );

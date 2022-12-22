@@ -14,8 +14,7 @@ export default new GoogleStrategy({
         try {
             const cred = await Author.findAll({
                 where: {
-                    provider: issuer,
-                    subject: profile.id
+                    email: profile.emails[0].value,
                 },
                 raw: true
             })

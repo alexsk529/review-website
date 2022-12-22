@@ -13,8 +13,7 @@ export default new VkStrategy({
         try {
             const cred = await Author.findAll({
                 where: {
-                    provider: profile.provider,
-                    subject: String(profile.id)
+                    email: profile.emails[0].value
                 },
                 raw: true
             })

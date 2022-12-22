@@ -12,15 +12,16 @@ import { useTranslation } from 'react-i18next';
 
 const MenuMobile = () => {
     const mobileMenuId = 'primary-search-account-menu-mobile';
+    const {menuMob, handleLogOut} = React.useContext(NavContext);
     const {
         handleMobileMenuOpen,
         mobileMoreAnchorEl,
         isMobileMenuOpen,
-        handleMobileMenuClose,
-        handleProfile,
-        handleYourSpace,
-        handleLogOut
-    } = React.useContext(NavContext)
+        handleMobileMenuClose
+    } = menuMob
+
+    const {popupProfile} = React.useContext(NavContext);
+    const { handlePopupOpen } = popupProfile
 
     const { t } = useTranslation();
 
@@ -51,18 +52,21 @@ const MenuMobile = () => {
                 open={isMobileMenuOpen}
                 onClose={handleMobileMenuClose}
             >
-                <MenuItem onClick={handleProfile}>
-                    <AssignmentIndIcon sx={{ mr: 1, height: 34, width: 34 }} />{t('profile')}
+                <MenuItem onClick={()=> {
+                    handlePopupOpen();
+                    handleMobileMenuClose();
+                }}>
+                    <AssignmentIndIcon color="error" sx={{ mr: 1, height: 34, width: 34 }} />{t('navbar.profile')}
                 </MenuItem>
-                <MenuItem onClick={handleYourSpace}>
-                    <ModeIcon sx={{ mr: 1, height: 34, width: 34 }} />{t('account')}
+                <MenuItem >
+                    <ModeIcon color="primary"  sx={{ mr: 1, height: 34, width: 34 }} />{t('navbar.account')}
                 </MenuItem>
                 <Divider />
                 <MenuItem onClick={handleLogOut}>
-                    <ListItemIcon>
-                        <Logout fontSize='small' />
+                    <ListItemIcon >
+                        <Logout color="primary"  />
                     </ListItemIcon>
-                    {t('logout')}
+                    {t('navbar.logout')}
                 </MenuItem>
             </Menu>
         </Box>

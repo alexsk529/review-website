@@ -10,6 +10,13 @@ export const useNav = () => {
     const handleMobileMenuClose = () => {
         setMobileMoreAnchorEl(null);
     };
+    const menuMob = {
+        mobileMoreAnchorEl,
+        setMobileMoreAnchorEl,
+        isMobileMenuOpen,
+        handleMobileMenuOpen,
+        handleMobileMenuClose
+    }
 
     const [anchorEl, setAnchorEl] = React.useState(null);
     const isMenuOpen = Boolean(anchorEl);
@@ -19,6 +26,13 @@ export const useNav = () => {
     const handleMenuClose = () => {
         setAnchorEl(null);
     };
+    const menuDesk = {
+        anchorEl,
+        setAnchorEl,
+        isMenuOpen,
+        handleMenuOpen,
+        handleMenuClose
+    }
 
     const [user, setUser] = React.useState();
     async function handleLogOut () {
@@ -33,8 +47,14 @@ export const useNav = () => {
             .catch(e => console.log(e))
     }
 
-    const handleProfile = () => {
-
+    const [popupOpen, setPopupOpen] = React.useState(false);
+    const handlePopupOpen = () => {
+        setPopupOpen(true)
+    }
+    const popupProfile = {
+        popupOpen,
+        setPopupOpen,
+        handlePopupOpen
     }
 
     const handleYourSpace = () => {
@@ -42,18 +62,12 @@ export const useNav = () => {
     }
 
     return {
-        mobileMoreAnchorEl, 
-        isMobileMenuOpen, 
-        handleMobileMenuOpen, 
-        handleMobileMenuClose, 
-        anchorEl, 
-        isMenuOpen, 
-        handleMenuOpen, 
-        handleMenuClose, 
+        menuMob,
+        menuDesk,
         handleLogOut,
-        handleProfile, 
-        handleYourSpace,
         user, 
-        setUser
+        setUser,
+        popupProfile,
+        handleYourSpace
     };
 }

@@ -62,10 +62,6 @@ app.use(passport.authenticate('session'));
 app.use(logger('dev'));
 
 app.use('/', mainRouter);
-app.get('/api/get-user', mustAuthenticated, (req, res) => {
-    console.log('req.user:  ', req.user);
-    res.send(req.user)
-})
 app.use('/api/auth', authRouter);
 app.use('/api/review', mustAuthenticated, reviewRouter);
 app.use('/api/comment', commentRouter);

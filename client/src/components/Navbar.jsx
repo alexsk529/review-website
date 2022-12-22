@@ -64,7 +64,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 export default function Navbar() {
     const {user, setUser} = React.useContext(NavContext);
     React.useEffect(() => {
-        axios.get('/api/get-user', { withCredentials: true })
+        axios.get('/api/author/get-author', { withCredentials: true })
             .then(res =>{
                 res.data && setUser(res.data)
                 res.data && console.log(res.data);
@@ -91,7 +91,7 @@ export default function Navbar() {
                             <SearchIcon />
                         </SearchIconWrapper>
                         <StyledInputBase
-                            placeholder={t('search')}
+                            placeholder={t('navbar.search')}
                             inputProps={{ 'aria-label': 'search' }}
                         />
                     </Search>

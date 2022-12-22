@@ -14,13 +14,16 @@ import { useTranslation } from 'react-i18next';
 
 const MenuDesktop = () => {
     const menuId = 'primary-search-account-menu';
+    const { menuDesk, handleLogOut } = React.useContext(NavContext)
     const {
-        handleLogOut, 
-        handleMenuOpen, 
-        anchorEl, 
-        isMenuOpen, 
+        handleMenuOpen,
+        anchorEl,
+        isMenuOpen,
         handleMenuClose
-    } = React.useContext(NavContext)
+    } = menuDesk
+
+    const { popupProfile } = React.useContext(NavContext);
+    const { handlePopupOpen } = popupProfile
 
     const { t } = useTranslation();
 
@@ -43,28 +46,33 @@ const MenuDesktop = () => {
                 <AccountCircle />
             </IconButton>
             <Menu
-            anchorEl={anchorEl}
-            anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-            }}
-            id={menuId}
-            keepMounted
-            transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-            }}
-            open={isMenuOpen}
-            onClose={handleMenuClose}
-        >
-            <MenuItem onClick={handleMenuClose}>
-                <AssignmentIndIcon sx={{ mr: 1, height: 30, width: 30 }} /> {t('profile')}
-            </MenuItem>
-            <Divider />
-            <MenuItem onClick={handleMenuClose}>
-                <ModeIcon sx={{ mr: 1, height: 30, width: 30 }} /> {t('account')}
-            </MenuItem>
-        </Menu>
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                }}
+                id={menuId}
+                keepMounted
+                transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                }}
+                open={isMenuOpen}
+                onClose={handleMenuClose}
+            >
+                <MenuItem
+                    onClick={() => {
+                        handlePopupOpen();
+                        handleMenuClose();
+                    }}
+                >
+                    <AssignmentIndIcon color="error" sx={{ mr: 1, height: 30, width: 30 }} /> {t('navbar.profile')}
+                </MenuItem>
+                <Divider />
+                <MenuItem onClick={handleMenuClose}>
+                    <ModeIcon sx={{ mr: 1, height: 30, width: 30 }} color="primary" /> {t('navbar.account')}
+                </MenuItem>
+            </Menu>
         </Box>
     );
 }
