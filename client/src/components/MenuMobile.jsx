@@ -5,6 +5,7 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import ModeIcon from '@mui/icons-material/Mode';
 import Logout from '@mui/icons-material/Logout';
 import { NavContext } from '../context/NavContext.js';
@@ -12,7 +13,7 @@ import { useTranslation } from 'react-i18next';
 
 const MenuMobile = () => {
     const mobileMenuId = 'primary-search-account-menu-mobile';
-    const {menuMob, handleLogOut} = React.useContext(NavContext);
+    const { menuMob, handleLogOut, user } = React.useContext(NavContext);
     const {
         handleMobileMenuOpen,
         mobileMoreAnchorEl,
@@ -52,6 +53,12 @@ const MenuMobile = () => {
                 open={isMobileMenuOpen}
                 onClose={handleMobileMenuClose}
             >
+                {
+                    user.role === 'admin' &&
+                    <MenuItem>
+                        <AdminPanelSettingsIcon color='error' sx={{ mr: 1, height: 34, width: 34 }}/>{t('navbar.admin')}
+                    </MenuItem>
+                }
                 <MenuItem onClick={()=> {
                     handlePopupOpen();
                     handleMobileMenuClose();

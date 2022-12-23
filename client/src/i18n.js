@@ -16,6 +16,7 @@ i18n
                         account: 'Personal account',
                         login: 'Log In',
                         logout: 'Log Out',
+                        admin: 'Admin-panel'
                     },
                     profile: {
                         welcome: 'Welcome, {{name}}',
@@ -28,7 +29,7 @@ i18n
                         close: 'Close',
                         edit: 'Edit',
                         input: 'Input new name',
-                        inputError: 'Input at least 2 symbols'
+                        inputError: 'Input at least 2 symbols',
                     }
                     
                 }
@@ -41,6 +42,7 @@ i18n
                         account: 'Личный кабинет',
                         login: 'Войти',
                         logout: 'Выйти',
+                        admin: 'Админ-панель'
                     },
                     profile: {
                         welcome: 'Добро пожаловать, {{name}}',
