@@ -1,8 +1,7 @@
-import React, { useContext } from 'react';
+import React from 'react';
 
 import axios from '../axios.js'
 import { NavContext } from '../context/NavContext.js';
-import { UserContext } from '../context/UserContext.js';
 
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
@@ -25,7 +24,7 @@ import { useForm } from 'react-hook-form';
 
 
 const ProfilePopup = () => {
-    const { popupProfile } = React.useContext(NavContext);
+    const { popupProfile, user, setUser } = React.useContext(NavContext);
     const {
         popupOpen,
         setPopupOpen
@@ -34,14 +33,12 @@ const ProfilePopup = () => {
     const [isEditting, setIsEditting] = React.useState(false)
     const [dateString, setDateString] = React.useState('')
 
-    const {
-        user,
-        setUser
-    } = React.useContext(UserContext)
     let email, name, date, role;
     user && ({ email, author_name: name, created_at: date, role } = user)
+    date = React.useMemo(()=> {
+        new Date(Date.parse(date))
+    }, [date]);
     React.useEffect(() => {
-        date = new Date(Date.parse(date));
         if (!isNaN(date)) setDateString(`${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`)
     }, [date])
 

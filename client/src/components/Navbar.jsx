@@ -17,7 +17,6 @@ import LoginBox from './LoginBox.jsx';
 import { NavContext } from '../context/NavContext.js';
 
 import { useTranslation } from 'react-i18next';
-import { UserContext } from '../context/UserContext.js';
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -63,7 +62,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 );
 
 export default function Navbar() {
-    const {user, setUser} = React.useContext(UserContext);
+    const {user, setUser} = React.useContext(NavContext);
     React.useEffect(() => {
         axios.get('/api/author/get-author', { withCredentials: true })
             .then(res =>{
@@ -74,6 +73,7 @@ export default function Navbar() {
                 user && console.log('user is: ', user);
             })
             .catch(e => console.log(e))
+            // eslint-disable-next-line
     }, [])
 
     const { t } = useTranslation();

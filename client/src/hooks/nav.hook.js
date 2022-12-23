@@ -1,8 +1,8 @@
 import React from 'react';
 import axios from '../axios.js'
-import { useUser } from './user.hook.js';
 
 export const useNav = () => {
+    const [user, setUser] = React.useState();
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
     const handleMobileMenuOpen = (event) => {
@@ -35,7 +35,6 @@ export const useNav = () => {
         handleMenuClose
     }
 
-    const {user, setUser} = useUser();
     async function handleLogOut () {
         await axios.post('/api/auth/logout', {}, { withCredentials: true })
             .then(res => {
