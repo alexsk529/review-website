@@ -2,6 +2,7 @@ import React from 'react';
 
 import axios from '../axios.js'
 import { NavContext } from '../context/NavContext.js';
+import { UserContext } from '../context/UserContext.js';
 
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
@@ -36,7 +37,7 @@ const ProfilePopup = () => {
     const {
         user,
         setUser
-    } = React.useContext(NavContext)
+    } = React.useContext(UserContext)
     let email, name, date, role;
     user && ({ email, author_name: name, created_at: date, role } = user)
     date = React.useMemo(()=>(new Date(Date.parse(date))),[date])

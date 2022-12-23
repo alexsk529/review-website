@@ -1,7 +1,9 @@
 import './App.css';
 import MainPage from './pages/MainPage.jsx';
 import { NavContext } from './context/NavContext.js';
+import { UserContext } from './context/UserContext.js';
 import { useNav } from './hooks/nav.hook.js';
+import { useUser } from './hooks/user.hook';
 
 function App() {
 
@@ -9,11 +11,11 @@ function App() {
     menuMob,
     menuDesk,
     handleLogOut,
-    user,
-    setUser,
     popupProfile,
     handleYourSpace
   } = useNav();
+
+  const {user, setUser} = useUser();
 
   return (
     <div className="App">
@@ -26,7 +28,9 @@ function App() {
         popupProfile,
         handleYourSpace
       }}>
-        <MainPage />
+        <UserContext.Provider value={{user, setUser}}>
+          <MainPage />
+        </UserContext.Provider>
       </NavContext.Provider>
     </div>
   );
