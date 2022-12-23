@@ -9,8 +9,8 @@ import { useTranslation } from 'react-i18next';
 
 const LoginBox = ({xs, md, alignItems, loginExists}) => {
     const handleAuthClick = (provider) => () => {
-        //window.open(`https://review-website.onrender.com/api/auth/${provider}`, '_self')
-        window.open(`${process.env.REACT_APP_URL || 'http://localhost:5000'}/api/auth/${provider}`, '_self')
+        window.open(`https://review-website.onrender.com/api/auth/${provider}`, '_self')
+        //window.open(`${process.env.REACT_APP_URL || 'http://localhost:5000'}/api/auth/${provider}`, '_self')
     }
 
     const { t } = useTranslation();
