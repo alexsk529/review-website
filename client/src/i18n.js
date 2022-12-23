@@ -16,6 +16,7 @@ i18n
                         account: 'Personal account',
                         login: 'Log In',
                         logout: 'Log Out',
+                        admin: 'Admin-panel',
                     },
                     profile: {
                         welcome: 'Welcome, {{name}}',
@@ -41,6 +42,7 @@ i18n
                         account: 'Личный кабинет',
                         login: 'Войти',
                         logout: 'Выйти',
+                        admin: 'Админ-панель'
                     },
                     profile: {
                         welcome: 'Добро пожаловать, {{name}}',

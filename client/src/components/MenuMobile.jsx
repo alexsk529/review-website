@@ -7,6 +7,7 @@ import MenuItem from '@mui/material/MenuItem';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import ModeIcon from '@mui/icons-material/Mode';
 import Logout from '@mui/icons-material/Logout';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import { NavContext } from '../context/NavContext.js';
 import { useTranslation } from 'react-i18next';
 
@@ -20,7 +21,7 @@ const MenuMobile = () => {
         handleMobileMenuClose
     } = menuMob
 
-    const {popupProfile} = React.useContext(NavContext);
+    const {popupProfile, user} = React.useContext(NavContext);
     const { handlePopupOpen } = popupProfile
 
     const { t } = useTranslation();
@@ -52,6 +53,12 @@ const MenuMobile = () => {
                 open={isMobileMenuOpen}
                 onClose={handleMobileMenuClose}
             >
+                {
+                    user.role === "admin" && 
+                    <MenuItem>
+                        <AdminPanelSettingsIcon color="error" sx={{ mr: 1, height: 34, width: 34 }} />{t('navbar.admin')}
+                    </MenuItem>
+                }
                 <MenuItem onClick={()=> {
                     handlePopupOpen();
                     handleMobileMenuClose();

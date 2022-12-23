@@ -6,6 +6,7 @@ import IconButton from '@mui/material/IconButton'
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import LogoutIcon from '@mui/icons-material/Logout';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import ModeIcon from '@mui/icons-material/Mode';
@@ -22,7 +23,7 @@ const MenuDesktop = () => {
         handleMenuClose
     } = menuDesk
 
-    const { popupProfile } = React.useContext(NavContext);
+    const { popupProfile, user } = React.useContext(NavContext);
     const { handlePopupOpen } = popupProfile
 
     const { t } = useTranslation();
@@ -60,6 +61,12 @@ const MenuDesktop = () => {
                 open={isMenuOpen}
                 onClose={handleMenuClose}
             >
+                {
+                    user.role === "admin" && 
+                    <MenuItem>
+                        <AdminPanelSettingsIcon color="error" sx={{ mr: 1, height: 30, width: 30 }}/>{t('navbar.admin')}
+                    </MenuItem>
+                }
                 <MenuItem
                     onClick={() => {
                         handlePopupOpen();
