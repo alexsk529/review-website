@@ -67,6 +67,7 @@ export default function Navbar() {
         axios.get('/api/author/get-author', { withCredentials: true })
             .then(res =>{
                 res.data && setUser(res.data)
+                res.data && localStorage.setItem('user', JSON.stringify(res.data))
                 res.data && console.log(res.data);
             })
             .then(()=> {

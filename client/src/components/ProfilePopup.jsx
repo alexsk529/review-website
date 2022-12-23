@@ -35,9 +35,8 @@ const ProfilePopup = () => {
 
     let email, name, date, role;
     user && ({ email, author_name: name, created_at: date, role } = user)
-    date = React.useMemo(()=> {
-        new Date(Date.parse(date))
-    }, [date]);
+
+    date = new Date(Date.parse(date))
     React.useEffect(() => {
         if (!isNaN(date)) setDateString(`${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`)
     }, [date])
@@ -69,6 +68,8 @@ const ProfilePopup = () => {
         try {
             const res = await axios.patch('/api/author/rename-author', { name: data.name })
             res && res.data?.subject && setUser(res.data.subject)
+            res && res.data?.subject && localStorage.setItem('user', JSON.stringify(res.data.subject))
+            handleCancelEdit()
         } catch (e) {
             console.log(e);
         }

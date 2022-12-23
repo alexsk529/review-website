@@ -2,7 +2,7 @@ import React from 'react';
 import axios from '../axios.js'
 
 export const useNav = () => {
-    const [user, setUser] = React.useState();
+    const [user, setUser] = React.useState(JSON.parse(localStorage.getItem('user')) || null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
     const handleMobileMenuOpen = (event) => {
@@ -39,6 +39,7 @@ export const useNav = () => {
         await axios.post('/api/auth/logout', {}, { withCredentials: true })
             .then(res => {
                 setUser(res.data.user)
+                localStorage.removeItem('user')
             })
             .then(()=> {
                 handleMenuClose();
