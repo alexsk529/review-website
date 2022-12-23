@@ -74,7 +74,6 @@ export default function Navbar() {
                 user && console.log('user is: ', user);
             })
             .catch(e => console.log(e))
-            // eslint-disable-next-line
     }, [])
 
     const { t } = useTranslation();
