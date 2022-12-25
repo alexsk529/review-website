@@ -11,15 +11,17 @@ import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import { NavContext } from '../context/NavContext.js';
 import { useTranslation } from 'react-i18next';
 
-const MenuMobile = () => {
+const MenuMobile = ({handleLogout}) => {
     const mobileMenuId = 'primary-search-account-menu-mobile';
-    const {menuMob, handleLogOut} = React.useContext(NavContext);
-    const {
-        handleMobileMenuOpen,
-        mobileMoreAnchorEl,
-        isMobileMenuOpen,
-        handleMobileMenuClose
-    } = menuMob
+
+    const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+    const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+    const handleMobileMenuOpen = (event) => {
+        setMobileMoreAnchorEl(event.currentTarget);
+    };
+    const handleMobileMenuClose = () => {
+        setMobileMoreAnchorEl(null);
+    };
 
     const {popupProfile, user} = React.useContext(NavContext);
     const { handlePopupOpen } = popupProfile
@@ -69,7 +71,10 @@ const MenuMobile = () => {
                     <ModeIcon color="primary"  sx={{ mr: 1, height: 34, width: 34 }} />{t('navbar.account')}
                 </MenuItem>
                 <Divider />
-                <MenuItem onClick={handleLogOut}>
+                <MenuItem onClick={async () => {
+                    await handleLogout();
+                    handleMobileMenuClose()
+                }}>
                     <ListItemIcon >
                         <Logout color="primary"  />
                     </ListItemIcon>

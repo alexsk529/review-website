@@ -13,15 +13,17 @@ import ModeIcon from '@mui/icons-material/Mode';
 import { NavContext } from '../context/NavContext.js';
 import { useTranslation } from 'react-i18next';
 
-const MenuDesktop = () => {
+const MenuDesktop = ({handleLogout}) => {
     const menuId = 'primary-search-account-menu';
-    const { menuDesk, handleLogOut } = React.useContext(NavContext)
-    const {
-        handleMenuOpen,
-        anchorEl,
-        isMenuOpen,
-        handleMenuClose
-    } = menuDesk
+    
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const isMenuOpen = Boolean(anchorEl);
+    const handleMenuOpen = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleMenuClose = () => {
+        setAnchorEl(null);
+    };
 
     const { popupProfile, user } = React.useContext(NavContext);
     const { handlePopupOpen } = popupProfile
@@ -31,7 +33,7 @@ const MenuDesktop = () => {
     return (
         <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
             <Tooltip title={t('logout')}>
-                <IconButton onClick={handleLogOut} color='error'>
+                <IconButton onClick={handleLogout} color='error'>
                     <LogoutIcon />
                 </IconButton>
             </Tooltip>

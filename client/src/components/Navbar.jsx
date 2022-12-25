@@ -63,6 +63,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 export default function Navbar() {
     const {user, setUser} = React.useContext(NavContext);
+
     React.useEffect(() => {
         axios.get('/api/author/get-author', { withCredentials: true })
             .then(res =>{
@@ -78,6 +79,15 @@ export default function Navbar() {
     }, [])
 
     const { t } = useTranslation();
+
+    async function handleLogout () {
+        await axios.post('/api/auth/logout', {}, { withCredentials: true })
+            .then(res => {
+                setUser(res.data.user)
+                localStorage.removeItem('user')
+            })
+            .catch(e => console.log(e))
+    }
 
     return (
         <Box sx={{ flexGrow: 1 }}>
@@ -100,12 +110,12 @@ export default function Navbar() {
                     <Box sx={{ flexGrow: 1 }} />
                     {
                         user ?
-                            <MenuDesktop/> :
+                            <MenuDesktop handleLogout = {handleLogout}/> :
                             <LoginBox xs={'none'} md={"flex"} alignItems={"center"} loginExists={true} />
                     }
                     {
                         user ?
-                            <MenuMobile/> :
+                            <MenuMobile handleLogout = {handleLogout}/> :
                             <LoginBox xs={"flex"} md={"none"} alignItems={""} loginExists={false}/>
                     }
                 </Toolbar>
