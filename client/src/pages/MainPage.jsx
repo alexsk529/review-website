@@ -8,7 +8,6 @@ const MainPage = () => {
     return (
         <Box>
             <Navbar />
-            <ProfilePopup />
         </Box>
     );
 }

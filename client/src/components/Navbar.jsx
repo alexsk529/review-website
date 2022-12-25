@@ -14,6 +14,7 @@ import SuppMenu from './SuppMenu.jsx';
 import MenuMobile from './MenuMobile.jsx';
 import MenuDesktop from './MenuDesktop.jsx';
 import LoginBox from './LoginBox.jsx';
+import ProfilePopup from './ProfilePopup.jsx';
 import { NavContext } from '../context/NavContext.js';
 
 import { useTranslation } from 'react-i18next';
@@ -62,31 +63,41 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 );
 
 export default function Navbar() {
-    const {user, setUser} = React.useContext(NavContext);
+    const { user, setUser } = React.useContext(NavContext);
 
     React.useEffect(() => {
         axios.get('/api/author/get-author', { withCredentials: true })
-            .then(res =>{
+            .then(res => {
                 res.data && setUser(res.data)
                 res.data && localStorage.setItem('user', JSON.stringify(res.data))
                 res.data && console.log(res.data);
             })
-            .then(()=> {
+            .then(() => {
                 user && console.log('user is: ', user);
             })
             .catch(e => console.log(e))
-            // eslint-disable-next-line
+        // eslint-disable-next-line
     }, [])
 
     const { t } = useTranslation();
 
-    async function handleLogout () {
+    async function handleLogout() {
         await axios.post('/api/auth/logout', {}, { withCredentials: true })
             .then(res => {
                 setUser(res.data.user)
                 localStorage.removeItem('user')
             })
             .catch(e => console.log(e))
+    }
+
+    const [popupOpen, setPopupOpen] = React.useState(false);
+    const handlePopupOpen = () => {
+        setPopupOpen(true)
+    }
+    const popupProfile = {
+        popupOpen,
+        setPopupOpen,
+        handlePopupOpen
     }
 
     return (
@@ -97,7 +108,7 @@ export default function Navbar() {
                         <LangSwitch mr={4} />
                         <ThemeSwitch />
                     </Box>
-                    <SuppMenu/>
+                    <SuppMenu />
                     <Search>
                         <SearchIconWrapper>
                             <SearchIcon />
@@ -110,13 +121,25 @@ export default function Navbar() {
                     <Box sx={{ flexGrow: 1 }} />
                     {
                         user ?
-                            <MenuDesktop handleLogout = {handleLogout}/> :
+                            <React.Fragment>
+                                <MenuDesktop
+                                    handleLogout={handleLogout}
+                                    popupProfile={popupProfile}
+                                />
+                                <ProfilePopup popupProfile={popupProfile} />
+                            </React.Fragment> :
                             <LoginBox xs={'none'} md={"flex"} alignItems={"center"} loginExists={true} />
                     }
                     {
                         user ?
-                            <MenuMobile handleLogout = {handleLogout}/> :
-                            <LoginBox xs={"flex"} md={"none"} alignItems={""} loginExists={false}/>
+                            <React.Fragment>
+                                <MenuMobile
+                                    handleLogout={handleLogout}
+                                    popupProfile={popupProfile}
+                                />
+                                <ProfilePopup popupProfile={popupProfile}/>
+                            </React.Fragment>:
+                            <LoginBox xs={"flex"} md={"none"} alignItems={""} loginExists={false} />
                     }
                 </Toolbar>
             </AppBar>

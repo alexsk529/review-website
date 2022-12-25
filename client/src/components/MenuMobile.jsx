@@ -11,7 +11,7 @@ import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import { NavContext } from '../context/NavContext.js';
 import { useTranslation } from 'react-i18next';
 
-const MenuMobile = ({handleLogout}) => {
+const MenuMobile = ({handleLogout, popupProfile}) => {
     const mobileMenuId = 'primary-search-account-menu-mobile';
 
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
@@ -23,7 +23,7 @@ const MenuMobile = ({handleLogout}) => {
         setMobileMoreAnchorEl(null);
     };
 
-    const {popupProfile, user} = React.useContext(NavContext);
+    const {user} = React.useContext(NavContext);
     const { handlePopupOpen } = popupProfile
 
     const { t } = useTranslation();

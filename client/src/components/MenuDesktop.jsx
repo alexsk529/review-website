@@ -13,7 +13,7 @@ import ModeIcon from '@mui/icons-material/Mode';
 import { NavContext } from '../context/NavContext.js';
 import { useTranslation } from 'react-i18next';
 
-const MenuDesktop = ({handleLogout}) => {
+const MenuDesktop = ({handleLogout, popupProfile}) => {
     const menuId = 'primary-search-account-menu';
     
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -25,7 +25,7 @@ const MenuDesktop = ({handleLogout}) => {
         setAnchorEl(null);
     };
 
-    const { popupProfile, user } = React.useContext(NavContext);
+    const { user } = React.useContext(NavContext);
     const { handlePopupOpen } = popupProfile
 
     const { t } = useTranslation();

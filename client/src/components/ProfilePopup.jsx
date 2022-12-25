@@ -23,8 +23,8 @@ import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 
 
-const ProfilePopup = () => {
-    const { popupProfile, user, setUser } = React.useContext(NavContext);
+const ProfilePopup = ({popupProfile}) => {
+    const { user, setUser } = React.useContext(NavContext);
     const {
         popupOpen,
         setPopupOpen
