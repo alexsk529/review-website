@@ -1,7 +1,8 @@
 import React from 'react';
 
-import axios from '../axios.js'
-import { NavContext } from '../context/NavContext.js';
+//redux
+import { useSelector, useDispatch } from 'react-redux';
+import { updateUser, selectUser } from '../redux/userSlice.js';
 
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
@@ -24,7 +25,9 @@ import { useForm } from 'react-hook-form';
 
 
 const ProfilePopup = ({popupProfile}) => {
-    const { user, setUser } = React.useContext(NavContext);
+    const user = useSelector(selectUser)
+    const dispatch = useDispatch();
+
     const {
         popupOpen,
         setPopupOpen
@@ -37,7 +40,7 @@ const ProfilePopup = ({popupProfile}) => {
     user && ({ email, author_name: name, created_at: date, role } = user)
 
     date = new Date(Date.parse(date))
-    React.useEffect(() => {
+    React.useLayoutEffect(() => {
         if (!isNaN(date)) setDateString(`${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`)
     }, [date])
 
@@ -66,9 +69,7 @@ const ProfilePopup = ({popupProfile}) => {
     const onSubmit = async (data) => {
         console.log(data);
         try {
-            const res = await axios.patch('/api/author/rename-author', { name: data.name })
-            res && res.data?.subject && setUser(res.data.subject)
-            res && res.data?.subject && localStorage.setItem('user', JSON.stringify(res.data.subject))
+            dispatch(updateUser(data.name))
             handleCancelEdit()
         } catch (e) {
             console.log(e);

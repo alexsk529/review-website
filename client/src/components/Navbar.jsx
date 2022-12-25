@@ -1,4 +1,10 @@
 import React from 'react';
+
+//redux
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchUser, selectUserEmail } from '../redux/userSlice.js';
+
+//css-framework
 import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -6,17 +12,16 @@ import Toolbar from '@mui/material/Toolbar';
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
 
+//custom-comps.
 import LangSwitch from './LangSwitch.jsx';
 import ThemeSwitch from './ThemeSwitch.jsx';
-
-import axios from '../axios.js';
 import SuppMenu from './SuppMenu.jsx';
 import MenuMobile from './MenuMobile.jsx';
 import MenuDesktop from './MenuDesktop.jsx';
 import LoginBox from './LoginBox.jsx';
 import ProfilePopup from './ProfilePopup.jsx';
-import { NavContext } from '../context/NavContext.js';
 
+//util
 import { useTranslation } from 'react-i18next';
 
 const Search = styled('div')(({ theme }) => ({
@@ -63,32 +68,15 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 );
 
 export default function Navbar() {
-    const { user, setUser } = React.useContext(NavContext);
+    const dispatch = useDispatch();
+    const userEmail = useSelector(selectUserEmail)
+    const userStatus = useSelector(state => state.user.status)
 
     React.useEffect(() => {
-        axios.get('/api/author/get-author', { withCredentials: true })
-            .then(res => {
-                res.data && setUser(res.data)
-                res.data && localStorage.setItem('user', JSON.stringify(res.data))
-                res.data && console.log(res.data);
-            })
-            .then(() => {
-                user && console.log('user is: ', user);
-            })
-            .catch(e => console.log(e))
-        // eslint-disable-next-line
-    }, [])
+        if (userStatus === 'idle') dispatch(fetchUser())
+    }, [userStatus, dispatch])
 
     const { t } = useTranslation();
-
-    async function handleLogout() {
-        await axios.post('/api/auth/logout', {}, { withCredentials: true })
-            .then(res => {
-                setUser(res.data.user)
-                localStorage.removeItem('user')
-            })
-            .catch(e => console.log(e))
-    }
 
     const [popupOpen, setPopupOpen] = React.useState(false);
     const handlePopupOpen = () => {
@@ -120,10 +108,9 @@ export default function Navbar() {
                     </Search>
                     <Box sx={{ flexGrow: 1 }} />
                     {
-                        user ?
+                        userEmail ?
                             <React.Fragment>
                                 <MenuDesktop
-                                    handleLogout={handleLogout}
                                     popupProfile={popupProfile}
                                 />
                                 <ProfilePopup popupProfile={popupProfile} />
@@ -131,10 +118,9 @@ export default function Navbar() {
                             <LoginBox xs={'none'} md={"flex"} alignItems={"center"} loginExists={true} />
                     }
                     {
-                        user ?
+                        userEmail ?
                             <React.Fragment>
                                 <MenuMobile
-                                    handleLogout={handleLogout}
                                     popupProfile={popupProfile}
                                 />
                                 <ProfilePopup popupProfile={popupProfile}/>

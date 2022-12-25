@@ -1,4 +1,10 @@
 import React from 'react';
+
+//redux
+import { useSelector, useDispatch } from 'react-redux';
+import { logout, selectUserRole } from '../redux/userSlice.js';
+
+//css-framework
 import Box from '@mui/material/Box';
 import Tooltip from '@mui/material/Tooltip';
 import Divider from '@mui/material/Divider';
@@ -10,10 +16,13 @@ import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import ModeIcon from '@mui/icons-material/Mode';
-import { NavContext } from '../context/NavContext.js';
+
 import { useTranslation } from 'react-i18next';
 
-const MenuDesktop = ({handleLogout, popupProfile}) => {
+const MenuDesktop = ({ popupProfile }) => {
+    const dispatch = useDispatch();
+    const userRole = useSelector(selectUserRole)
+    
     const menuId = 'primary-search-account-menu';
     
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -25,7 +34,6 @@ const MenuDesktop = ({handleLogout, popupProfile}) => {
         setAnchorEl(null);
     };
 
-    const { user } = React.useContext(NavContext);
     const { handlePopupOpen } = popupProfile
 
     const { t } = useTranslation();
@@ -33,7 +41,7 @@ const MenuDesktop = ({handleLogout, popupProfile}) => {
     return (
         <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
             <Tooltip title={t('logout')}>
-                <IconButton onClick={handleLogout} color='error'>
+                <IconButton onClick={()=>dispatch(logout())} color='error'>
                     <LogoutIcon />
                 </IconButton>
             </Tooltip>
@@ -64,7 +72,7 @@ const MenuDesktop = ({handleLogout, popupProfile}) => {
                 onClose={handleMenuClose}
             >
                 {
-                    user.role === "admin" && 
+                    userRole === "admin" && 
                     <MenuItem>
                         <AdminPanelSettingsIcon color="error" sx={{ mr: 1, height: 30, width: 30 }}/>{t('navbar.admin')}
                     </MenuItem>

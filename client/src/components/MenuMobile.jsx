@@ -1,4 +1,10 @@
 import React from 'react';
+
+//redux
+import { useSelector, useDispatch } from 'react-redux';
+import { logout, selectUserRole } from '../redux/userSlice.js';
+
+//css-framework
 import Box from '@mui/material/Box';
 import { Divider, ListItemIcon, IconButton } from '@mui/material';
 import MoreIcon from '@mui/icons-material/MoreVert';
@@ -8,10 +14,13 @@ import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import ModeIcon from '@mui/icons-material/Mode';
 import Logout from '@mui/icons-material/Logout';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
-import { NavContext } from '../context/NavContext.js';
+
 import { useTranslation } from 'react-i18next';
 
-const MenuMobile = ({handleLogout, popupProfile}) => {
+const MenuMobile = ({popupProfile}) => {
+    const dispatch = useDispatch();
+    const userRole = useSelector(selectUserRole)
+
     const mobileMenuId = 'primary-search-account-menu-mobile';
 
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
@@ -23,7 +32,6 @@ const MenuMobile = ({handleLogout, popupProfile}) => {
         setMobileMoreAnchorEl(null);
     };
 
-    const {user} = React.useContext(NavContext);
     const { handlePopupOpen } = popupProfile
 
     const { t } = useTranslation();
@@ -56,7 +64,7 @@ const MenuMobile = ({handleLogout, popupProfile}) => {
                 onClose={handleMobileMenuClose}
             >
                 {
-                    user.role === "admin" && 
+                    userRole === "admin" && 
                     <MenuItem>
                         <AdminPanelSettingsIcon color="error" sx={{ mr: 1, height: 34, width: 34 }} />{t('navbar.admin')}
                     </MenuItem>
@@ -72,7 +80,7 @@ const MenuMobile = ({handleLogout, popupProfile}) => {
                 </MenuItem>
                 <Divider />
                 <MenuItem onClick={async () => {
-                    await handleLogout();
+                    await dispatch(logout())
                     handleMobileMenuClose()
                 }}>
                     <ListItemIcon >
