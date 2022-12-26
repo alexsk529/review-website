@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { Link } from 'react-router-dom';
+
 import './PersonalAccount.css';
 //mui
 import Box from '@mui/material/Box';
@@ -59,7 +61,7 @@ const PersonalAccount = () => {
                         <DeleteIcon />
                     </IconButton>
                 </Tooltip>
-                <Typography variant='h1' sx={{ fontSize: 24, color: '#5c5c5c', width: '100%' }} align='center'>
+                <Typography variant='h1' sx={{ fontSize: 20, color: '#5c5c5c', width: '100%' }} align='center'>
                     {t('account.tableTitle')}
                 </Typography>
             </Box>
@@ -80,9 +82,11 @@ const PersonalAccount = () => {
                     }}
                 />
             </Box>
-            <Button variant='contained' color="success" endIcon={<EditIcon/>} sx={{mt: 2}} size='small' >
-                {t('account.create')}
-            </Button>    
+            <Link to='/create-review'>
+                <Button variant='contained' color="success" endIcon={<EditIcon />} sx={{ mt: 2 }} size='small' >
+                    {t('account.create')}
+                </Button>
+            </Link>
         </Container>
     );
 }

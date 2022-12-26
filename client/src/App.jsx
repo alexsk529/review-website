@@ -5,6 +5,7 @@ import Navbar from './components/Navbar.jsx'
 import MainPage from './pages/MainPage.jsx';
 import PersonalAccount from './pages/PersonalAccount';
 import AdminPanel from './pages/AdminPanel';
+import CreateReview from './pages/CreateReview.jsx';
 
 import { Routes, Route, Navigate } from 'react-router-dom';
 
@@ -28,6 +29,8 @@ function App() {
             <Routes>
               <Route exact path='/' element={<MainPage/>}/>
               <Route exact path='/account' element={<PersonalAccount/>}/>
+              <Route exact path='/create-review' element={<CreateReview isEdit={false}/>}/>
+              <Route exact path='/edit-review' element={<CreateReview isEdit={true} />}/>
               { userRole === 'admin' ? <Route exact path='/admin' element={<AdminPanel/>} /> : null }
             </Routes>
           </React.Fragment> :
