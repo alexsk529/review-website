@@ -17,6 +17,8 @@ i18n
                         login: 'Log In',
                         logout: 'Log Out',
                         admin: 'Admin-panel',
+                        home: 'Home',
+                        dashboard: 'Dashboard'
                     },
                     profile: {
                         welcome: 'Welcome, {{name}}',
@@ -30,8 +32,10 @@ i18n
                         edit: 'Edit',
                         input: 'Input new name',
                         inputError: 'Input at least 2 symbols'
+                    },
+                    account: {
+                        delete: 'Delete a review'
                     }
-                    
                 }
             },
             ru: {
@@ -42,7 +46,9 @@ i18n
                         account: 'Личный кабинет',
                         login: 'Войти',
                         logout: 'Выйти',
-                        admin: 'Админ-панель'
+                        admin: 'Админ-панель',
+                        home: 'На главную',
+                        dashboard: 'Панель управления'
                     },
                     profile: {
                         welcome: 'Добро пожаловать, {{name}}',
@@ -56,6 +62,9 @@ i18n
                         edit: 'Редактировать',
                         input: 'Введите новое имя',
                         inputError: 'Введите минимум 2 символа'
+                    },
+                    account: {
+                        delete: 'Удалить обзор'
                     }
                 }
             }
