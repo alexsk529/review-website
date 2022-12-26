@@ -34,7 +34,17 @@ i18n
                         inputError: 'Input at least 2 symbols'
                     },
                     account: {
-                        delete: 'Delete a review'
+                        delete: 'Delete a review',
+                        tableTitle: 'The list of your reviews',
+                        title: 'Review Title',
+                        category: 'Category',
+                        work: 'Name of the piece of art',
+                        grade: 'Your grade',
+                        createdAt: 'Review creation date',
+                        tools: 'Tools',
+                        edit: 'Edit the review',
+                        open: 'Open the review',
+                        create: 'Create a new review'
                     }
                 }
             },
@@ -64,7 +74,17 @@ i18n
                         inputError: 'Введите минимум 2 символа'
                     },
                     account: {
-                        delete: 'Удалить обзор'
+                        delete: 'Удалить обзор',
+                        tableTitle: 'Список ваших обзоров',
+                        title: 'Название обзора',
+                        category: 'Категория',
+                        work: 'Название произведения',
+                        grade: 'Ваш оценка',
+                        createdAt: 'Дата создания обзора',
+                        tools: 'Ред.',
+                        edit: 'Ред. обзор',
+                        open: 'Открыть обзор',
+                        create: 'Создать новый обзор'
                     }
                 }
             }
