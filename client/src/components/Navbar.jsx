@@ -72,7 +72,7 @@ export default function Navbar() {
     const userEmail = useSelector(selectUserEmail)
     const userStatus = useSelector(state => state.user.status)
 
-    React.useEffect(() => {
+    React.useLayoutEffect(() => {
         if (userStatus === 'idle') dispatch(fetchUser())
     }, [userStatus, dispatch])
 
