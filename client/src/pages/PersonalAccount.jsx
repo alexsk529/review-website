@@ -22,16 +22,14 @@ const PersonalAccount = () => {
     const [selected, setSelected] = React.useState([]);
     const { t } = useTranslation();
 
-    const toolsHeader = (<Box sx={{ display: 'flex', alignItems: 'center' }}>{t('account.tools')}<CarpenterOutlinedIcon /></Box>)
-
-    let columns = [
+    const columns = [
         { field: "id", headerName: "ID", headerAlign: 'center', align: 'center', flex: 0.1 },
         { field: "title", headerName: t('account.title'), flex: 1 },
         { field: 'category', headerName: t('account.category'), flex: 0.7 },
         { field: "work", headerName: t('account.work'), flex: 1.5 },
         { field: "grade", headerName: t('account.grade'), headerAlign: 'center', align: 'center', flex: 0.7 },
         { field: "createdAt", headerName: t('account.createdAt'), headerAlign: 'center', align: 'center', flex: 1.5 },
-        { field: 'buttons', headerName: toolsHeader, headerAlign: 'center', align: 'center', flex: 0.5, headerClassName: 'header-tools' }
+        { field: 'buttons', headerName: t('account.tools'), headerAlign: 'center', align: 'center', flex: 0.5, headerClassName: 'header-tools' }
     ];
 
     const tool = (

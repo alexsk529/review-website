@@ -49,7 +49,18 @@ i18n
                     createReview: {
                         create: 'Creation the new review',
                         edit: 'Edit the review',
-                        placeholder: 'Start writing your review...'
+                        placeholder: 'Start writing your review...',
+                        work: 'Piece of art',
+                        title: 'Review name',
+                        category: 'Category',
+                        tags: 'Tags',
+                        grade: 'Your grade',
+                        selectFile: 'Select Image',
+                        uploadFile: 'Upload Image',
+                        dragDrop: 'Drag and Drop Images to Upload Or',
+                        cancel: 'Cancel',
+                        upload: 'Upload',
+                        confirm: 'Confirm',
                     }
                 }
             },
@@ -94,7 +105,18 @@ i18n
                     createReview: {
                         create: 'Создание нового обзора',
                         edit: 'Редактирование обзора',
-                        placeholder: 'Начните ваш обзор...'
+                        placeholder: 'Начните ваш обзор...',
+                        work: 'Произведение',
+                        title: 'Название обзора',
+                        category: 'Категория',
+                        tags: 'Тэги',
+                        grade: 'Ваша оценка',
+                        selectFile: 'Выберите картинку',
+                        uploadFile: 'Загрузите картинку',
+                        dragDrop: 'Перетащите картинку для загрузки или',
+                        cancel: 'Отменить',
+                        upload: 'Загрузить',
+                        confirm: 'Сохранить',
                     }
                 }
             }

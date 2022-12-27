@@ -106,6 +106,15 @@ const MenuComponent = ({ isMobile, popupProfile }) => {
                     <AssignmentIndIcon color="error" sx={{ mr: 1, height: 30, width: 30 }} /> {t('navbar.profile')}
                 </MenuItem>
                 <Divider />
+                {
+                    isMobile ?
+                        <Link to='/'>
+                            <MenuItem>
+                                <HomeIcon sx={{ mr: 1, height: 30, width: 30 }} color="primary" /> {t('navbar.home')}
+                            </MenuItem>
+                        </Link> :
+                        null
+                }
                 <Link to="/account">
                     <MenuItem onClick={handleMenuClose}>
                         <ModeIcon sx={{ mr: 1, height: 30, width: 30 }} color="primary" /> {t('navbar.account')}

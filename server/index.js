@@ -67,7 +67,7 @@ app.use('/api/review', mustAuthenticated, reviewRouter);
 app.use('/api/comment', commentRouter);
 app.use('/api/admin',mustAuthenticated, mustBeAdmin, adminRouter);
 app.use('/api/author', mustAuthenticated, authorRouter);
-app.use('/api/work', mustAuthenticated, workRouter);
+app.use('/api/work', workRouter);
 
 async function start() {
     try {
