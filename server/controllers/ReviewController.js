@@ -1,4 +1,5 @@
 import {db, Author, ReviewTag, Review, Comments, Work, Tag} from '../db.js';
+import { cloudinary } from '../cloudinary.js';
 
 class ReviewController {
     async getReviews (req, res, { bestRate}) {
@@ -95,6 +96,25 @@ class ReviewController {
             }
         });
         res.status(204).send({message: 'The review has been deleted'})
+    }
+
+    async uploadImage (req, res) {
+        try {
+            const fileStr = req.body.data;
+            const uploadRes = await cloudinary.uploader.upload(fileStr, {
+                upload_preset: 'review-website'
+            })
+            console.log(uploadRes);
+            res.json({msg: 'image uploaded'})
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({err: 'Something went wrong'})
+        }
+    }
+
+    async getImage (req, res) {
+        console.log(cloudinary);
+        res.send();
     }
 
  }

@@ -7,6 +7,7 @@ import { selectUserEmail } from '../redux/userSlice';
 import { fetchWorks, selectWorks, selectCategories } from '../redux/worksSlice.js';
 
 import Box from '@mui/material/Box';
+import Autocomplete from '@mui/material/Autocomplete';
 import Rating from '@mui/material/Rating';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -17,9 +18,6 @@ import { useTranslation } from 'react-i18next';
 import Editor from '../components/Editor/Editor.jsx';
 import DragAndDrop from '../components/DragAndDrop/DragAndDrop.jsx'
 
-import CustomAutocomplete from '../components/CustomAutocomplete.jsx';
-
-
 const CreateReview = ({ isEdit }) => {
     const dispatch = useDispatch();
 
@@ -28,7 +26,7 @@ const CreateReview = ({ isEdit }) => {
     const [title, setTitle] = React.useState('');
     const [content, setContent] = React.useState(``);
     const [image, setImage] = React.useState('');
-    const [grade, setGrade] = React.useState(0);
+    const [grade, setGrade] = React.useState(null);
     const [tags, setTags] = React.useState([]);
 
     const userEmail = useSelector(selectUserEmail);
@@ -48,11 +46,12 @@ const CreateReview = ({ isEdit }) => {
 
     React.useLayoutEffect(() => {
         tagsOptions = getTags();
-    })
+    },[])
 
     let works = useSelector(selectWorks);
     let categories = useSelector(selectCategories);
 
+    const handle = () => axios.get('/api/review/image')
     return (
         <Container maxWidth='lg' sx={{ mt: 3 }}>
             <Typography variant='h1' sx={{ fontSize: 20, color: '#5c5c5c', width: '100%' }} align='center'>
@@ -71,15 +70,37 @@ const CreateReview = ({ isEdit }) => {
                     sm: 'row'
                 }
             }} >
-                <CustomAutocomplete
-                    setState={setWork}
-                    label={t('createReview.work')}
+                <Autocomplete
+                    freeSolo
+                    sx={{ width: 250 }}
                     options={works}
+                    value={work}
+                    inputValue={work}
+                    onChange={(_, newVal) => {
+                        if (newVal === null) newVal='';
+                        setWork(newVal)
+                    }}
+                    onInputChange={(_, newVal) => {
+                        if (newVal === null) newVal='';
+                        setWork(newVal)
+                    }}
+                    renderInput={(params) => <TextField name={t('createReview.work')} {...params} label={t('createReview.work')} variant="standard"/>}
                 />
-                <CustomAutocomplete
-                    setState={setCategory}
-                    label={t('createReview.category')}
+                <Autocomplete
+                    freeSolo
+                    sx={{ width: 250 }}
                     options={categories}
+                    value={category}
+                    inputValue={category}
+                    onChange={(_, newVal) => {
+                        if (newVal === null) newVal='';
+                        setCategory(newVal)
+                    }}
+                    onInputChange={(_, newVal) => {
+                        if (newVal === null) newVal='';
+                        setCategory(newVal)
+                    }}
+                    renderInput={(params) => <TextField name={t('createReview.category')} {...params} label={t('createReview.category')} variant="standard"/>}
                 />
                 <TextField
                     variant='standard'
@@ -101,13 +122,15 @@ const CreateReview = ({ isEdit }) => {
                 },
                 alignItems: 'center'
             }}>
-                <CustomAutocomplete
+                <Autocomplete
+                    freeSolo
                     sx={{ width: 250 }}
                     multiple
                     limitTags={2}
-                    setState={setTags}
-                    label={t('createReview.tags')}
                     options={tagsOptions}
+                    value={tags}
+                    onChange={(e, newVal) => {setTags(newVal)}}
+                    renderInput={(params) => <TextField name={t('createReview.tags')} {...params} label={t('createReview.tags')} variant="standard"/>}
                 />
                 <Box sx={{ mt: 2 }}>
                     <Typography component="legend" sx={{ color: '#5c5c5c' }}>{t('createReview.grade')}</Typography>
@@ -118,22 +141,8 @@ const CreateReview = ({ isEdit }) => {
                     />
                 </Box>
             </Container>
-            <Container width="100%" sx={{ mt: 4, display: { xs: 'none', sm: 'none', md: 'block', lg: 'block', xl: 'block' } }}>
-                <DragAndDrop />
-            </Container>
-            <Container width='100%' sx={{ mt: 4, display: { md: 'none', lg: 'none', xl: 'none' } }}>
-                <Button
-                    variant="contained"
-                    component="label"
-                >
-                    {t('createReview.uploadFile')}
-                    <input
-                        type="file"
-                        hidden
-                    />
-                </Button>
-            </Container>
-            <Button variant='contained' color="success" sx={{ mt: 2, mb: 2 }} size='small' >
+            <DragAndDrop image={image} setImage={setImage} />
+            <Button variant='contained' color="success" sx={{ mt: 2, mb: 2 }} size='small' onClick={handle}>
                 {t('createReview.confirm')}
             </Button>
         </Container>

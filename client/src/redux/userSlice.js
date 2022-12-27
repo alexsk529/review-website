@@ -33,6 +33,7 @@ const userSlice = createSlice({
             })
             .addCase(fetchUser.rejected, (state, action) => {
                 state.status = 'failed'
+                localStorage.removeItem('user')
                 state.error = action.error.message
             })
             .addCase(fetchUser.fulfilled, (state, action) => {

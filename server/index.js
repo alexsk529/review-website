@@ -42,6 +42,7 @@ app.use((req,res,next) => {
 
 let cookiesConfigs = {}
 app.use(express.json());
+app.use(express.urlencoded())    
 if (domain) cookiesConfigs = {
         sameSite: 'none', 
         secure: true,

@@ -1,4 +1,4 @@
-.dropzone, .uploads {
+.dropzone {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -10,6 +10,14 @@
     border: 3px dashed rgb(117, 112, 112);
     padding: 2rem;
     margin: 0 auto;
+}
+
+@media (max-width: 600px) {
+    .dropzone {
+        height: 125px;
+        min-width: 260px;
+        width: 25%;
+    }
 }
 
 .dropzone_title {
