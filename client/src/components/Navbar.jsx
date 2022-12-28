@@ -13,9 +13,9 @@ import SearchIcon from '@mui/icons-material/Search';
 //custom-comps.
 import LangSwitch from './LangSwitch.jsx';
 import ThemeSwitch from './ThemeSwitch.jsx';
-import SuppMenu from './SuppMenu.jsx';
+import MenuSupp from './MenuSupp.jsx';
 import MenuComponent from './MenuComponent.jsx';
-import LoginBox from './LoginBox.jsx';
+import BoxLogin from './BoxLogin.jsx';
 import ProfilePopup from './ProfilePopup.jsx';
 import { Search, SearchIconWrapper, StyledInputBase } from './NavBarComponents.js'
 
@@ -51,7 +51,7 @@ export default function Navbar() {
                         <LangSwitch mr={4} />
                         <ThemeSwitch />
                     </Box>
-                    <SuppMenu />
+                    <MenuSupp />
                     <Search>
                         <SearchIconWrapper>
                             <SearchIcon />
@@ -73,7 +73,7 @@ export default function Navbar() {
                                 </Box>
                                 <ProfilePopup popupProfile={popupProfile} />
                             </React.Fragment> :
-                            <LoginBox xs={'none'} md={"flex"} alignItems={"center"} loginExists={true} />
+                            <BoxLogin xs={'none'} md={"flex"} alignItems={"center"} loginExists={true} />
                     }
                     {
                         userEmail ?
@@ -86,7 +86,7 @@ export default function Navbar() {
                                 </Box>
                                 <ProfilePopup popupProfile={popupProfile} />
                             </React.Fragment> :
-                            <LoginBox xs={"flex"} md={"none"} alignItems={""} loginExists={false} />
+                            <BoxLogin xs={"flex"} md={"none"} alignItems={""} loginExists={false} />
                     }
                 </Toolbar>
             </AppBar>

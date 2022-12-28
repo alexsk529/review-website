@@ -7,7 +7,6 @@ import { selectUserEmail } from '../redux/userSlice';
 import { fetchWorks, selectWorks, selectCategories } from '../redux/worksSlice.js';
 
 import Box from '@mui/material/Box';
-import Zoom from '@mui/material/Zoom';
 import Autocomplete from '@mui/material/Autocomplete';
 import Rating from '@mui/material/Rating';
 import Button from '@mui/material/Button';
@@ -18,10 +17,12 @@ import Container from '@mui/material/Container';
 import { useTranslation } from 'react-i18next';
 import Editor from '../components/Editor/Editor.jsx';
 import DragAndDrop from '../components/DragAndDrop/DragAndDrop.jsx'
-import ErrorMessage from '../components/ErrorMessage.jsx'
+import MessageError from '../components/MessageError.jsx'
+import MessageFinal from '../components/MessageFinal.jsx';
 
 
 const CreateReview = ({ isEdit }) => {
+    //vars
     const dispatch = useDispatch();
 
     const [work, setWork] = React.useState('');
@@ -33,7 +34,10 @@ const CreateReview = ({ isEdit }) => {
     const [tags, setTags] = React.useState([]);
 
     const [errors, setErrors] = React.useState([])
+
     const [isError, setIsError] = React.useState(false)
+    const [isSuccess, setIsSuccess] = React.useState(false)
+    const [isServerError, setIsServerError] = React.useState(false)
 
     const { t } = useTranslation();
 
@@ -47,49 +51,49 @@ const CreateReview = ({ isEdit }) => {
 
     const userEmail = useSelector(selectUserEmail);
 
-    React.useLayoutEffect(() => {
-        dispatch(fetchWorks());
-    }, [dispatch])
+    let works = useSelector(selectWorks);
+    let categories = useSelector(selectCategories);
 
-    let tagsOptions = [];
+    let tagsOptions = React.useRef([]);
 
+    //methods
     const getTags = async () => {
         const res = await axios.get('/api/work/get-tags')
         return res.data
     }
-
-    React.useLayoutEffect(() => {
-        tagsOptions = getTags();
-    }, [])
-
-    let works = useSelector(selectWorks);
-    let categories = useSelector(selectCategories);
-
+    
+    const errorCollector = () => {
+        const errors = []
+        work.length < 2 && errors.push(workLabel);
+        category.length < 2 && errors.push(categoryLabel);
+        title.length < 2 && errors.push(titleLabel);
+        content.length < 20 && errors.push(reviewLabel)
+        !grade && errors.push(gradeLabel);
+        return (errors)
+    }
+    
     const handleCreateReview = () => {
         setIsError(false)
-        const err = [];
-        work.length < 2 && err.push(workLabel);
-        category.length < 2 && err.push(categoryLabel);
-        title.length < 2 && err.push(titleLabel);
-        content.length < 20 && err.push(reviewLabel)
-        !grade && err.push(gradeLabel);
-
-        if (err.length > 0) {
-            setErrors(err)
+        if (errorCollector().length > 0) {
+            setErrors(errorCollector())
             setIsError(true)
+            return;
         }
+        setIsServerError(true)
     }
 
-    React.useEffect(() => {
-        if (isError) {
-            const timeout = setTimeout(()=> setIsError(false), 7000);
-            return () => clearTimeout(timeout)
-        }
-    },[isError])
+    //hooks
+    React.useLayoutEffect(() => {
+        dispatch(fetchWorks());
+    }, [dispatch])
 
+    React.useLayoutEffect(() => {
+        tagsOptions.current = getTags();
+    }, [])
+    
     return (
         <Container maxWidth='lg' sx={{ mt: 3 }}>
-            <Typography variant='h1' sx={{ fontSize: 20, color: '#5c5c5c', width: '100%' }} align='center'>
+            <Typography variant='h1' sx={{ fontSize: 20, color: '#5c5c5c', width: '100%', mb: 3 }} align='center'>
                 {isEdit ? t('createReview.edit') : t('createReview.create')}
             </Typography>
             <Container sx={{
@@ -163,7 +167,7 @@ const CreateReview = ({ isEdit }) => {
                     sx={{ width: 250 }}
                     multiple
                     limitTags={2}
-                    options={tagsOptions}
+                    options={tagsOptions.current}
                     value={tags}
                     onChange={(e, newVal) => { setTags(newVal) }}
                     renderInput={(params) => <TextField name="tags" {...params} label={tagsLabel} variant="standard" />}
@@ -181,7 +185,17 @@ const CreateReview = ({ isEdit }) => {
             <Button variant='contained' color="success" sx={{ mt: 2, mb: 2 }} size='small' onClick={handleCreateReview}>
                 {confirmLabel}
             </Button>
-            {isError ? <Zoom in={isError}><ErrorMessage errors={errors} /></Zoom> : null}
+            {isError ? <MessageError errors={errors} isError={isError} setIsError={setIsError} /> : null}
+            {
+                isSuccess || isServerError ?
+                    <MessageFinal
+                        isSuccess={isSuccess}
+                        setIsSuccess={setIsSuccess}
+                        isServerError={isServerError}
+                        setIsServerError={setIsServerError}
+                    /> :
+                    null
+            }
         </Container>
     )
 }

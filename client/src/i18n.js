@@ -68,7 +68,11 @@ i18n
                             blank: 'can not be blanked',
                             twoSymbols: 'must contain at least 2 symbols',
                             manySymbols: 'must contain at least 20 symbols'
-                        }
+                        },
+                        congrat: 'Congratulations!',
+                        success: 'Your review has been created!',
+                        wentWrong: 'Something went wrong...',
+                        again: 'Please, try again later.'
                     }
                 }
             },
@@ -132,7 +136,11 @@ i18n
                             blank: 'не должно быть пустым',
                             twoSymbols: 'должно содержать минимум 2 символа',
                             manySymbols: 'должно содержать минимум 20 символов'
-                        }
+                        },
+                        congrat: 'Поздравляем!',
+                        success: 'Ваш обзор был создан!',
+                        wentWrong: 'Что-то пошло не так...',
+                        again: 'Пожалуйста, попробуйте позже.'
                     }
                 }
             }
