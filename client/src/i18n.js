@@ -72,7 +72,8 @@ i18n
                         congrat: 'Congratulations!',
                         success: 'Your review has been created!',
                         wentWrong: 'Something went wrong...',
-                        again: 'Please, try again later.'
+                        again: 'Please, try again later.',
+                        clear: 'Clear page'
                     }
                 }
             },
@@ -140,7 +141,8 @@ i18n
                         congrat: 'Поздравляем!',
                         success: 'Ваш обзор был создан!',
                         wentWrong: 'Что-то пошло не так...',
-                        again: 'Пожалуйста, попробуйте позже.'
+                        again: 'Пожалуйста, попробуйте позже.',
+                        clear: 'Очистить контент'
                     }
                 }
             }

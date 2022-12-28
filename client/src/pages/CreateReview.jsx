@@ -48,7 +48,8 @@ const CreateReview = ({ isEdit }) => {
     const tagsLabel = t('createReview.tags');
     const gradeLabel = t('createReview.grade');
     const confirmLabel = t('createReview.confirm');
-    const reviewLabel = t('createReview.review')
+    const reviewLabel = t('createReview.review');
+    const clearLabel = t('createReview.clear')
 
     const userEmail = useSelector(selectUserEmail);
 
@@ -92,6 +93,23 @@ const CreateReview = ({ isEdit }) => {
         };
         const response = await dispatch(createReview(review))
         console.log(response);
+    }
+
+    const handleClear = () => {
+        setWork('');
+        setCategory('');
+        setTitle('');
+        setContent('');
+        setImage('')
+        setGrade(null);
+        setTags([]);
+        localStorage.removeItem('tags')
+        localStorage.removeItem('title')
+        localStorage.removeItem('image')
+        localStorage.removeItem('work')
+        localStorage.removeItem('category')
+        localStorage.removeItem('content')
+        localStorage.removeItem('grade')
     }
 
     //hooks
@@ -219,8 +237,11 @@ const CreateReview = ({ isEdit }) => {
                 </Box>
             </Container>
             <DragAndDrop image={image} setImage={setImage} />
-            <Button variant='contained' color="success" sx={{ mt: 2, mb: 2 }} size='small' onClick={handleCreateReview}>
+            <Button variant='contained' color="success" sx={{ mt: 2, mb: 2, mr: 2 }} size='small' onClick={handleCreateReview}>
                 {confirmLabel}
+            </Button>
+            <Button variant='contained' color='warning' sx={{ mt: 2, mb: 2 }} size='small' onClick={handleClear}>
+                {clearLabel}
             </Button>
             {isError ? <MessageError errors={errors} isError={isError} setIsError={setIsError} /> : null}
             {
