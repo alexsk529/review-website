@@ -23,6 +23,7 @@ const DragDropFiles = ({ image, setImage }) => {
         reader.readAsDataURL(file);
         reader.onloadend = () => {
             setImage(reader.result)
+            localStorage.setItem('image', JSON.stringify(reader.result))
         }
     }
 

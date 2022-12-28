@@ -15,6 +15,10 @@ const Editor = ({ content, setContent }) => {
         editor.current.getEditor().root.dataset.placeholder = plcholder
     }, [plcholder])
 
+    React.useEffect(()=> {
+        localStorage.setItem('content', JSON.stringify(content))
+    }, [content])
+
     const toolbarOptions = [
         [{ 'header': [1, 2, false] }],
         ['bold', 'italic', 'underline',],

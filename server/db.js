@@ -101,13 +101,16 @@ const Review = db.define('review', {
         type: DataTypes.STRING,
         allowNull: false
     },
-    rate: {
+    grade: {
         type: DataTypes.INTEGER,
         allowNull: false
     },
     created_at: {
         type: DataTypes.DATE,
         defaultValue: db.literal('CURRENT_TIMESTAMP')
+    },
+    image_url: {
+        type: DataTypes.STRING
     }
 }, {
     timestamps: false

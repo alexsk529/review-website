@@ -7,8 +7,8 @@ const reviewRouter = Router();
 
 reviewRouter.get('/get/:id');
 reviewRouter.get('/searchby/:tag', ReviewController.getReviews)
-reviewRouter.post('/create', ReviewController.createReview);
-reviewRouter.patch('/:id');
+reviewRouter.post('/create', (req, res)=>{console.log(req.body);res.status(200).json(req.body)}, ReviewController.createReview);
+reviewRouter.patch('/update');
 reviewRouter.delete('/:id', ReviewController.deleteReview);
 // reviewRouter.post('/image', ReviewController.uploadImage);
 reviewRouter.post('/image', ReviewController.uploadImage);
