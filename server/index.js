@@ -1,5 +1,5 @@
 import express from 'express';
-import dotenv from 'dotenv';
+// import dotenv from 'dotenv';
 import cors from 'cors';
 import session from 'express-session';
 import cookieParser from 'cookie-parser';
@@ -20,7 +20,7 @@ import mustBeAdmin from './middleware/adminMiddleware.js';
 
 import { sync, select } from './void.js'
 
-dotenv.config();
+//dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 const redirectURL = process.env.FRONT_END_URL || 'http://localhost:3000';
@@ -54,7 +54,7 @@ app.use(session({
     secret:'review-website',
     resave: false,
     saveUninitialized: false,
-    store: new sessionStore({db: 'sessions.db', dir: './'}),
+    store: new sessionStore({db: 'sessions.db', dir: './session'}),
     cookie: cookiesConfigs
 }));
 
@@ -70,15 +70,21 @@ app.use('/api/admin',mustAuthenticated, mustBeAdmin, adminRouter);
 app.use('/api/author', mustAuthenticated, authorRouter);
 app.use('/api/work', workRouter);
 
-async function start() {
-    try {
-        app.listen(PORT, () => {
-            console.log(`Server started on port ${PORT}`)
-            console.log('redirectURL: ', redirectURL);
-        })
-    } catch (e) {
-        console.log(e)
-    }
-}
+app.listen(PORT, () => {
+    console.log(`Server started on port ${PORT}`);
+})
 
-start();
+export default app
+
+// async function start() {
+//     try {
+//         app.listen(PORT, () => {
+//             console.log(`Server started on port ${PORT}`)
+//             console.log('redirectURL: ', redirectURL);
+//         })
+//     } catch (e) {
+//         console.log(e)
+//     }
+// }
+//
+// start();
