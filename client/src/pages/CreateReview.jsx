@@ -7,7 +7,7 @@ import { selectUserEmail } from '../redux/userSlice';
 import { fetchWorks, selectWorks, selectCategories } from '../redux/worksSlice.js';
 
 import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
+import Zoom from '@mui/material/Zoom';
 import Autocomplete from '@mui/material/Autocomplete';
 import Rating from '@mui/material/Rating';
 import Button from '@mui/material/Button';
@@ -18,6 +18,7 @@ import Container from '@mui/material/Container';
 import { useTranslation } from 'react-i18next';
 import Editor from '../components/Editor/Editor.jsx';
 import DragAndDrop from '../components/DragAndDrop/DragAndDrop.jsx'
+import ErrorMessage from '../components/ErrorMessage.jsx'
 
 
 const CreateReview = ({ isEdit }) => {
@@ -64,31 +65,6 @@ const CreateReview = ({ isEdit }) => {
     let works = useSelector(selectWorks);
     let categories = useSelector(selectCategories);
 
-    const ErrorMessage = ({ errors }) => {
-        console.log(errors);
-        return (
-            <Container>
-                <Paper
-                    elevation={3}
-                    sx={{ backgroundColor: '#d32f2f', width: '35%', minWidth: '280px', fontSize: 16, p: 2, color: '#e6e6e6', margin: '0 auto' }}
-                >
-                    <Typography variant='h1' sx={{ fontSize: 18, width: '100%' }} align='left'>{t('createReview.errors.error')}</Typography>
-                    {errors.map(err => (
-                        <Typography variant='body1' sx={{mt: 1}} align='left'>{t('createReview.errors.field')} "{err}"&nbsp;
-                            {
-                                err === reviewLabel ?
-                                    t('createReview.errors.manySymbols') :
-                                    err === gradeLabel ?
-                                        t('createReview.errors.blank') :
-                                        t('createReview.errors.twoSymbols')
-                            }.
-                    </Typography>
-                    ))}
-                </Paper>
-            </Container>
-        );
-    }
-
     const handleCreateReview = () => {
         setIsError(false)
         const err = [];
@@ -103,7 +79,13 @@ const CreateReview = ({ isEdit }) => {
             setIsError(true)
         }
     }
-    console.log(isError);
+
+    React.useEffect(() => {
+        if (isError) {
+            const timeout = setTimeout(()=> setIsError(false), 7000);
+            return () => clearTimeout(timeout)
+        }
+    },[isError])
 
     return (
         <Container maxWidth='lg' sx={{ mt: 3 }}>
@@ -199,7 +181,7 @@ const CreateReview = ({ isEdit }) => {
             <Button variant='contained' color="success" sx={{ mt: 2, mb: 2 }} size='small' onClick={handleCreateReview}>
                 {confirmLabel}
             </Button>
-            {isError ? <ErrorMessage errors={errors} /> : null}
+            {isError ? <Zoom in={isError}><ErrorMessage errors={errors} /></Zoom> : null}
         </Container>
     )
 }
