@@ -61,6 +61,14 @@ i18n
                         cancel: 'Cancel',
                         upload: 'Upload',
                         confirm: 'Confirm',
+                        review: 'Review',
+                        errors: {
+                            error: 'There are errors in the next fields:',
+                            field: 'The field',
+                            blank: 'can not be blanked',
+                            twoSymbols: 'must contain at least 2 symbols',
+                            manySymbols: 'must contain at least 20 symbols'
+                        }
                     }
                 }
             },
@@ -117,6 +125,14 @@ i18n
                         cancel: 'Отменить',
                         upload: 'Загрузить',
                         confirm: 'Сохранить',
+                        review: 'Обзор',
+                        errors: {
+                            error: 'Возникли ошибки в следующих полях:',
+                            field: 'Поле',
+                            blank: 'не должно быть пустым',
+                            twoSymbols: 'должно содержать минимум 2 символа',
+                            manySymbols: 'должно содержать минимум 20 символов'
+                        }
                     }
                 }
             }
