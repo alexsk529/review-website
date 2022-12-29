@@ -5,33 +5,19 @@ class ReviewController {
     constructor() {
         this.createReview = this.createReview.bind(this)
     }
-    async getReviews(req, res, { bestRate }) {
+    async getReviews(req, res, { bestGrade }) {
         try {
-            const order = ['created_at', 'DESC'];
-            if (bestRate) order = ['rate', 'DESC'];
+            let order = ['created_at', 'DESC'];
+            if (bestGrade) order = ['grade', 'DESC'];
             const reviews = await Review.findAll({
-                attributes: ['review_title', 'content', 'rate', 'created_at'],
-                include: [
-                    {
-                        model: Author,
-                        attributes: ['email', 'author_name', 'likes'],
-                        required: true
-                    },
-                    {
-                        model: Work,
-                        required: true
-                    },
-                    {
-                        model: Tag,
-                    }
-                ],
+                include: Work,
                 order: [order],
                 raw: true
             })
             const data = JSON.parse(JSON.stringify(reviews));
-            res.send({ isAuthenticated: req.isAuthenticated(), data: reviews[0] })
+            res.send({ isAuthenticated: req.isAuthenticated(), data: reviews })
         } catch (e) {
-            console.log(e);
+            res.status(500).send('Something went wrong')
         }
     }
 

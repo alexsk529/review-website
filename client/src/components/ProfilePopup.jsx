@@ -20,6 +20,9 @@ import CloseIcon from '@mui/icons-material/Close';
 import EditIcon from '@mui/icons-material/Edit';
 
 import { useTranslation } from 'react-i18next';
+import { format, parseISO } from 'date-fns';
+import ruLocale from 'date-fns/locale/ru';
+import enLocale from 'date-fns/locale/en-US';
 
 import { useForm } from 'react-hook-form';
 
@@ -28,21 +31,20 @@ const ProfilePopup = ({popupProfile}) => {
     const user = useSelector(selectUser)
     const dispatch = useDispatch();
 
+    const locale = {
+        ru: ruLocale,
+        en: enLocale
+    }
+
     const {
         popupOpen,
         setPopupOpen
     } = popupProfile;
 
     const [isEditting, setIsEditting] = React.useState(false)
-    const [dateString, setDateString] = React.useState('')
 
     let email, name, date, role;
     user && ({ email, author_name: name, created_at: date, role } = user)
-
-    date = new Date(Date.parse(date))
-    React.useLayoutEffect(() => {
-        if (!isNaN(date)) setDateString(`${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`)
-    }, [date])
 
     const { register, handleSubmit, formState: { errors } } = useForm({
         defaultValues: {
@@ -145,7 +147,7 @@ const ProfilePopup = ({popupProfile}) => {
                     <Divider />
                     <ListItem sx={{ display: 'flex', justifyContent: 'space-between', flexDirection:{xs: 'column', sm:'row'} }}>
                         <Typography color="primary" variant='h6'>{t('profile.creationDate')}</Typography>
-                        <Typography sx={{ color: "#7f7e7e" }} variant='body1'>{dateString}</Typography>
+                        <Typography sx={{ color: "#7f7e7e" }} variant='body1'>{format(parseISO(date), 'dd/MMM/yy', {locale: locale[t('locale')]})}</Typography>
                     </ListItem>
                     <Divider />
                     <ListItem sx={{ display: 'flex', justifyContent: 'space-between', flexDirection:{xs: 'column', sm:'row'} }}>

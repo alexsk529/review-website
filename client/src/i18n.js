@@ -10,6 +10,7 @@ i18n
         resources: {
             en: {
                 translation: {
+                    locale: 'en',
                     navbar: {
                         search: "Search...",
                         profile: "Profile",
@@ -44,7 +45,8 @@ i18n
                         tools: 'Tools',
                         edit: 'Edit the review',
                         open: 'Open the review',
-                        create: 'Create a new review'
+                        create: 'Create a new review',
+                        refresh: 'Refresh your reviews'
                     },
                     createReview: {
                         create: 'Creation the new review',
@@ -79,6 +81,7 @@ i18n
             },
             ru: {
                 translation: {
+                    locale: 'ru',
                     navbar: {
                         search: "Поиск...",
                         profile: "Профиль",
@@ -108,12 +111,13 @@ i18n
                         title: 'Название обзора',
                         category: 'Категория',
                         work: 'Название произведения',
-                        grade: 'Ваш оценка',
+                        grade: 'Ваша оценка',
                         createdAt: 'Дата создания обзора',
                         tools: 'Ред.',
                         edit: 'Ред. обзор',
                         open: 'Открыть обзор',
-                        create: 'Создать новый обзор'
+                        create: 'Создать новый обзор',
+                        refresh: 'Обновить ваши обзоры'
                     },
                     createReview: {
                         create: 'Создание нового обзора',
