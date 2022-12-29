@@ -109,7 +109,7 @@ const MenuComponent = ({ isMobile, popupProfile }) => {
                 {
                     isMobile ?
                         <Link to='/'>
-                            <MenuItem>
+                            <MenuItem onClick={handleMenuClose}>
                                 <HomeIcon sx={{ mr: 1, height: 30, width: 30 }} color="primary" /> {t('navbar.home')}
                             </MenuItem>
                         </Link> :

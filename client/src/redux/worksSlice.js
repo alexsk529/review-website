@@ -12,22 +12,26 @@ const worksSlice = createSlice({
     reducers: {},
     extraReducers(builder) {
         builder.addCase(fetchWorks.fulfilled, (state, action) => {
-            state = action.payload
+            return action.payload
         })
     }
 })
 
 export default worksSlice.reducer
 
-export const selectWorks = state => state.works.map(item => item.work_name);
+export const selectWorks = state => state.works.map(item => {
+    const result = item.work_name;
+    return result[0].toUpperCase() + result.slice(1)
+});
 
 export const selectCategories = state => {
     const groups = state.works.map(item => item.category);
     const unique = (arr) => {
-        const result = [];
+        let result = [];
         arr.forEach(el => {
             !result.includes(el) && result.push(el)
         })
+        result = result.map(item => item[0].toUpperCase() + item.slice(1))
         return result
     }
     return unique(groups) 

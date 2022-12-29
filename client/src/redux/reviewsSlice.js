@@ -18,7 +18,7 @@ export const fetchReviewsByBestRate = createAsyncThunk('reviews/fetchReviewsByBe
 })
 
 export const createReview = createAsyncThunk('reviews/createReview', async(review) => {
-    const response = await axios.post('/api/review/create', {review}, {withCredentials: true});
+    const response = await axios.post('/api/review/create', {...review}, {withCredentials: true});
     return response.data;
 });
 
@@ -40,15 +40,16 @@ const reviewsSlice = createSlice({
     reducers: {},
     extraReducers(builder) {
         builder
+            .addCase(createReview.pending, (state, action) => {
+                state.status = 'loading'
+            })
             .addCase(createReview.fulfilled, (state, action) => {
-                //state.reviews.data = state.reviews.data.concat(action.payload)
-                console.log('succeded');
-                console.log(action);
+                state.status = 'idle'
+                state.data = state.data.concat(action.payload.review)
             })
             .addCase(createReview.rejected, (state, action) => {
-                //state.error = action.error.message
-                console.log('rejected');
-                console.log(action);
+                state.status = 'idle'
+                state.error = action.error.message
             })
             .addCase(updateReview.rejected, (state, action) => {
                 state.error = action.error.message

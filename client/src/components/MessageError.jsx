@@ -27,14 +27,29 @@ const ErrorMessage = ({ errors, isError, setIsError }) => {
             onClose={handleClose}
             sx={{}}
         >
-            <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between', backgroundColor: RED, color: WHITISH }}>
+            <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between', backgroundColor: RED, color: WHITISH, p: { xs: 1, sm: 3 } }}>
                 {t('createReview.errors.error')} <IconButton sx={{color: WHITISH}} onClick={handleClose}><CloseIcon /></IconButton>
             </DialogTitle>
-            <DialogContent sx={{ backgroundColor: RED, color: WHITISH }}>
+            <DialogContent sx={{ backgroundColor: RED, color: WHITISH, p: {xs: 0, sm:2} }}>
                 <Typography variant='h1' sx={{ fontSize: 18, width: '100%' }} align='left'></Typography>
                 <List>
                     {errors.map((err, i) => (
-                        <ListItem key={i} variant='body1' sx={{ mt: 1 }} align='left'>{t('createReview.errors.field')} <b><i>"{err}"</i></b>&nbsp;
+                        <ListItem 
+                        key={i} 
+                        variant='body1' 
+                        sx={{
+                             mt: 1,  
+                             display: 'flex', 
+                             justifyContent: 'flexStart',
+                             alignItems: {xs: 'start', sm: 'center' }, 
+                             flexDirection:{xs: 'column', sm:'row'} 
+                              }} 
+                             align='left'
+                             >
+                                <div>
+                                {t('createReview.errors.field')} <b><i>"{err}"</i></b>&nbsp;
+                                </div>
+                                <div>
                             {
                                 err === reviewLabel ?
                                     t('createReview.errors.manySymbols') :
@@ -42,6 +57,7 @@ const ErrorMessage = ({ errors, isError, setIsError }) => {
                                         t('createReview.errors.blank') :
                                         t('createReview.errors.twoSymbols')
                             }.
+                            </div>
                         </ListItem>
                     ))}
                 </List>

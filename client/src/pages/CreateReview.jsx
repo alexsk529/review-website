@@ -3,7 +3,6 @@ import React from 'react';
 import axios from '../axios.js';
 
 import { useSelector, useDispatch } from 'react-redux';
-import { selectUserEmail } from '../redux/userSlice';
 import { fetchWorks, selectWorks, selectCategories } from '../redux/worksSlice.js';
 import { createReview } from '../redux/reviewsSlice.js';
 
@@ -14,6 +13,7 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import CircularProgress from '@mui/material/CircularProgress';
 
 import { useTranslation } from 'react-i18next';
 import Editor from '../components/Editor/Editor.jsx';
@@ -33,6 +33,8 @@ const CreateReview = ({ isEdit }) => {
     const [image, setImage] = React.useState(JSON.parse(localStorage.getItem('image')) || '');
     const [grade, setGrade] = React.useState(JSON.parse(localStorage.getItem('grade')) || null);
     const [tags, setTags] = React.useState(JSON.parse(localStorage.getItem('tags')) || []);
+    
+    const [imageName, setImageName] = React.useState(JSON.parse(localStorage.getItem('name')) || '')
 
     const [errors, setErrors] = React.useState([])
 
@@ -51,19 +53,20 @@ const CreateReview = ({ isEdit }) => {
     const reviewLabel = t('createReview.review');
     const clearLabel = t('createReview.clear')
 
-    const userEmail = useSelector(selectUserEmail);
-
     let works = useSelector(selectWorks);
     let categories = useSelector(selectCategories);
 
-    let tagsOptions = React.useRef([]);
+    const [tagsOptions, setTagsOptions] = React.useState([])
+
+    const reviewStatus = useSelector(state => state.reviews.status)
 
     //methods
     const getTags = async () => {
         const res = await axios.get('/api/work/get-tags')
-        tagsOptions = res.data;
+        const tags = res.data.map(item => item.tag_name)
+        setTagsOptions(tags)
     }
-    
+
     const errorCollector = () => {
         const errors = []
         work.length < 2 && errors.push(workLabel);
@@ -73,6 +76,26 @@ const CreateReview = ({ isEdit }) => {
         !grade && errors.push(gradeLabel);
         return (errors)
     }
+
+    
+    const handleClear = () => {
+        setWork('');
+        setCategory('');
+        setTitle('');
+        setContent('');
+        setImage('')
+        setGrade(null);
+        setTags([]);
+        setImageName('');
+        localStorage.removeItem('tags')
+        localStorage.removeItem('title')
+        localStorage.removeItem('image')
+        localStorage.removeItem('work')
+        localStorage.removeItem('category')
+        localStorage.removeItem('content')
+        localStorage.removeItem('grade')
+        localStorage.removeItem('name')
+    }
     
     const handleCreateReview = async () => {
         setIsError(false)
@@ -81,7 +104,6 @@ const CreateReview = ({ isEdit }) => {
             setIsError(true)
             return;
         }
-        setIsServerError(true)
         const review = {
             work,
             category,
@@ -92,24 +114,8 @@ const CreateReview = ({ isEdit }) => {
             tags
         };
         const response = await dispatch(createReview(review))
-        console.log(response);
-    }
-
-    const handleClear = () => {
-        setWork('');
-        setCategory('');
-        setTitle('');
-        setContent('');
-        setImage('')
-        setGrade(null);
-        setTags([]);
-        localStorage.removeItem('tags')
-        localStorage.removeItem('title')
-        localStorage.removeItem('image')
-        localStorage.removeItem('work')
-        localStorage.removeItem('category')
-        localStorage.removeItem('content')
-        localStorage.removeItem('grade')
+        response && ((response.meta.requestStatus === 'fulfilled') ? setIsSuccess(true) : setIsServerError(false))
+        response && ((response.meta.requestStatus === 'fulfilled') && handleClear()) 
     }
 
     //hooks
@@ -120,7 +126,7 @@ const CreateReview = ({ isEdit }) => {
     React.useLayoutEffect(() => {
         getTags();
     }, [])
-    
+
     return (
         <Container maxWidth='lg' sx={{ mt: 3 }}>
             <Typography variant='h1' sx={{ fontSize: 20, color: '#5c5c5c', width: '100%', mb: 3 }} align='center'>
@@ -142,10 +148,12 @@ const CreateReview = ({ isEdit }) => {
             }} >
                 <Autocomplete
                     freeSolo
-                    sx={{ width: {
-                        xs: 280,
-                        sm: 300
-                    }}}
+                    sx={{
+                        width: {
+                            xs: 280,
+                            sm: 300
+                        }
+                    }}
                     name="work"
                     options={works}
                     value={work}
@@ -164,10 +172,12 @@ const CreateReview = ({ isEdit }) => {
                 />
                 <Autocomplete
                     freeSolo
-                    sx={{ width: {
-                        xs: 280,
-                        sm: 200
-                    }}}
+                    sx={{
+                        width: {
+                            xs: 280,
+                            sm: 200
+                        }
+                    }}
                     options={categories}
                     value={category}
                     inputValue={category}
@@ -185,16 +195,17 @@ const CreateReview = ({ isEdit }) => {
                 />
                 <TextField
                     variant='standard'
-                    sx={{ width: {
-                        xs: 280,
-                        sm: 300
-                    }}}
+                    sx={{
+                        width: {
+                            xs: 280,
+                            sm: 300
+                        }
+                    }}
                     value={title}
-                    onChange={(e) => 
-                        {
-                            setTitle(e.target.value);
-                            localStorage.setItem('title', JSON.stringify(e.target.value))
-                        }}
+                    onChange={(e) => {
+                        setTitle(e.target.value);
+                        localStorage.setItem('title', JSON.stringify(e.target.value))
+                    }}
                     label={titleLabel}
                 />
             </Container>
@@ -216,10 +227,10 @@ const CreateReview = ({ isEdit }) => {
                     sx={{ width: 250 }}
                     multiple
                     limitTags={2}
-                    options={tagsOptions.current}
+                    options={tagsOptions}
                     value={tags}
-                    onChange={(e, newVal) => { 
-                        setTags(newVal) 
+                    onChange={(e, newVal) => {
+                        setTags(newVal)
                         localStorage.setItem('tags', JSON.stringify(tags))
                     }}
                     renderInput={(params) => <TextField name="tags" {...params} label={tagsLabel} variant="standard" />}
@@ -236,13 +247,19 @@ const CreateReview = ({ isEdit }) => {
                     />
                 </Box>
             </Container>
-            <DragAndDrop image={image} setImage={setImage} />
-            <Button variant='contained' color="success" sx={{ mt: 2, mb: 2, mr: 2 }} size='small' onClick={handleCreateReview}>
-                {confirmLabel}
-            </Button>
-            <Button variant='contained' color='warning' sx={{ mt: 2, mb: 2 }} size='small' onClick={handleClear}>
-                {clearLabel}
-            </Button>
+            {
+                reviewStatus === 'loading' ?
+                    <CircularProgress sx={{mt: 3}}/> :
+                    <React.Fragment>
+                        <DragAndDrop image={image} setImage={setImage} name={imageName} setName={setImageName} />
+                        <Button variant='contained' color="success" sx={{ mt: 2, mb: 2, mr: 2 }} size='small' onClick={handleCreateReview}>
+                            {confirmLabel}
+                        </Button>
+                        <Button variant='contained' color='warning' sx={{ mt: 2, mb: 2 }} size='small' onClick={handleClear}>
+                            {clearLabel}
+                        </Button>
+                    </React.Fragment>
+            }
             {isError ? <MessageError errors={errors} isError={isError} setIsError={setIsError} /> : null}
             {
                 isSuccess || isServerError ?

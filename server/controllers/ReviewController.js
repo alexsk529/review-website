@@ -1,8 +1,11 @@
-import {db, Author, ReviewTag, Review, Comments, Work, Tag} from '../db.js';
+import { db, Author, ReviewTag, Review, Comments, Work, Tag } from '../db.js';
 import { cloudinary } from '../cloudinary.js';
 
 class ReviewController {
-    async getReviews (req, res, { bestRate}) {
+    constructor() {
+        this.createReview = this.createReview.bind(this)
+    }
+    async getReviews(req, res, { bestRate }) {
         try {
             const order = ['created_at', 'DESC'];
             if (bestRate) order = ['rate', 'DESC'];
@@ -26,42 +29,61 @@ class ReviewController {
                 raw: true
             })
             const data = JSON.parse(JSON.stringify(reviews));
-            res.send({isAuthenticated: req.isAuthenticated(), data: reviews[0]})
+            res.send({ isAuthenticated: req.isAuthenticated(), data: reviews[0] })
         } catch (e) {
             console.log(e);
         }
     }
-    
-    async createReview (req, res) {
+
+    async uploadImage (img) {
+        const uploadRes = await cloudinary.uploader.upload(img, {
+            upload_preset: 'review-website'
+        })
+        return uploadRes
+    }
+
+    async findOrCreateWork (work, category) {
+        const result = await Work.findOrCreate({
+            where: {
+                work_name: work.toLowerCase()
+            },
+            defaults: {
+                work_name: work.toLowerCase(),
+                category: category.toLowerCase()
+            },
+            raw: true
+        })
+        return (result[0])
+    }
+
+    async createReview(req, res) {
         try {
             const {
                 work,
                 category,
                 title,
                 content,
-                rate,
-                tags
+                grade,
+                tags, 
+                image
             } = req.body;
-            const {email} = req.user;
-            await Work.findOrCreate({
-                where: {
-                    work_name: work
-                },
-                defaults: {
-                    work_name: work,
-                category: category
-                }
-            })
-            const review = Review.create({
-                work_name: work,
+            const { email } = req.user;
+
+            const imageUrl = (await this.uploadImage(image)).public_id
+
+            const workName = (await this.findOrCreateWork(work, category)).work_name
+
+            const review = await Review.create({
+                work_name: workName,
                 email: email,
                 review_title: title,
                 content: content,
-                rate: rate
-            },{
+                grade: grade,
+                image_url: imageUrl
+            }, {
                 raw: true
             })
-            const id = review.review_id;
+            const id = review.dataValues.review_id;
             tags.forEach(async (tag) => {
                 await Tag.findOrCreate({
                     where: {
@@ -71,14 +93,32 @@ class ReviewController {
                         tag_name: tag
                     }
                 })
+
+                await ReviewTag.create({
+                    review_id: id,
+                    tag_name: tag
+                })
             })
-            res.status(201).send({message: 'The review has been created'})
+            res.status(201).send({
+                message: 'The review has been created',
+                review: {
+                    id,
+                    reviewTitle: review.dataValues.review_id,
+                    workName,
+                    email: review.dataValues.email,
+                    content: review.dataValues.content,
+                    grade: review.dataValues.grade,
+                    createdAt: review.dataValues.created_at,
+                    imageUrl: review.dataValues.image_url
+                } 
+            })
         } catch (e) {
             console.log(e)
+            res.status(500).send(e.message)
         }
     }
 
-    async deleteReview (req, res) {
+    async deleteReview(req, res) {
         const id = req.params.id.slice(1);
         await ReviewTag.destroy({
             where: {
@@ -95,28 +135,14 @@ class ReviewController {
                 review_id: id
             }
         });
-        res.status(204).send({message: 'The review has been deleted'})
+        res.status(204).send({ message: 'The review has been deleted' })
     }
 
-    async uploadImage (req, res) {
-        try {
-            const fileStr = req.body.data;
-            const uploadRes = await cloudinary.uploader.upload(fileStr, {
-                upload_preset: 'review-website'
-            })
-            console.log(uploadRes);
-            res.json({msg: 'image uploaded'})
-        } catch (error) {
-            console.error(error);
-            res.status(500).json({err: 'Something went wrong'})
-        }
-    }
-
-    async getImage (req, res) {
+    async getImage(req, res) {
         console.log(cloudinary);
         res.send();
     }
 
- }
+}
 
 export default new ReviewController();

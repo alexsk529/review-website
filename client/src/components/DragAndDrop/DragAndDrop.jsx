@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useRef } from "react";
 import './DragAndDrop.css'
 
 import Button from '@mui/material/Button';
@@ -6,10 +6,8 @@ import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 
 import { useTranslation } from 'react-i18next';
-import axios from '../../axios.js'
 
-const DragDropFiles = ({ image, setImage }) => {
-    const [name, setName] = useState('')
+const DragDropFiles = ({ image, setImage, name, setName }) => {
     const { t } = useTranslation();
 
     const inputRef = useRef();
@@ -31,26 +29,15 @@ const DragDropFiles = ({ image, setImage }) => {
         event.preventDefault();
         const file = event.dataTransfer.files[0]
         setName(file.name);
+        localStorage.setItem('name', JSON.stringify(file.name))
         previewFile(file)
     };
     const handleChange = (event) => {
         const file = event.target.files[0]
         setName(file.name);
+        localStorage.setItem('name', JSON.stringify(file.name))
         previewFile(file)
     }
-
-    const uploadImage = async (base64) => {
-        try {
-            await axios.post('/api/review/image', {data: base64})
-            setImage(null);
-        } catch (error) {
-            console.error(error)
-        }
-    }
-    // send files to the server // learn from my other video
-    const handleUpload = () => {
-        uploadImage(image)
-    };
 
     if (image) return (
         <Container width="100%" sx={{ mt: 4 }}>
@@ -62,9 +49,6 @@ const DragDropFiles = ({ image, setImage }) => {
                     <Button variant="contained" size="small" color="error" onClick={() => setImage(null)}>{t('createReview.cancel')}</Button>
                     {/* <Button variant="contained" size="small" onClick={handleUpload}>{t('createReview.upload')}</Button> */}
                 </Box>
-                <Button onClick={handleUpload}>
-                    Do it
-                </Button>
             </div>
         </Container>
     )

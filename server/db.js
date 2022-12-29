@@ -98,7 +98,7 @@ const Review = db.define('review', {
         allowNull: false
     },
     content: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(10000),
         allowNull: false
     },
     grade: {
