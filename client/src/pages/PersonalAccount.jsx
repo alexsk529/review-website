@@ -69,7 +69,7 @@ const PersonalAccount = () => {
             headerAlign: 'center',
             align: 'center',
             flex: 1.3,
-            valueFormatter: (params) => format(parseISO(params.value), 'H:m dd/MMM/yy', { locale: locale[t('locale')] })
+            valueFormatter: (params) => format(parseISO(params.value), 'H:m, dd/MMM/yy', { locale: locale[t('locale')] })
         },
         {
             field: 'buttons',
@@ -81,7 +81,11 @@ const PersonalAccount = () => {
             type: 'actions',
             getActions: (params) => [
                 <GridActionsCellItem color="primary" label="Observe" icon={<Tooltip title={t('account.open')}><SearchIcon /></Tooltip>} />,
-                <GridActionsCellItem color="error"  label="Edit" icon={<Tooltip title={t('account.edit')}><EditIcon /></Tooltip>} />
+                <GridActionsCellItem
+                    color="error"
+                    label="Edit"
+                    icon={<Link to={`/edit-review/:${params.id}`}><Tooltip title={t('account.edit')}><EditIcon /></Tooltip></Link>}
+                />
             ]
         }
     ];
