@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, createSelector } from '@reduxjs/toolkit';
 import axios from '../axios.js'
 
 const initialState = {
@@ -7,7 +7,7 @@ const initialState = {
     error: null
 }
 
-export const fetchReviews = createAsyncThunk('reviews/fetchAllReviews', async () => {
+export const fetchReviews = createAsyncThunk('reviews/fetchReviews', async () => {
     const response = await axios.get('/');
     return response.data.data;
 });
@@ -23,7 +23,7 @@ export const createReview = createAsyncThunk('reviews/createReview', async (revi
 });
 
 export const updateReview = createAsyncThunk('reviews/updateReview', async (review) => {
-    const response = await axios.patch('/api/review/update', { review }, { withCredentials: true });
+    const response = await axios.patch('/api/review/update', { ...review }, { withCredentials: true });
     return response.data;
 });
 
@@ -71,19 +71,18 @@ export const reviewsSlice = createSlice({
                 state.status = 'idle'
                 state.error = action.error.message
             })
+            .addCase(updateReview.pending, (state, action) => {
+                state.status = 'loading'
+            })
             .addCase(updateReview.rejected, (state, action) => {
+                state.status = 'idle'
                 state.error = action.error.message
             })
             .addCase(updateReview.fulfilled, (state, action) => {
-                const { review_id: id, work_name, review_title, content, image_url, rate } = action.payload;
-                const existingPost = state.reviews.data.find(review => review.review_id === id);
-                if (existingPost) {
-                    existingPost.work_name = work_name;
-                    existingPost.review_title = review_title;
-                    existingPost.content = content;
-                    existingPost.image_url = image_url;
-                    existingPost.rate = rate;
-                }
+                state.status = 'idle'
+                const {id} = action.payload.review
+                const existingPost = state.data.find(review => review.review_id === id);
+                if (existingPost) existingPost = {...action.payload.review}
             })
     }
 })

@@ -50,7 +50,7 @@ const TagsGrade = (props) => {
                 freeSolo
                 sx={{ width: 250 }}
                 multiple
-                limitTags={2}
+                limitTags={1}
                 options={tagsOptions}
                 value={tags}
                 onChange={(e, newVal) => {

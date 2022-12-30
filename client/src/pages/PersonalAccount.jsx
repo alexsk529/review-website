@@ -80,11 +80,11 @@ const PersonalAccount = () => {
             headerClassName: 'header-tools',
             type: 'actions',
             getActions: (params) => [
-                <GridActionsCellItem color="primary" label="Observe" icon={<Tooltip title={t('account.open')}><SearchIcon /></Tooltip>} />,
+                <GridActionsCellItem color="primary" label="Observe" icon={<Tooltip placement='left' title={t('account.open')}><SearchIcon /></Tooltip>} />,
                 <GridActionsCellItem
                     color="error"
                     label="Edit"
-                    icon={<Link to={`/edit-review/:${params.id}`}><Tooltip title={t('account.edit')}><EditIcon /></Tooltip></Link>}
+                    icon={<Link to={`/edit-review/${params.id}`}><Tooltip placement='right' title={t('account.edit')}><EditIcon /></Tooltip></Link>}
                 />
             ]
         }
@@ -95,7 +95,7 @@ const PersonalAccount = () => {
     const rows = reviews.map((row) => ({
         id: row.review_id,
         title: row.review_title,
-        category: row["work.category"],
+        category: row.category,
         work: row.work_name,
         grade: row.grade,
         createdAt: row.created_at
@@ -148,6 +148,7 @@ const PersonalAccount = () => {
                     reviewsStatus === 'loading' ?
                         <CircularProgress /> :
                         <DataGrid
+                            getRowId={(row) => row.id}
                             autoHeight
                             sx={{
                                 justifyContent: "space-between"

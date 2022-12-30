@@ -3,18 +3,22 @@ import { cloudinary } from '../cloudinary.js';
 
 class ReviewController {
     constructor() {
-        this.createReview = this.createReview.bind(this)
+        this.createReview = this.createReview.bind(this);
+        this.updateReview = this.updateReview.bind(this);
     }
     async getReviews(req, res, { bestGrade }) {
         try {
             let order = ['created_at', 'DESC'];
             if (bestGrade) order = ['grade', 'DESC'];
-            const reviews = await Review.findAll({
+            let reviews = (await Review.findAll({
                 include: Work,
                 order: [order],
-                raw: true
+            })).map(item => item.dataValues)
+            reviews = reviews.map(item => ({...item, category: item.work.dataValues.category}))            
+            reviews = reviews.map(item => {
+                delete item.work
+                return item
             })
-            const data = JSON.parse(JSON.stringify(reviews));
             res.send({ isAuthenticated: req.isAuthenticated(), data: reviews })
         } catch (e) {
             res.status(500).send('Something went wrong')
@@ -42,6 +46,23 @@ class ReviewController {
         return (result[0])
     }
 
+    async addNewTags (tags, id) {
+        tags.forEach(async (tag) => {
+            await Tag.findOrCreate({
+                where: {
+                    tag_name: tag
+                }
+            })
+
+            await ReviewTag.findOrCreate({
+                where: {
+                    review_id: id,
+                    tag_name: tag
+                }
+            })
+        })
+    }
+
     async createReview(req, res) {
         try {
             const {
@@ -55,11 +76,13 @@ class ReviewController {
             } = req.body;
             const { email } = req.user;
 
-            const imageUrl = (await this.uploadImage(image)).public_id
+            let imageUrl = image
+
+            if (!imageUrl) imageUrl = (await this.uploadImage(image)).public_id
 
             const workName = (await this.findOrCreateWork(work, category)).work_name
 
-            const review = await Review.create({
+            const review = (await Review.create({
                 work_name: workName,
                 email: email,
                 review_title: title,
@@ -68,39 +91,109 @@ class ReviewController {
                 image_url: imageUrl
             }, {
                 raw: true
-            })
-            const id = review.dataValues.review_id;
-            tags.forEach(async (tag) => {
-                await Tag.findOrCreate({
-                    where: {
-                        tag_name: tag
-                    },
-                    defaults: {
-                        tag_name: tag
-                    }
-                })
+            })).dataValues
+            const id = review.review_id;
 
-                await ReviewTag.create({
-                    review_id: id,
-                    tag_name: tag
-                })
-            })
+            this.addNewTags(tags, id)
+
             res.status(201).send({
                 message: 'The review has been created',
                 review: {
-                    id,
-                    reviewTitle: review.dataValues.review_id,
-                    workName,
-                    email: review.dataValues.email,
-                    content: review.dataValues.content,
-                    grade: review.dataValues.grade,
-                    createdAt: review.dataValues.created_at,
-                    imageUrl: review.dataValues.image_url
+                    ...review,
+                    category
                 } 
             })
         } catch (e) {
             console.log(e)
             res.status(500).send(e.message)
+        }
+    }
+
+    async updateReview (req, res) {
+        try {
+            const {
+                id,
+                work,
+                category,
+                title,
+                content,
+                grade,
+                tags, 
+                image
+            } = req.body;
+            const { email } = req.user;
+            const existingURL = (await Review.findOne({
+                attributes: ['image_url'],
+                where: {
+                    review_id: id
+                },
+                raw: true
+            })).image_url
+    
+            let imageUrl = image
+
+            if (!imageUrl) imageUrl = (await this.uploadImage(image)).public_id
+            
+            const workName = (await this.findOrCreateWork(work, category)).work_name;
+            
+            work === workName && await Work.update({
+                category: category
+            }, {
+                where: {
+                    work_name: work
+                }
+            })
+    
+            const review = (await Review.update({
+                work_name: workName,
+                email: email,
+                review_title: title,
+                content: content,
+                grade: grade,
+                image_url: imageUrl,
+            }, {
+                where: {
+                    review_id: id
+                },
+                raw: true,
+                returning: true
+            }))[1][0]
+    
+            await ReviewTag.destroy({
+                where: {
+                    review_id: id
+                }
+            })
+    
+            this.addNewTags(tags, id)
+    
+            res.status(200).send({
+                message: 'The review has been updated',
+                review: {
+                    ...review,
+                    category
+                } 
+            })
+        } catch (e) {
+            console.log(e)
+            res.status(500).send(e.message)
+        }
+    }
+
+    async getTagsForReview (req, res) {
+        try {
+            const reviewId = +req.params.id
+            console.log(reviewId);
+            const tags = await ReviewTag.findAll({
+                attributes: ['tag_name'],
+                where: {
+                    review_id: reviewId
+                },
+                raw: true
+            })
+            res.send(tags)
+        } catch (error) {
+            res.status(500).send(error.message)
         }
     }
 
@@ -123,12 +216,6 @@ class ReviewController {
         });
         res.status(204).send({ message: 'The review has been deleted' })
     }
-
-    async getImage(req, res) {
-        console.log(cloudinary);
-        res.send();
-    }
-
 }
 
 export default new ReviewController();

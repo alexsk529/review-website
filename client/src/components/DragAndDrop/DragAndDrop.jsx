@@ -46,7 +46,7 @@ const DragDropFiles = ({ image, setImage, name, setName }) => {
                     <li className="dropzone_title" >{name}</li>
                 </ul>
                 <Box sx={{ display: 'flex', gap: 3, mt: 3 }}>
-                    <Button variant="contained" size="small" color="error" onClick={() => setImage(null)}>{t('createReview.cancel')}</Button>
+                    <Button variant="contained" size="small" color="error" onClick={() =>{setImage(''); localStorage.removeItem('image');localStorage.removeItem('name')} }>{t('createReview.cancel')}</Button>
                     {/* <Button variant="contained" size="small" onClick={handleUpload}>{t('createReview.upload')}</Button> */}
                 </Box>
             </div>

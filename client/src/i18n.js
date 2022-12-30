@@ -72,7 +72,7 @@ i18n
                             manySymbols: 'must contain at least 20 symbols'
                         },
                         congrat: 'Congratulations!',
-                        success: 'Your review has been created!',
+                        success: 'Your review has been saved!',
                         wentWrong: 'Something went wrong...',
                         again: 'Please, try again later.',
                         clear: 'Clear page'
@@ -143,7 +143,7 @@ i18n
                             manySymbols: 'должно содержать минимум 20 символов'
                         },
                         congrat: 'Поздравляем!',
-                        success: 'Ваш обзор был создан!',
+                        success: 'Ваш обзор был сохранен!',
                         wentWrong: 'Что-то пошло не так...',
                         again: 'Пожалуйста, попробуйте позже.',
                         clear: 'Очистить контент'

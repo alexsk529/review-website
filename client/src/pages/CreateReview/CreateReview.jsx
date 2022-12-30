@@ -1,8 +1,8 @@
 import React from 'react';
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 
 import { useDispatch } from 'react-redux';
-import { createReview } from '../../redux/reviewsSlice.js';
+import { createReview, updateReview } from '../../redux/reviewsSlice.js';
 
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
@@ -14,12 +14,14 @@ import Editor from '../../components/Editor/Editor.jsx';
 import TitleRevWork from './TitleRevWork.jsx';
 import TagsGrade from './TagsGrade.jsx';
 import ActionsMessages from './ActionsMessages.jsx';
+import Edit from './Edit.jsx';
 
 
 const CreateReview = ({ isEdit }) => {
     //vars
     const dispatch = useDispatch();
-    const id = (useParams())?.id?.slice(1);
+    const navigate = useNavigate();
+    const id = (useParams())?.id;
 
     const [work, setWork] = React.useState(JSON.parse(localStorage.getItem('work')) || '');
     const [category, setCategory] = React.useState(JSON.parse(localStorage.getItem('category')) || '')
@@ -92,9 +94,12 @@ const CreateReview = ({ isEdit }) => {
             grade,
             tags
         };
-        const response = await dispatch(createReview(review))
-        response && ((response.meta.requestStatus === 'fulfilled') ? setIsSuccess(true) : setIsServerError(false))
-        response && ((response.meta.requestStatus === 'fulfilled') && handleClear())
+        if (isEdit) review.id = id;
+        let response;
+        isEdit ? response = await dispatch(updateReview(review)) : response = await dispatch(createReview(review))
+        response && ((response.meta.requestStatus === 'fulfilled') ? setIsSuccess(true) : setIsServerError(true))
+        response && (response.meta.requestStatus === 'fulfilled') && handleClear()
+        
     }
 
     return (
@@ -116,14 +121,14 @@ const CreateReview = ({ isEdit }) => {
             <Box sx={{ mt: 2, mb: 2 }}>
                 <Editor content={content} setContent={setContent} />
             </Box>
-            <TagsGrade 
+            <TagsGrade
                 tags={tags}
                 setTags={setTags}
                 gradeLabel={gradeLabel}
                 grade={grade}
                 setGrade={setGrade}
             />
-            <ActionsMessages 
+            <ActionsMessages
                 image={image}
                 setImage={setImage}
                 imageName={imageName}
@@ -138,6 +143,21 @@ const CreateReview = ({ isEdit }) => {
                 setIsServerError={setIsServerError}
                 setIsSuccess={setIsSuccess}
             />
+            {
+                isEdit ?
+                    <Edit
+                        id={id}
+                        setWork={setWork}
+                        setTitle={setTitle}
+                        setCategory={setCategory}
+                        setContent={setContent}
+                        setTags={setTags}
+                        setGrade={setGrade}
+                        setImage={setImage}
+                        setImageName={setImageName}
+                    /> :
+                    null
+            }
         </Container>
     )
 }
