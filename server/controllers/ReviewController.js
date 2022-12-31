@@ -1,5 +1,7 @@
-import { db, Author, ReviewTag, Review, Comments, Work, Tag } from '../db.js';
+import { ReviewTag, Review, Comments, Work} from '../db.js';
 import { cloudinary } from '../cloudinary.js';
+import TagController from './TagController.js';
+import WorkController from './WorkController.js';
 
 class ReviewController {
     constructor() {
@@ -32,37 +34,6 @@ class ReviewController {
         return uploadRes
     }
 
-    async findOrCreateWork (work, category) {
-        const result = await Work.findOrCreate({
-            where: {
-                work_name: work.toLowerCase()
-            },
-            defaults: {
-                work_name: work.toLowerCase(),
-                category: category.toLowerCase()
-            },
-            raw: true
-        })
-        return (result[0])
-    }
-
-    async addNewTags (tags, id) {
-        tags.forEach(async (tag) => {
-            await Tag.findOrCreate({
-                where: {
-                    tag_name: tag
-                }
-            })
-
-            await ReviewTag.findOrCreate({
-                where: {
-                    review_id: id,
-                    tag_name: tag
-                }
-            })
-        })
-    }
-
     async createReview(req, res) {
         try {
             const {
@@ -78,9 +49,9 @@ class ReviewController {
 
             let imageUrl = image
 
-            if (!imageUrl) imageUrl = (await this.uploadImage(image)).public_id
+            if (imageUrl) imageUrl = (await this.uploadImage(image)).public_id
 
-            const workName = (await this.findOrCreateWork(work, category)).work_name
+            const workName = (await WorkController.findOrCreateWork(work, category)).work_name
 
             const review = (await Review.create({
                 work_name: workName,
@@ -94,7 +65,7 @@ class ReviewController {
             })).dataValues
             const id = review.review_id;
 
-            this.addNewTags(tags, id)
+            TagController.addNewTags(tags, id)
 
             res.status(201).send({
                 message: 'The review has been created',
@@ -105,7 +76,7 @@ class ReviewController {
             })
         } catch (e) {
             console.log(e)
-            res.status(500).send(e.message)
+            res.status(500).send({msg: e.message, cause: e.cause, stack: e.stack})
         }
     }
 
@@ -122,19 +93,12 @@ class ReviewController {
                 image
             } = req.body;
             const { email } = req.user;
-            const existingURL = (await Review.findOne({
-                attributes: ['image_url'],
-                where: {
-                    review_id: id
-                },
-                raw: true
-            })).image_url
     
             let imageUrl = image
 
-            if (!imageUrl) imageUrl = (await this.uploadImage(image)).public_id
+            if (imageUrl) imageUrl = (await this.uploadImage(image)).public_id
             
-            const workName = (await this.findOrCreateWork(work, category)).work_name;
+            const workName = (await WorkController.findOrCreateWork(work, category)).work_name;
             
             work === workName && await Work.update({
                 category: category
@@ -165,7 +129,7 @@ class ReviewController {
                 }
             })
     
-            this.addNewTags(tags, id)
+            TagController.addNewTags(tags, id)
     
             res.status(200).send({
                 message: 'The review has been updated',
@@ -176,45 +140,31 @@ class ReviewController {
             })
         } catch (e) {
             console.log(e)
-            res.status(500).send(e.message)
-        }
-    }
-
-    async getTagsForReview (req, res) {
-        try {
-            const reviewId = +req.params.id
-            console.log(reviewId);
-            const tags = await ReviewTag.findAll({
-                attributes: ['tag_name'],
-                where: {
-                    review_id: reviewId
-                },
-                raw: true
-            })
-            res.send(tags)
-        } catch (error) {
-            res.status(500).send(error.message)
+            res.status(500).send({msg: e.message, cause: e.cause, stack: e.stack})
         }
     }
 
     async deleteReview(req, res) {
-        const id = req.params.id.slice(1);
-        await ReviewTag.destroy({
-            where: {
-                review_id: id
-            }
-        });
-        await Comments.destroy({
-            where: {
-                review_id: id
-            }
-        });
-        await Review.destroy({
-            where: {
-                review_id: id
-            }
-        });
-        res.status(204).send({ message: 'The review has been deleted' })
+        try {
+            const selected = req.body;
+            selected.forEach(async id => {
+                await ReviewTag.destroy({
+                    where: {
+                        review_id: id
+                    }
+                })
+                await Review.destroy({
+                    where: {
+                        review_id: id
+                    },
+                    returning: true
+                })
+            })
+            
+            res.status(200).send({msg: 'Items/item have/has been deleted', selected})
+        } catch (e) {
+            res.status(500).send({msg: e.message, cause: e.cause, stack: e.stack})
+        }
     }
 }
 

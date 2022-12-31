@@ -181,8 +181,8 @@ Comments.belongsTo(Review, {foreignKey: 'review_id'});
 Work.hasMany(Review, {foreignKey: 'work_name'});
 Review.belongsTo(Work, {foreignKey: 'work_name'});
 
-Review.belongsToMany(Tag, {through: ReviewTag, foreignKey: 'review_id'});
-Tag.belongsToMany(Review, {through: ReviewTag, foreignKey: 'tag_name'});
+Review.belongsToMany(Tag, {through: ReviewTag, foreignKey: 'review_id', onDelete: 'CASCADE'});
+Tag.belongsToMany(Review, {through: ReviewTag, foreignKey: 'tag_name', onDelete: 'CASCADE'});
 
 
 

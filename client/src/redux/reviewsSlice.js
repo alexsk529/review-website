@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk, createSelector } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from '../axios.js'
 
 const initialState = {
@@ -27,8 +27,8 @@ export const updateReview = createAsyncThunk('reviews/updateReview', async (revi
     return response.data;
 });
 
-export const deleteReview = createAsyncThunk('reviews/deleteReview', async (reviewId) => {
-    const response = await axios.delete(`/api/review/:${reviewId}`);
+export const deleteReviews = createAsyncThunk('reviews/deleteReviews', async (reviewsId) => {
+    const response = await axios.delete(`/api/review/delete`, {data: reviewsId, withCredentials: true});
     return response.data
 })
 
@@ -81,8 +81,19 @@ export const reviewsSlice = createSlice({
             .addCase(updateReview.fulfilled, (state, action) => {
                 state.status = 'idle'
                 const {id} = action.payload.review
-                const existingPost = state.data.find(review => review.review_id === id);
+                let existingPost = state.data.find(review => review.review_id === id);
                 if (existingPost) existingPost = {...action.payload.review}
+            })
+            .addCase(deleteReviews.pending, (state) => {
+                state.status = 'deleting'
+            })
+            .addCase(deleteReviews.rejected, (state, action) => {
+                state.status = 'deleted'
+                state.error = action.error.message
+            })
+            .addCase(deleteReviews.fulfilled, (state, action) => {
+                state.status = 'deleted';
+                state.data = state.data.filter(review => !action.payload.selected.includes(review.review_id));
             })
     }
 })

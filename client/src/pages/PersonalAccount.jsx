@@ -23,7 +23,7 @@ import { format, parseISO } from 'date-fns';
 import ruLocale from 'date-fns/locale/ru';
 import enLocale from 'date-fns/locale/en-US';
 
-import { selectReviewsByUserEmail, fetchReviews } from '../redux/reviewsSlice';
+import { selectReviewsByUserEmail, fetchReviews, deleteReviews } from '../redux/reviewsSlice';
 import { selectUserEmail } from '../redux/userSlice';
 import { fetchWorks } from '../redux/worksSlice';
 
@@ -53,16 +53,16 @@ const PersonalAccount = () => {
         {
             field: 'category',
             headerName: t('account.category'),
-            flex: 0.7,
+            flex: 0.6,
             valueFormatter: (params) => (params.value[0].toUpperCase() + params.value.slice(1))
         },
         {
             field: "work",
             headerName: t('account.work'),
-            flex: 1.2,
+            flex: 1.5,
             valueFormatter: (params) => (params.value[0].toUpperCase() + params.value.slice(1))
         },
-        { field: "grade", headerName: t('account.grade'), headerAlign: 'center', align: 'center', flex: 0.7 },
+        { field: "grade", headerName: t('account.grade'), headerAlign: 'center', align: 'center', flex: 0.6 },
         {
             field: "createdAt",
             headerName: t('account.createdAt'),
@@ -80,7 +80,11 @@ const PersonalAccount = () => {
             headerClassName: 'header-tools',
             type: 'actions',
             getActions: (params) => [
-                <GridActionsCellItem color="primary" label="Observe" icon={<Tooltip placement='left' title={t('account.open')}><SearchIcon /></Tooltip>} />,
+                <GridActionsCellItem
+                    color="primary"
+                    label="Observe"
+                    icon={<Link to={`/review/${params.id}`}><Tooltip placement='left' title={t('account.open')}><SearchIcon /></Tooltip></Link>}
+                />,
                 <GridActionsCellItem
                     color="error"
                     label="Edit"
@@ -89,8 +93,6 @@ const PersonalAccount = () => {
             ]
         }
     ];
-
-    //let rows=[];
 
     const rows = reviews.map((row) => ({
         id: row.review_id,
@@ -101,20 +103,9 @@ const PersonalAccount = () => {
         createdAt: row.created_at
     }));
 
-    const tool = (
-        <React.Fragment>
-            <Tooltip title={t('account.open')}>
-                <IconButton size='small'>
-                    <SearchIcon />
-                </IconButton>
-            </Tooltip>
-            <Tooltip title={t('account.edit')}>
-                <IconButton size='small'>
-                    <EditIcon />
-                </IconButton>
-            </Tooltip>
-        </React.Fragment>
-    )
+    const handleDelete = () => {
+        dispatch(deleteReviews(selected))
+    }
 
     React.useEffect(() => {
         reviewsStatus === 'idle' && dispatch(fetchWorks())
@@ -126,18 +117,25 @@ const PersonalAccount = () => {
     }
 
     return (
-        <Container maxWidth='lg' sx={{ mt: 3 }}>
+        <Container maxWidth='xl' sx={{ mt: 3 }}>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 {
                     reviewsStatus === 'loading' ?
                         null :
-                        <Tooltip title={t('account.delete')} align='left'>
-                            <IconButton
-                                color="error"
-                            >
-                                <DeleteIcon />
-                            </IconButton>
-                        </Tooltip>
+                        <React.Fragment>
+                            {
+                                reviewsStatus === 'deleting' ?
+                                    <CircularProgress /> :
+                                    <Tooltip title={t('account.delete')} align='left'>
+                                        <IconButton
+                                            color="error"
+                                            onClick={handleDelete}
+                                        >
+                                            <DeleteIcon />
+                                        </IconButton>
+                                    </Tooltip>
+                            }
+                        </React.Fragment>
                 }
                 <Typography variant='h1' sx={{ fontSize: 20, color: '#5c5c5c', width: '100%' }} align='center'>
                     {t('account.tableTitle')}

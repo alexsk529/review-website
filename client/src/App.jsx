@@ -7,7 +7,7 @@ import PersonalAccount from './pages/PersonalAccount';
 import AdminPanel from './pages/AdminPanel';
 import CreateReview from './pages/CreateReview/CreateReview.jsx';
 
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route} from 'react-router-dom';
 
 import { useSelector } from 'react-redux';
 import { selectUserEmail, selectUserRole } from './redux/userSlice';
@@ -31,6 +31,7 @@ function App() {
               <Route exact path='/account' element={<PersonalAccount/>}/>
               <Route exact path='/create-review' element={<CreateReview isEdit={false}/>}/>
               <Route exact path='/edit-review/:id' element={<CreateReview isEdit={true} />}/>
+              <Route exact path='/review/:id' />
               { userRole === 'admin' ? <Route exact path='/admin' element={<AdminPanel/>} /> : null }
             </Routes>
           </React.Fragment> :
