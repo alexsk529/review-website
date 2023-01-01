@@ -96,7 +96,7 @@ class ReviewController {
     
             let imageUrl = image
 
-            if (imageUrl) imageUrl = (await this.uploadImage(image)).public_id
+            if (imageUrl && imageUrl.startsWith('data:image')) imageUrl = (await this.uploadImage(image)).public_id
             
             const workName = (await WorkController.findOrCreateWork(work, category)).work_name;
             
