@@ -25,7 +25,6 @@ import enLocale from 'date-fns/locale/en-US';
 
 import { selectReviewsByUserEmail, fetchReviews, deleteReviews } from '../redux/reviewsSlice';
 import { selectUserEmail } from '../redux/userSlice';
-import { fetchWorks } from '../redux/worksSlice';
 
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -106,11 +105,6 @@ const PersonalAccount = () => {
     const handleDelete = () => {
         dispatch(deleteReviews(selected))
     }
-
-    React.useEffect(() => {
-        reviewsStatus === 'idle' && dispatch(fetchWorks())
-        reviewsStatus === 'idle' && dispatch(fetchReviews())
-    }, [reviewsStatus, dispatch])
 
     const handleRefresh = () => {
         dispatch(fetchReviews())
