@@ -102,7 +102,7 @@ const Review = db.define('review', {
         allowNull: false
     },
     grade: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.FLOAT,
         allowNull: false
     },
     created_at: {
@@ -123,7 +123,7 @@ const Work = db.define('work', {
         primaryKey: true
     },
     work_rate: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.FLOAT,
         defaultValue: 0
     },
     rate_count: {

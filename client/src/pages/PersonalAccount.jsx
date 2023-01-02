@@ -68,7 +68,7 @@ const PersonalAccount = () => {
             headerAlign: 'center',
             align: 'center',
             flex: 1.3,
-            valueFormatter: (params) => format(parseISO(params.value), 'H:m, dd/MMM/yy', { locale: locale[t('locale')] })
+            valueFormatter: (params) => format(parseISO(params.value), 'HH:mm, dd/MMM/yy', { locale: locale[t('locale')] })
         },
         {
             field: 'buttons',
@@ -149,8 +149,8 @@ const PersonalAccount = () => {
                             }}
                             rows={rows}
                             columns={columns}
-                            pageSize={5}
-                            rowsPerPageOptions={[5]}
+                            pageSize={10}
+                            rowsPerPageOptions={[10]}
                             checkboxSelection
                             rowHeight={40}
                             onSelectionModelChange={(newSelection) => {

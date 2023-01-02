@@ -15,6 +15,7 @@ import TitleRevWork from './TitleRevWork.jsx';
 import TagsGrade from './TagsGrade.jsx';
 import ActionsMessages from './ActionsMessages.jsx';
 import Edit from './Edit.jsx';
+import { fetchWorks } from '../../redux/worksSlice.js';
 
 
 const CreateReview = ({ isEdit }) => {
@@ -97,6 +98,7 @@ const CreateReview = ({ isEdit }) => {
         if (isEdit) review.id = id;
         let response;
         isEdit ? response = await dispatch(updateReview(review)) : response = await dispatch(createReview(review))
+        dispatch(fetchWorks())
         response && ((response.meta.requestStatus === 'fulfilled') ? setIsSuccess(true) : setIsServerError(true))
         response && (response.meta.requestStatus === 'fulfilled') && handleClear()
         
