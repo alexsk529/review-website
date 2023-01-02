@@ -73,7 +73,7 @@ const ReviewExcerpt = (props) => {
     const CONTENT_HEIGHT = image_url ? 270 : 570
 
     return (
-        <Card sx={{ maxWidth: 400, mb: 5 }} elevation={8}>
+        <Card sx={{ maxWidth: {sm: 400, xs: 280}, mb: 5 }} elevation={8}>
             <CardActionArea sx={{ backgroundColor: BACKGROUND }}>
                 <CardHeader
                     sx={{ backgroundColor: HIGHLIGHT, minHeight: 170 }}
@@ -83,7 +83,7 @@ const ReviewExcerpt = (props) => {
                     subheader={
                         <React.Fragment>
                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <Typography>{work_name}</Typography>
+                                <Typography sx={{ fontSize: 14 }}>{work_name}</Typography>
 
                                 <Typography sx={{ fontSize: 12 }}>{date}</Typography>
                             </Box>
