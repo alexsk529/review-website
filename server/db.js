@@ -126,7 +126,7 @@ const Work = db.define('work', {
         type: DataTypes.INTEGER,
         defaultValue: 0
     },
-    likes_num: {
+    rate_count: {
         type: DataTypes.INTEGER,
         defaultValue: 0
     },

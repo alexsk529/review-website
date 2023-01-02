@@ -56,7 +56,7 @@ const DragDropFiles = ({ image, setImage, name, setName }) => {
     return (
         <React.Fragment>
 
-            <Container width="100%" sx={{ mt: 4, display: { xs: 'none', sm: 'none', md: 'block', lg: 'block', xl: 'block' } }}>
+            <Container width="100%" sx={{ mt: 4, display: { xs: 'none', sm: 'block', md: 'block', lg: 'block', xl: 'block' } }}>
                 <div
                     className="dropzone"
                     onDragOver={handleDragOver}
@@ -81,7 +81,7 @@ const DragDropFiles = ({ image, setImage, name, setName }) => {
                     </Button>
                 </div>
             </Container>
-            <Container width='100%' sx={{ mt: 4, display: { md: 'none', lg: 'none', xl: 'none' } }}>
+            <Container width='100%' sx={{ mt: 4, display: { sm:'none', md: 'none', lg: 'none', xl: 'none' } }}>
                 <div
                     className="dropzone"
                 >

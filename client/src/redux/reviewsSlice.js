@@ -35,7 +35,11 @@ export const deleteReviews = createAsyncThunk('reviews/deleteReviews', async (re
 export const reviewsSlice = createSlice({
     name: 'reviews',
     initialState,
-    reducers: {},
+    reducers: {
+        statusRefreshed(state) {
+            state.status = 'idle'
+        }
+    },
     extraReducers(builder) {
         builder
             .addCase(fetchReviews.pending, (state) => {
@@ -44,6 +48,7 @@ export const reviewsSlice = createSlice({
             .addCase(fetchReviews.fulfilled, (state, action) => {
                 state.status = 'succeded'
                 state.data = action.payload
+                state.error = null
             })
             .addCase(fetchReviews.rejected, (state, action) => {
                 state.status = 'idle'
@@ -55,6 +60,7 @@ export const reviewsSlice = createSlice({
             .addCase(fetchReviewsByBestGrade.fulfilled, (state, action) => {
                 state.status = 'succeded'
                 state.data = action.payload
+                state.error = null
             })
             .addCase(fetchReviewsByBestGrade.rejected, (state, action) => {
                 state.status = 'idle'
@@ -88,17 +94,19 @@ export const reviewsSlice = createSlice({
                 state.status = 'deleting'
             })
             .addCase(deleteReviews.rejected, (state, action) => {
-                state.status = 'deleted'
+                state.status = 'idle'
                 state.error = action.error.message
             })
             .addCase(deleteReviews.fulfilled, (state, action) => {
-                state.status = 'deleted';
+                state.status = 'idle';
                 state.data = state.data.filter(review => !action.payload.selected.includes(review.review_id));
             })
     }
 })
 
 export default reviewsSlice.reducer
+
+export const { statusRefreshed } = reviewsSlice.actions;
 
 export const selectAllReviews = state => state.reviews.data
 

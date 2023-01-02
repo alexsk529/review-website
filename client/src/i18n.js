@@ -76,6 +76,10 @@ i18n
                         wentWrong: 'Something went wrong...',
                         again: 'Please, try again later.',
                         clear: 'Clear page'
+                    },
+                    excerpt: {
+                        seemore: 'See More',
+                        grade: 'Author`s grade'
                     }
                 }
             },
@@ -147,6 +151,10 @@ i18n
                         wentWrong: 'Что-то пошло не так...',
                         again: 'Пожалуйста, попробуйте позже.',
                         clear: 'Очистить контент'
+                    },
+                    excerpt: {
+                        seemore: 'Подробнее',
+                        grade: 'Оценка автора'
                     }
                 }
             }

@@ -36,3 +36,5 @@ export const selectCategories = state => {
     }
     return unique(groups) 
 }
+
+export const selectWorkByName = (state, workName) => state.works.find(work => work.work_name === workName )

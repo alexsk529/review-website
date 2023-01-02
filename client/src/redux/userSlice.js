@@ -39,6 +39,7 @@ const userSlice = createSlice({
             .addCase(fetchUser.fulfilled, (state, action) => {
                 state.status = 'succeded'
                 state.user = action.payload
+                state.error = null
                 localStorage.setItem('user', JSON.stringify(action.payload))
             })
             .addCase(logout.rejected, (state, action) => {

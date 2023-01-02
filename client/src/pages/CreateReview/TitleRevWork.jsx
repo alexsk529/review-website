@@ -25,10 +25,6 @@ const TitleRevWork = (props) => {
     const works = useSelector(selectWorks);
     const categories = useSelector(selectCategories);
 
-    React.useLayoutEffect(() => {
-        dispatch(fetchWorks());
-    }, [dispatch])
-
     return (
         <Container sx={{
             display: 'flex',

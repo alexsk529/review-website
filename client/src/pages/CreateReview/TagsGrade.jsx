@@ -74,6 +74,7 @@ const TagsGrade = (props) => {
                         localStorage.setItem('grade', JSON.stringify(newVal))
                     }}
                     max={10}
+                    precision={0.5}
                 />
             </Box>
         </Container>
