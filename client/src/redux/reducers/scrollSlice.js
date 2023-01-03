@@ -18,7 +18,6 @@ export const scrollSlice = createSlice({
             state.data.length < action.payload.data.length ? state.status = 'idle' : state.status = 'success';
         },
         resetScroll (state) {
-            console.log('reset');
             state.status = 'idle';
             state.page = 1;
             state.data = [];

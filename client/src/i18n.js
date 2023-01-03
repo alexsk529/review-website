@@ -80,6 +80,11 @@ i18n
                     excerpt: {
                         seemore: 'See More',
                         grade: 'Author`s grade'
+                    },
+                    sorting: {
+                        sort: 'Sort by:',
+                        date: 'latest date',
+                        grade: 'best grade'
                     }
                 }
             },
@@ -155,6 +160,11 @@ i18n
                     excerpt: {
                         seemore: 'Подробнее',
                         grade: 'Оценка автора'
+                    },
+                    sorting: {
+                        sort: 'Сортировка по:',
+                        date: 'последней дате',
+                        grade: 'лучшей оценке'
                     }
                 }
             }

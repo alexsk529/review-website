@@ -38,6 +38,7 @@ export const reviewsSlice = createSlice({
     reducers: {
         statusRefreshed(state) {
             state.status = 'idle'
+            state.error = null
         }
     },
     extraReducers(builder) {
