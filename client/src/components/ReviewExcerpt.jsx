@@ -27,6 +27,8 @@ import { AdvancedImage } from '@cloudinary/react';
 import { fill } from '@cloudinary/url-gen/actions/resize';
 import { autoGravity } from "@cloudinary/url-gen/qualifiers/gravity";
 
+import { BACKGROUND, HIGHLIGHT, LIKE, DARKGRAY } from '../Const';
+
 const ReviewExcerpt = (props) => {
     const dispatch = useDispatch();
     const [liked, setLiked] = React.useState(false)
@@ -67,10 +69,6 @@ const ReviewExcerpt = (props) => {
 
     const date = format(parseISO(created_at), 'HH:mm, dd/MMM/yy', { locale: locale[t('locale')] });
 
-    const BACKGROUND = '#F6E3F5';
-    const HIGHLIGHT = "#F0CCEF";
-    const LIKE = "#eda800";
-    const DARKGRAY = '#656565';
     const CONTENT_HEIGHT = image_url ? 270 : 570
 
     return (

@@ -1,4 +1,3 @@
-import pg from 'pg'
 import {Sequelize, DataTypes} from 'sequelize';
 
 const db = new Sequelize('postgres://pyzrbyqn:800XiuGqvT5ifiXRGFHV4c9WN2VBwGDn@dumbo.db.elephantsql.com/pyzrbyqn', {

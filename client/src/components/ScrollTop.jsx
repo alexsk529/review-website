@@ -3,6 +3,8 @@ import { styled } from '@mui/material/styles';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import IconButton from '@mui/material/IconButton';
 
+import { BACKGROUND } from '../Const';
+
 const Scroll = styled('div') ( ({theme}) => ({
     zIndex: 2,
     position: 'fixed',
@@ -11,7 +13,7 @@ const Scroll = styled('div') ( ({theme}) => ({
     borderRadius: '50%',
     "&:hover, &.Mui-focusVisible": {
         transition: '0.3s',
-        backgroundColor: '#F6E3F5'
+        backgroundColor: BACKGROUND
     },
     left: '3%'
 }))

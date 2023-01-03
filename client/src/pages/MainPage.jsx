@@ -3,9 +3,11 @@ import React from 'react';
 import ReviewExcerpt from '../components/ReviewExcerpt.jsx';
 import SortingMenu from '../components/SortingMenu.jsx';
 import ScrollTop from '../components/ScrollTop.jsx';
+import TagCloud from '../components/TagCloud.jsx';
 
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
+import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import CircularProgress from '@mui/material/CircularProgress';
 
@@ -16,6 +18,8 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { useTranslation } from 'react-i18next';
 import { Typography } from '@mui/material';
+
+import { BACKGROUND } from '../Const.js';
 
 const MainPage = () => {
     const dispatch = useDispatch();
@@ -35,9 +39,9 @@ const MainPage = () => {
     }, [selectedIndex])
 
     React.useEffect(() => {
-            if (reviewsStatus === 'idle' && selectedIndex === 1) dispatch(fetchReviews())
-            if (reviewsStatus === 'idle' && selectedIndex === 2) dispatch(fetchReviewsByBestGrade())
-            reviewsStatus === 'idle' && dispatch(fetchWorks())
+        if (reviewsStatus === 'idle' && selectedIndex === 1) dispatch(fetchReviews())
+        if (reviewsStatus === 'idle' && selectedIndex === 2) dispatch(fetchReviewsByBestGrade())
+        reviewsStatus === 'idle' && dispatch(fetchWorks())
         if (reviewsStatus === 'succeded' && readyToScroll === true) {
             dispatch(resetScroll());
             dispatch(loadMore({ limit: LIMIT, data: reviews }));
@@ -64,15 +68,22 @@ const MainPage = () => {
     return (
         <Box sx={{ width: '100%' }}>
             <ScrollTop showBelow={100} />
-            <Typography component="legend" color="secondary" sx={{mb:1}}> {t('sorting.sort')} </Typography>
-            <SortingMenu 
-                selectedIndex={selectedIndex}
-                setSelectedIndex={setSelectedIndex}
-                options={options}
-            />
+            <Box>
+                <Typography component="legend" color="secondary" sx={{ mb: 1 }}> {t('sorting.sort')} </Typography>
+                <SortingMenu
+                    selectedIndex={selectedIndex}
+                    setSelectedIndex={setSelectedIndex}
+                    options={options}
+                />
+                <Container fixed align='center' sx={{ my: 2 }}>
+                    <Paper sx={{py:2, px:0, backgroundColor: BACKGROUND}} elevation={8}>
+                        <TagCloud />
+                    </Paper>
+                </Container>
+            </Box>
             {
                 reviewsStatus === 'loading' ?
-                    <Container sx={{ mt: 6 }}><CircularProgress /></Container>:
+                    <Container sx={{ mt: 6 }}><CircularProgress color='secondary' /></Container> :
                     <Container fixed sx={{ mt: 3 }}>
                         <Grid
                             container
@@ -98,7 +109,6 @@ const MainPage = () => {
                         }
                     </Container>
             }
-
         </Box>
     );
 }
