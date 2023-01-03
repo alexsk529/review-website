@@ -69,15 +69,15 @@ const MainPage = () => {
         <Box sx={{ width: '100%' }}>
             <ScrollTop showBelow={100} />
             <Box>
-                <Typography component="legend" color="secondary" sx={{ mb: 1 }}> {t('sorting.sort')} </Typography>
+                <Typography component="legend" color="secondary" sx={{ mb: 1 }}> {t('sorting.load')} </Typography>
                 <SortingMenu
                     selectedIndex={selectedIndex}
                     setSelectedIndex={setSelectedIndex}
                     options={options}
                 />
                 <Container fixed align='center' sx={{ my: 2 }}>
-                    <Paper sx={{py:2, px:0, backgroundColor: BACKGROUND}} elevation={8}>
-                        <TagCloud />
+                    <Paper sx={{py:2, px:0.2, backgroundColor: BACKGROUND}} elevation={8}>
+                        <TagCloud setSelectedIndex={setSelectedIndex} />
                     </Paper>
                 </Container>
             </Box>

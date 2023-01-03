@@ -82,6 +82,7 @@ i18n
                         grade: 'Author`s grade'
                     },
                     sorting: {
+                        load: 'Download reviews by:',
                         sort: 'Sort by:',
                         date: 'Latest Date',
                         grade: 'Best Grade'
@@ -162,6 +163,7 @@ i18n
                         grade: 'Оценка автора'
                     },
                     sorting: {
+                        load: 'Загрузить обзоры по:',
                         sort: 'Сортировка по:',
                         date: 'Последней дате',
                         grade: 'Лучшей оценке'

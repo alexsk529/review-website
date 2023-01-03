@@ -166,6 +166,24 @@ class ReviewController {
             res.status(500).send({msg: e.message, cause: e.cause, stack: e.stack})
         }
     }
+
+    async getReviewsByTag(req, res) {
+        const tag = req.params.tag
+        let ids = await TagController.getIdsByTag(tag);
+        ids = ids.map(id => id.review_id)
+        let reviews = (await Review.findAll({
+            include: Work,
+        })).map(item => item.dataValues)
+        reviews = reviews.map(item => ({...item, category: item.work.dataValues.category}))            
+        reviews = reviews.map(item => {
+            delete item.work
+            return item
+        })
+        const result = ids.map(id => {
+            return reviews.find(review => review.review_id == id)
+        })
+        res.send(result)
+    }
 }
 
 export default new ReviewController();

@@ -59,6 +59,15 @@ class TagController {
             res.status(500).send(error.message)
         }
     }
+
+    async getIdsByTag(tag) {
+            const ids = await ReviewTag.findAll({
+                attributes: ['review_id'],
+                where: {tag_name: tag},
+                raw: true
+            })
+            return ids
+    }
 }
 
 export default new TagController();

@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, current } from '@reduxjs/toolkit';
 import axios from '../../axios.js'
 
 const initialState = {
@@ -15,6 +15,11 @@ export const fetchReviews = createAsyncThunk('reviews/fetchReviews', async () =>
 export const fetchReviewsByBestGrade = createAsyncThunk('reviews/fetchReviewsByBestGrade', async () => {
     const response = await axios.get('/best-grade');
     return response.data.data;
+})
+
+export const fetchReviewsByTag = createAsyncThunk('reviews/fetchReviewsByTag', async (tag) => {
+    const response = await axios.get(`/findbytag/${tag.value}`)
+    return response.data
 })
 
 export const createReview = createAsyncThunk('reviews/createReview', async (review) => {
@@ -55,6 +60,7 @@ export const reviewsSlice = createSlice({
                 state.status = 'idle'
                 state.error = action.error.message
             })
+
             .addCase(fetchReviewsByBestGrade.pending, (state) => {
                 state.status = 'loading'
             })
@@ -67,6 +73,19 @@ export const reviewsSlice = createSlice({
                 state.status = 'idle'
                 state.error = action.error.message
             })
+
+            .addCase(fetchReviewsByTag.rejected, (state, action) => {
+                state.status = 'idle'
+                state.error = action.error.message
+            })
+            .addCase(fetchReviewsByTag.pending, (state) => {
+                state.status = 'loading'
+            })
+            .addCase(fetchReviewsByTag.fulfilled, (state, action) => {
+                state.status = 'succeded'
+                state.data=action.payload
+            })
+
             .addCase(createReview.pending, (state, action) => {
                 state.status = 'loading'
             })
@@ -78,6 +97,7 @@ export const reviewsSlice = createSlice({
                 state.status = 'idle'
                 state.error = action.error.message
             })
+
             .addCase(updateReview.pending, (state, action) => {
                 state.status = 'loading'
             })
@@ -91,6 +111,7 @@ export const reviewsSlice = createSlice({
                 let existingPost = state.data.find(review => review.review_id === id);
                 if (existingPost) existingPost = {...action.payload.review}
             })
+
             .addCase(deleteReviews.pending, (state) => {
                 state.status = 'deleting'
             })

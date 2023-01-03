@@ -32,11 +32,10 @@ const SortingMenu = ({ options, selectedIndex, setSelectedIndex }) => {
     return (
         <React.Fragment>
             <ButtonGroup color="secondary" variant="contained" ref={anchorRef} aria-label="split button">
-                <Button> {options[selectedIndex]} </Button>
+                <Button onClick={handleToggle}> {options[selectedIndex]} </Button>
                 <Button
                     size="small"
                     aria-controls={open ? 'split-button-menu' : undefined}
-                    
                     onClick={handleToggle}
                 >
                     <ArrowDropDownIcon />
