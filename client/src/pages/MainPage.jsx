@@ -2,11 +2,11 @@ import React from 'react';
 
 import ReviewExcerpt from '../components/ReviewExcerpt.jsx';
 import SortingMenu from '../components/SortingMenu.jsx';
+import ScrollTop from '../components/ScrollTop.jsx';
 
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
-import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 
 import { fetchReviews, fetchReviewsByBestGrade, selectAllReviews, statusRefreshed } from '../redux/reducers/reviewsSlice';
@@ -63,6 +63,7 @@ const MainPage = () => {
 
     return (
         <Box sx={{ width: '100%' }}>
+            <ScrollTop showBelow={100} />
             <Typography component="legend" color="secondary" sx={{mb:1}}> {t('sorting.sort')} </Typography>
             <SortingMenu 
                 selectedIndex={selectedIndex}

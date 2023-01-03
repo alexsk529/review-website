@@ -83,8 +83,8 @@ i18n
                     },
                     sorting: {
                         sort: 'Sort by:',
-                        date: 'latest date',
-                        grade: 'best grade'
+                        date: 'Latest Date',
+                        grade: 'Best Grade'
                     }
                 }
             },
@@ -163,8 +163,8 @@ i18n
                     },
                     sorting: {
                         sort: 'Сортировка по:',
-                        date: 'последней дате',
-                        grade: 'лучшей оценке'
+                        date: 'Последней дате',
+                        grade: 'Лучшей оценке'
                     }
                 }
             }
