@@ -23,8 +23,8 @@ import { format, parseISO } from 'date-fns';
 import ruLocale from 'date-fns/locale/ru';
 import enLocale from 'date-fns/locale/en-US';
 
-import { selectReviewsByUserEmail, fetchReviews, deleteReviews } from '../redux/reviewsSlice';
-import { selectUserEmail } from '../redux/userSlice';
+import { selectReviewsByUserEmail, fetchReviews, deleteReviews } from '../redux/reducers/reviewsSlice';
+import { selectUserEmail } from '../redux/reducers/userSlice';
 
 import { useSelector, useDispatch } from 'react-redux';
 

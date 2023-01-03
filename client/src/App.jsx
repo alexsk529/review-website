@@ -10,7 +10,7 @@ import CreateReview from './pages/CreateReview/CreateReview.jsx';
 import { Routes, Route} from 'react-router-dom';
 
 import { useSelector } from 'react-redux';
-import { selectUserEmail, selectUserRole } from './redux/userSlice';
+import { selectUserEmail, selectUserRole } from './redux/reducers/userSlice';
 import GlobalStyles from '@mui/material/GlobalStyles';
 
 function App() {

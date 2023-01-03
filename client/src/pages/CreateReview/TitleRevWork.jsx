@@ -5,7 +5,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchWorks, selectWorks, selectCategories } from '../../redux/worksSlice.js';
+import { selectWorks, selectCategories } from '../../redux/reducers/worksSlice.js';
 
 const TitleRevWork = (props) => {
     const {

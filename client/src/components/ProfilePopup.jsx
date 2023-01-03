@@ -2,7 +2,7 @@ import React from 'react';
 
 //redux
 import { useSelector, useDispatch } from 'react-redux';
-import { updateUser, selectUser } from '../redux/userSlice.js';
+import { updateUser, selectUser } from '../redux/reducers/userSlice.js';
 
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';

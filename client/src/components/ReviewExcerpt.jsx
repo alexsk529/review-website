@@ -15,8 +15,7 @@ import Button from '@mui/material/Button';
 import Rating from '@mui/material/Rating';
 
 import { useSelector, useDispatch } from 'react-redux';
-import { selectWorkByName } from '../redux/worksSlice';
-import { fetchWorks } from '../redux/worksSlice';
+import { selectWorkByName, fetchWorks } from '../redux/reducers/worksSlice';
 
 import { useTranslation } from 'react-i18next';
 import { format, parseISO } from 'date-fns';
@@ -36,7 +35,7 @@ const ReviewExcerpt = (props) => {
     const workInstance = useSelector(state => selectWorkByName(state, work_name))
     React.useEffect(() => {
         !workInstance && dispatch(fetchWorks())
-    },[])
+    }, [])
     const { work_rate, rate_count } = workInstance
 
     if (review_title[review_title.length - 1] !== '.') review_title += '.'
@@ -59,8 +58,10 @@ const ReviewExcerpt = (props) => {
     })
 
     const myImage = cld.image(image_url);
-
     myImage.resize(fill().width(400).height(300).gravity(autoGravity()));
+
+    const myImageMobile = cld.image(image_url);
+    myImageMobile.resize(fill().width(280).height(180).gravity(autoGravity()));
 
     const { t } = useTranslation();
 
@@ -73,7 +74,7 @@ const ReviewExcerpt = (props) => {
     const CONTENT_HEIGHT = image_url ? 270 : 570
 
     return (
-        <Card sx={{ maxWidth: {sm: 400, xs: 280}, mb: 5 }} elevation={8}>
+        <Card sx={{ maxWidth: { sm: 400, xs: 280 }, mb: 5 }} elevation={8}>
             <CardActionArea sx={{ backgroundColor: BACKGROUND }}>
                 <CardHeader
                     sx={{ backgroundColor: HIGHLIGHT, minHeight: 170 }}
@@ -106,9 +107,14 @@ const ReviewExcerpt = (props) => {
                 </CardHeader>
                 {
                     image_url ?
-                        <CardMedia>
+                        <React.Fragment>
+                        <CardMedia sx={{display: {xs:'none', sm:'block', md:'block', lg:'block', xl:'block'}}}>
                             <AdvancedImage cldImg={myImage} />
-                        </CardMedia> :
+                        </CardMedia>
+                        <CardMedia sx={{display: {xs:'block', sm:'none', md:'none', lg:'none', xl:'none'}}}>
+                            <AdvancedImage cldImg={myImageMobile} />
+                        </CardMedia>
+                        </React.Fragment> :
                         null
                 }
                 <CardContent sx={{ minHeight: CONTENT_HEIGHT, display: 'flex', alignItems: 'center' }}>
@@ -118,26 +124,43 @@ const ReviewExcerpt = (props) => {
                 </CardContent>
             </CardActionArea>
             <CardActions disableSpacing sx={{ backgroundColor: HIGHLIGHT }}>
-                <Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <IconButton onClick={(e) => setLiked(prev => !prev)} >
-                        {
-                            liked ?
-                                <FavoriteIcon sx={{ color: LIKE }} /> :
-                                <FavoriteBorderIcon sx={{ color: LIKE }} />
-                        }
-                    </IconButton>
-                    <div>
-                        <Typography component="legend" color="text.secondary">{t('excerpt.grade')}</Typography>
-                        <Rating
-                            name="Grade"
-                            value={grade}
-                            readOnly
-                            precision={0.5}
-                            size="small"
-                            max={10}
-                            sx={{ border: 1, borderRadius: 1, borderColor: DARKGRAY, backgroundColor: DARKGRAY, p: 0.6 }}
-                        />
-                    </div>
+                <Box sx={{
+                    width: '100%',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    flexDirection: {
+                        xs: 'column',
+                        sm: 'row'
+                    }
+                }}>
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center'
+                        }}
+                    >
+                        <IconButton onClick={(e) => setLiked(prev => !prev)} >
+                            {
+                                liked ?
+                                    <FavoriteIcon sx={{ color: LIKE }} /> :
+                                    <FavoriteBorderIcon sx={{ color: LIKE }} />
+                            }
+                        </IconButton>
+                        <div>
+                            <Typography component="legend" color="text.secondary">{t('excerpt.grade')}</Typography>
+                            <Rating
+                                name="Grade"
+                                value={grade}
+                                readOnly
+                                precision={0.5}
+                                size="small"
+                                max={10}
+                                sx={{ border: 1, borderRadius: 1, borderColor: DARKGRAY, backgroundColor: DARKGRAY, p: 0.6 }}
+                            />
+                        </div>
+                    </Box>
                     <Button size="small" color="secondary">{t('excerpt.seemore')}</Button>
                 </Box>
             </CardActions>

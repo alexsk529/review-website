@@ -1,8 +1,9 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 
-import userReducer from './userSlice.js'
-import worksReducer from './worksSlice.js'
-import reviewsReducer from './reviewsSlice.js'
+import userReducer from './reducers/userSlice.js';
+import worksReducer from './reducers/worksSlice.js';
+import reviewsReducer from './reducers/reviewsSlice.js';
+import scrollReducer from './reducers/scrollSlice.js';
 
 import { 
     persistStore, 
@@ -19,13 +20,14 @@ import storage from 'redux-persist/lib/storage';
 const rootReducer = combineReducers({
     user: userReducer,
     works: worksReducer,
-    reviews: reviewsReducer
+    reviews: reviewsReducer,
+    scroll: scrollReducer
 });
 
 const configs = {
     key: 'root',
     storage,
-    blacklist: ['user']
+    blacklist: ['user', 'scroll']
 }
 
 const persistedReducer = persistReducer(configs, rootReducer);

@@ -2,7 +2,8 @@ import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom'
 
 import { useDispatch } from 'react-redux';
-import { createReview, updateReview } from '../../redux/reviewsSlice.js';
+import { createReview, updateReview } from '../../redux/reducers/reviewsSlice.js';
+import { fetchWorks } from '../../redux/reducers/worksSlice.js';
 
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
@@ -15,7 +16,6 @@ import TitleRevWork from './TitleRevWork.jsx';
 import TagsGrade from './TagsGrade.jsx';
 import ActionsMessages from './ActionsMessages.jsx';
 import Edit from './Edit.jsx';
-import { fetchWorks } from '../../redux/worksSlice.js';
 
 
 const CreateReview = ({ isEdit }) => {

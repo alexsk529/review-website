@@ -2,7 +2,7 @@ import React from 'react';
 
 //redux
 import { useSelector, useDispatch } from 'react-redux';
-import { logout, selectUserRole } from '../redux/userSlice.js';
+import { logout, selectUserRole } from '../redux/reducers/userSlice.js';
 
 //css-framework
 import Tooltip from '@mui/material/Tooltip';

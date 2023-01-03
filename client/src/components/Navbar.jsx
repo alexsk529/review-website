@@ -2,7 +2,7 @@ import React from 'react';
 
 //redux
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchUser, selectUserEmail } from '../redux/userSlice.js';
+import { fetchUser, selectUserEmail } from '../redux/reducers/userSlice.js';
 
 //css-framework
 import AppBar from '@mui/material/AppBar';

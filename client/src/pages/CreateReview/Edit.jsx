@@ -2,7 +2,7 @@ import React from 'react';
 
 import axios from '../../axios.js'
 import { useSelector, useDispatch } from 'react-redux';
-import { selectReviewById, fetchReviews } from '../../redux/reviewsSlice';
+import { selectReviewById, fetchReviews } from '../../redux/reducers/reviewsSlice';
 
 const Edit = (props) => {
     const {
