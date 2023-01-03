@@ -21,8 +21,6 @@ const MainPage = () => {
 
     React.useEffect(() => {
         dispatch(statusRefreshed())
-        console.log('start');
-        return () => { console.log('init unmount'); }
     }, [])
 
     React.useEffect(() => {
@@ -38,14 +36,15 @@ const MainPage = () => {
     const scrollData = useSelector(selectScroll);
 
     React.useEffect(() => {
-        document.addEventListener('scroll', handleScroll)
+        reviewsStatus === 'succeded' && document.addEventListener('scroll', handleScroll)
+        reviewsStatus === 'idle' && document.removeEventListener('scroll', handleScroll)
         return () => {
             document.removeEventListener('scroll', handleScroll)
         }
-    }, [scrollStatus])
+    }, [scrollStatus, reviewsStatus])
 
     const handleScroll = (e) => {
-        if ((e.target.documentElement.scrollHeight - (e.target.documentElement.scrollTop + window.innerHeight) < 200) && (scrollStatus === 'idle')) {
+        if ((e.target.documentElement.scrollHeight - (e.target.documentElement.scrollTop + window.innerHeight) < 300) && (scrollStatus === 'idle')) {
             dispatch(loadMore({ limit: LIMIT, data: reviews }))
         }
     }
