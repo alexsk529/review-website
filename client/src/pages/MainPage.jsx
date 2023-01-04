@@ -69,7 +69,7 @@ const MainPage = () => {
         <Box sx={{ width: '100%' }}>
             <ScrollTop showBelow={100} />
             <Box>
-                <Typography component="legend" color="secondary" sx={{ mb: 1 }}> {t('sorting.load')} </Typography>
+                <Typography component="legend" sx={{ mb: 1 }}> {t('sorting.load')} </Typography>
                 <SortingMenu
                     selectedIndex={selectedIndex}
                     setSelectedIndex={setSelectedIndex}
@@ -79,7 +79,7 @@ const MainPage = () => {
                     reviewsStatus === 'loading' ?
                         null :
                         <Container fixed align='center' sx={{ my: 2 }}>
-                            <Paper sx={{ py: 2, px: 0.2, backgroundColor: BACKGROUND }} elevation={8}>
+                            <Paper sx={{ py: 2, px: 0.2}} elevation={8}>
                                 <TagCloud setSelectedIndex={setSelectedIndex} />
                             </Paper>
                         </Container>
@@ -88,7 +88,7 @@ const MainPage = () => {
             </Box>
             {
                 reviewsStatus === 'loading' ?
-                    <Container sx={{ mt: 6 }}><CircularProgress color='secondary' /></Container> :
+                    <Container sx={{ mt: 6 }}><CircularProgress  /></Container> :
                     <Container fixed sx={{ mt: 3 }}>
                         <Grid
                             container

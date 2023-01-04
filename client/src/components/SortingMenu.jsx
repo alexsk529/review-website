@@ -31,7 +31,7 @@ const SortingMenu = ({ options, selectedIndex, setSelectedIndex }) => {
 
     return (
         <React.Fragment>
-            <ButtonGroup color="secondary" variant="contained" ref={anchorRef} aria-label="split button">
+            <ButtonGroup variant="contained" ref={anchorRef} aria-label="split button">
                 <Button onClick={handleToggle}> {options[selectedIndex]} </Button>
                 <Button
                     size="small"

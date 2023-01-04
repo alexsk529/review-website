@@ -9,13 +9,16 @@ import DialogContent from '@mui/material/DialogContent'
 import CloseIcon from '@mui/icons-material/Close';
 import IconButton from '@mui/material/IconButton';
 
+import { useTheme } from '@mui/material/styles';
+
 const ErrorMessage = ({ errors, isError, setIsError }) => {
     const { t } = useTranslation();
 
     const reviewLabel = t('createReview.review');
     const gradeLabel = t('createReview.grade');
 
-    const RED = '#d32f2f';
+    const theme = useTheme();
+
     const WHITISH = '#E0DFDF'
 
     const handleClose = () => setIsError(false)
@@ -27,10 +30,10 @@ const ErrorMessage = ({ errors, isError, setIsError }) => {
             onClose={handleClose}
             sx={{}}
         >
-            <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between', backgroundColor: RED, color: WHITISH, p: { xs: 1, sm: 3 } }}>
-                {t('createReview.errors.error')} <IconButton sx={{color: WHITISH}} onClick={handleClose}><CloseIcon /></IconButton>
+            <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between', backgroundColor: theme.palette.warning.main, color: WHITISH, p: { xs: 1, sm: 3 } }}>
+                {t('createReview.errors.error')} <IconButton onClick={handleClose}><CloseIcon /></IconButton>
             </DialogTitle>
-            <DialogContent sx={{ backgroundColor: RED, color: WHITISH, p: {xs: 0, sm:2} }}>
+            <DialogContent sx={{ backgroundColor: theme.palette.warning.main, color: WHITISH, p: {xs: 0, sm:2} }}>
                 <Typography variant='h1' sx={{ fontSize: 18, width: '100%' }} align='left'></Typography>
                 <List>
                     {errors.map((err, i) => (

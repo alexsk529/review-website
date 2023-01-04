@@ -27,6 +27,8 @@ import { AdvancedImage } from '@cloudinary/react';
 import { fill } from '@cloudinary/url-gen/actions/resize';
 import { autoGravity } from "@cloudinary/url-gen/qualifiers/gravity";
 
+import { useTheme } from '@mui/material/styles';
+
 import { BACKGROUND, HIGHLIGHT, LIKE, DARKGRAY } from '../Const';
 
 const ReviewExcerpt = (props) => {
@@ -39,6 +41,8 @@ const ReviewExcerpt = (props) => {
         !workInstance && dispatch(fetchWorks())
     }, [])
     const { work_rate, rate_count } = workInstance
+
+    const theme = useTheme();
 
     if (review_title[review_title.length - 1] !== '.') review_title += '.'
     work_name = work_name[0].toUpperCase() + work_name.slice(1)
@@ -73,12 +77,11 @@ const ReviewExcerpt = (props) => {
 
     return (
         <Card sx={{ maxWidth: { sm: 400, xs: 280 }, mb: 5 }} elevation={8}>
-            <CardActionArea sx={{ backgroundColor: BACKGROUND }}>
+            <CardActionArea>
                 <CardHeader
-                    sx={{ backgroundColor: HIGHLIGHT, minHeight: 170 }}
+                    sx={{ minHeight: 170 }}
                     title={review_title}
-                    titleTypographyProps={{ color: 'secondary', mb: 1 }}
-                    subheaderTypographyProps={{ color: 'secondary' }}
+                    titleTypographyProps={{ mb: 1 }}
                     subheader={
                         <React.Fragment>
                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -87,7 +90,7 @@ const ReviewExcerpt = (props) => {
                                 <Typography sx={{ fontSize: 12 }}>{date}</Typography>
                             </Box>
                             <Box sx={{ display: 'flex', justifyContent: 'space-between', fontSize: 13 }}>
-                                <Typography sx={{ fontSize: 'inherit' }}>{category}</Typography>
+                                <Typography sx={{ fontSize: 'inherit' }}>{t('account.category')}: {category}</Typography>
                                 <Rating
                                     name="Rating"
                                     value={rate_count === 0 ? 0 : work_rate / rate_count}
@@ -116,12 +119,10 @@ const ReviewExcerpt = (props) => {
                         null
                 }
                 <CardContent sx={{ minHeight: CONTENT_HEIGHT, display: 'flex', alignItems: 'center' }}>
-                    <Typography variant="body2" fontSize={14} dangerouslySetInnerHTML={{ __html: content }}>
-
-                    </Typography>
+                    <Typography variant="body2" color="text.secondary" fontSize={14} dangerouslySetInnerHTML={{ __html: content, style:{color: theme.palette.text.secondary} }} />
                 </CardContent>
             </CardActionArea>
-            <CardActions disableSpacing sx={{ backgroundColor: HIGHLIGHT }}>
+            <CardActions disableSpacing >
                 <Box sx={{
                     width: '100%',
                     display: 'flex',
@@ -147,7 +148,7 @@ const ReviewExcerpt = (props) => {
                             }
                         </IconButton>
                         <div>
-                            <Typography component="legend" color="text.secondary">{t('excerpt.grade')}</Typography>
+                            <Typography component="legend" >{t('excerpt.grade')}</Typography>
                             <Rating
                                 name="Grade"
                                 value={grade}
@@ -159,7 +160,7 @@ const ReviewExcerpt = (props) => {
                             />
                         </div>
                     </Box>
-                    <Button size="small" color="secondary">{t('excerpt.seemore')}</Button>
+                    <Button size="small" >{t('excerpt.seemore')}</Button>
                 </Box>
             </CardActions>
         </Card>

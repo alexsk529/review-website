@@ -9,7 +9,6 @@ const TagCloud = ({setSelectedIndex}) => {
     const [tagsOptions, setTagsOptions] = React.useState([])
     const dispatch = useDispatch();
     const reviewsStatus = useSelector(state => state.reviews.status);
-
     const getTags = async () => {
         const res = await axios.get('/tags-cloud');
         setTagsOptions(res.data)
@@ -17,8 +16,8 @@ const TagCloud = ({setSelectedIndex}) => {
     }
 
     const handleClickGetIds = async (tag) => {
-        dispatch(fetchReviewsByTag(tag))
-        setSelectedIndex(0)
+        dispatch(fetchReviewsByTag(tag));
+        setSelectedIndex(0);
     }
 
     React.useLayoutEffect(() => {

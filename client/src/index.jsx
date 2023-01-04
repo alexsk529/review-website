@@ -10,6 +10,7 @@ import { store, persistor } from './redux/store';
 import './i18n.js';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
 root.render(
     <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>

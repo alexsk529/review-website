@@ -26,7 +26,6 @@ import enLocale from 'date-fns/locale/en-US';
 
 import { useForm } from 'react-hook-form';
 
-
 const ProfilePopup = ({popupProfile}) => {
     const user = useSelector(selectUser)
     const dispatch = useDispatch();
@@ -86,6 +85,11 @@ const ProfilePopup = ({popupProfile}) => {
                 p: {
                     xs: 0,
                     sm: 4
+                },
+            }}
+            PaperProps = {{
+                sx: {
+                    borderRadius: 2
                 }
             }}
             fullScreen={true}
@@ -97,7 +101,7 @@ const ProfilePopup = ({popupProfile}) => {
                 height: '100%',
                 p: {
                     xs: 0,
-                    sm: 4
+                    sm: 4,
                 }
             }}>
                 <DialogTitle sx={{ color: "#d32f2f", display: 'flex', justifyContent: 'space-between' }}>
