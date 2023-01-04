@@ -8,8 +8,7 @@ class ReviewController {
         this.createReview = this.createReview.bind(this);
         this.updateReview = this.updateReview.bind(this);
     }
-    async getReviews(req, res, { bestGrade }) {
-        try {
+    async getReviews(bestGrade) {
             let order = ['created_at', 'DESC'];
             if (bestGrade) order = ['grade', 'DESC'];
             let reviews = (await Review.findAll({
@@ -21,10 +20,7 @@ class ReviewController {
                 delete item.work
                 return item
             })
-            res.send({ isAuthenticated: req.isAuthenticated(), data: reviews })
-        } catch (e) {
-            res.status(500).send('Something went wrong')
-        }
+            return reviews
     }
 
     async uploadImage (img) {
@@ -34,8 +30,7 @@ class ReviewController {
         return uploadRes
     }
 
-    async createReview(req, res) {
-        try {
+    async createReview(data, email) {
             const {
                 work,
                 category,
@@ -44,8 +39,7 @@ class ReviewController {
                 grade,
                 tags, 
                 image
-            } = req.body;
-            const { email } = req.user;
+            } = data;
 
             let imageUrl = image
 
@@ -67,21 +61,10 @@ class ReviewController {
 
             TagController.addNewTags(tags, id)
 
-            res.status(201).send({
-                message: 'The review has been created',
-                review: {
-                    ...review,
-                    category
-                } 
-            })
-        } catch (e) {
-            console.log(e)
-            res.status(500).send({msg: e.message, cause: e.cause, stack: e.stack})
-        }
+            return review;
     }
 
-    async updateReview (req, res) {
-        try {
+    async updateReview (data, email) {
             const {
                 id,
                 work,
@@ -91,8 +74,7 @@ class ReviewController {
                 grade,
                 tags, 
                 image
-            } = req.body;
-            const { email } = req.user;
+            } = data;
     
             let imageUrl = image
 
@@ -130,23 +112,10 @@ class ReviewController {
             })
     
             TagController.addNewTags(tags, id)
-    
-            res.status(200).send({
-                message: 'The review has been updated',
-                review: {
-                    ...review,
-                    category
-                } 
-            })
-        } catch (e) {
-            console.log(e)
-            res.status(500).send({msg: e.message, cause: e.cause, stack: e.stack})
-        }
+            return review;
     }
 
-    async deleteReview(req, res) {
-        try {
-            const selected = req.body;
+    async deleteReview(selected) {
             selected.forEach(async id => {
                 await ReviewTag.destroy({
                     where: {
@@ -160,15 +129,10 @@ class ReviewController {
                     returning: true
                 })
             })
-            
-            res.status(200).send({msg: 'Items/item have/has been deleted', selected})
-        } catch (e) {
-            res.status(500).send({msg: e.message, cause: e.cause, stack: e.stack})
-        }
+            return 'Items/item have/has been deleted';
     }
 
-    async getReviewsByTag(req, res) {
-        const tag = req.params.tag
+    async getReviewsByTag(tag) {
         let ids = await TagController.getIdsByTag(tag);
         ids = ids.map(id => id.review_id)
         let reviews = (await Review.findAll({
@@ -182,7 +146,7 @@ class ReviewController {
         const result = ids.map(id => {
             return reviews.find(review => review.review_id == id)
         })
-        res.send(result)
+        return result
     }
 }
 

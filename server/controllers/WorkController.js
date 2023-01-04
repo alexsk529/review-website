@@ -1,13 +1,9 @@
 import { Work } from '../db.js';
 
 class WorkController {
-    async getAllWorks (req, res) {
-        try {
+    async getAllWorks () {
             const works = await Work.findAll({raw: true});
-            res.send(works)
-        } catch (e) {
-            console.log(e);
-        }
+            return works
     }
 
     async findOrCreateWork (work, category) {

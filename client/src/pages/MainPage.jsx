@@ -75,11 +75,16 @@ const MainPage = () => {
                     setSelectedIndex={setSelectedIndex}
                     options={options}
                 />
-                <Container fixed align='center' sx={{ my: 2 }}>
-                    <Paper sx={{py:2, px:0.2, backgroundColor: BACKGROUND}} elevation={8}>
-                        <TagCloud setSelectedIndex={setSelectedIndex} />
-                    </Paper>
-                </Container>
+                {
+                    reviewsStatus === 'loading' ?
+                        null :
+                        <Container fixed align='center' sx={{ my: 2 }}>
+                            <Paper sx={{ py: 2, px: 0.2, backgroundColor: BACKGROUND }} elevation={8}>
+                                <TagCloud setSelectedIndex={setSelectedIndex} />
+                            </Paper>
+                        </Container>
+                }
+
             </Box>
             {
                 reviewsStatus === 'loading' ?

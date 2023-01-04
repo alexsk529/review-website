@@ -1,36 +1,25 @@
 import { Author } from '../db.js'
 
 class AuthorController {
-    async getAuthor(req, res) {
-        try {
+    async getAuthor(email) {
             const user = await Author.findOne({
                 where: {
-                    email: req.user.email
+                    email: email
                 }
             })
-
-            res.send(user);
-        } catch (e) {
-            console.log(e);
-        }
+            return user
     }
 
-    async renameAuthor(req, res) {
-        try {
-            const { name } = req.body
+    async renameAuthor(name, email) {
             const edit = await Author.update({
                 author_name: name
             }, {
                 where: {
-                    email: req.user.email
+                    email: email
                 },
                 returning: true
             })
-            res.json({message: 'Successfully updated', subject: edit[1][0]})
-        } catch (e) {
-            console.log(e);
-        }
-
+            return edit[1][0]
     }
 }
 

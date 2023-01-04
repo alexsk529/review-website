@@ -2,15 +2,18 @@ import React from 'react';
 import axios from '../axios.js';
 import { TagCloud as Cloud } from 'react-tagcloud';
 import { fetchReviewsByTag } from '../redux/reducers/reviewsSlice.js';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const TagCloud = ({setSelectedIndex}) => {
-    const tagsOptions = React.useRef([])
+    const [tagsOptions, setTagsOptions] = React.useState([])
     const dispatch = useDispatch();
+    const reviewsStatus = useSelector(state => state.reviews.status);
 
     const getTags = async () => {
         const res = await axios.get('/tags-cloud');
-        tagsOptions.current = res.data;
+        setTagsOptions(res.data)
+        //tagsOptions.current = res.data;
     }
 
     const handleClickGetIds = async (tag) => {
@@ -19,8 +22,8 @@ const TagCloud = ({setSelectedIndex}) => {
     }
 
     React.useLayoutEffect(() => {
-        getTags()
-    }, [tagsOptions.current])
+        reviewsStatus === 'succeded' && getTags()
+    }, [reviewsStatus])
 
     const options = {
         luminosity: 'bright',
@@ -28,14 +31,20 @@ const TagCloud = ({setSelectedIndex}) => {
     }
 
     return (
-        <Cloud
+        <React.Fragment>
+        {
+            tagsOptions.length > 0 ?
+            <Cloud
             minSize={14}
             maxSize={35}
-            tags={tagsOptions.current}
+            tags={tagsOptions}
             colorOptions={options}
             style={{ cursor: 'pointer' }}
             onClick={tag => handleClickGetIds(tag)}
-        />
+            /> :
+            <CircularProgress color="secondary" /> 
+        }
+        </React.Fragment>
     );
 }
 

@@ -1,13 +1,9 @@
 import { Tag, ReviewTag, db } from '../db.js';
 
 class TagController {
-    async getAllTags(req, res) {
-        try {
+    async getAllTags() {
             const tags = await Tag.findAll({ raw: true });
-            res.send(tags)
-        } catch (e) {
-            console.log(e);
-        }
+            return (tags)
     }
 
     async addNewTags(tags, id) {
@@ -27,10 +23,7 @@ class TagController {
         })
     }
 
-    async getTagsForReview(req, res) {
-        try {
-            const reviewId = +req.params.id
-            console.log(reviewId);
+    async getTagsForReview(reviewId) {
             const tags = await ReviewTag.findAll({
                 attributes: ['tag_name'],
                 where: {
@@ -38,14 +31,10 @@ class TagController {
                 },
                 raw: true
             })
-            res.send(tags)
-        } catch (error) {
-            res.status(500).send(error.message)
-        }
+            return tags
     }
 
     async getTagsCloud(req, res) {
-        try {
             const tags = await ReviewTag.findAll({
                 attributes: [
                     ['tag_name','value'],
@@ -54,10 +43,7 @@ class TagController {
                 group: 'tag_name',
                 raw: true
             })
-            res.send(tags)
-        } catch (error) {
-            res.status(500).send(error.message)
-        }
+            return tags;
     }
 
     async getIdsByTag(tag) {
