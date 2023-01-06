@@ -22,6 +22,11 @@ export const fetchReviewsByTag = createAsyncThunk('reviews/fetchReviewsByTag', a
     return response.data
 })
 
+export const fetchReviewsBySearch = createAsyncThunk('reviews/fetchReviewsBySearch', async (query) => {
+    const response = await axios.get(`/search/${query}`)
+    return response.data
+})
+
 export const createReview = createAsyncThunk('reviews/createReview', async (review) => {
     const response = await axios.post('/api/review/create', { ...review }, { withCredentials: true });
     return response.data;
@@ -84,6 +89,19 @@ export const reviewsSlice = createSlice({
             .addCase(fetchReviewsByTag.fulfilled, (state, action) => {
                 state.status = 'succeded'
                 state.data=action.payload
+            })
+
+            .addCase(fetchReviewsBySearch.rejected, (state, action) => {
+                state.status = 'idle'
+                state.error = action.error.message 
+            })
+            .addCase(fetchReviewsBySearch.pending, (state) => {
+                state.status = 'loading'
+            })
+            .addCase(fetchReviewsBySearch.fulfilled, (state, action) => {
+                state.status = 'succeded'
+                state.data = action.payload
+                state.error = null
             })
 
             .addCase(createReview.pending, (state, action) => {

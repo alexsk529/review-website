@@ -2,10 +2,12 @@ import React from 'react';
 import axios from '../axios.js';
 import { TagCloud as Cloud } from 'react-tagcloud';
 import { fetchReviewsByTag } from '../redux/reducers/reviewsSlice.js';
+import { changeIndex } from '../redux/reducers/selectedSlice.js';
 import { useDispatch, useSelector } from 'react-redux';
 import CircularProgress from '@mui/material/CircularProgress';
 
-const TagCloud = ({setSelectedIndex}) => {
+const TagCloud = () => {
+    const selectedIndex = useSelector(state => state.selected)
     const [tagsOptions, setTagsOptions] = React.useState([])
     const dispatch = useDispatch();
     const reviewsStatus = useSelector(state => state.reviews.status);
@@ -17,7 +19,7 @@ const TagCloud = ({setSelectedIndex}) => {
 
     const handleClickGetIds = async (tag) => {
         dispatch(fetchReviewsByTag(tag));
-        setSelectedIndex(0);
+        dispatch(changeIndex(0))
     }
 
     React.useLayoutEffect(() => {

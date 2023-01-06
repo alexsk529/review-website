@@ -30,7 +30,8 @@ const MainPage = () => {
 
     const { t } = useTranslation();
 
-    const [selectedIndex, setSelectedIndex] = React.useState(1);
+    const selectedIndex = useSelector(state => state.selected)
+
     const options = [t('sorting.sort'), t('sorting.date'), t('sorting.grade')]
 
     React.useEffect(() => {
@@ -71,8 +72,6 @@ const MainPage = () => {
             <Box>
                 <Typography component="legend" sx={{ mb: 1 }}> {t('sorting.load')} </Typography>
                 <SortingMenu
-                    selectedIndex={selectedIndex}
-                    setSelectedIndex={setSelectedIndex}
                     options={options}
                 />
                 {
@@ -80,7 +79,7 @@ const MainPage = () => {
                         null :
                         <Container fixed align='center' sx={{ my: 2 }}>
                             <Paper sx={{ py: 2, px: 0.2}} elevation={8}>
-                                <TagCloud setSelectedIndex={setSelectedIndex} />
+                                <TagCloud />
                             </Paper>
                         </Container>
                 }

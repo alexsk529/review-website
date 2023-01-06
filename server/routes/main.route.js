@@ -32,12 +32,22 @@ mainRouter.get('/tags-cloud', async (req, res) =>{
 mainRouter.get('/findbytag/:tag', async (req, res) => {
     try {
         const tag = req.params.tag
-        const reviews = await ReviewController.getReviewsByTag(tag)
+        const ids = await TagController.getIdsByTag(tag);
+        const reviews = await ReviewController.getReviewsByIds(ids)
         res.send(reviews);
     } catch (error) {
         res.status(500).send(error.message)
     }
-    
+})
+mainRouter.get('/search/:query', async (req, res) => {
+    try {
+        const query = req.params.query;
+        const ids = await ReviewController.getIdsByQuery(query);
+        const reviews = await ReviewController.getReviewsByIds(ids);
+        res.send(reviews)
+    } catch (error) {
+        res.status(500).send(error.message)
+    }
 })
 
 export default mainRouter;

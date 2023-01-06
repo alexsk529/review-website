@@ -9,12 +9,18 @@ import Popper from '@mui/material/Popper';
 import MenuItem from '@mui/material/MenuItem';
 import MenuList from '@mui/material/MenuList';
 
-const SortingMenu = ({ options, selectedIndex, setSelectedIndex }) => {
+import { changeIndex } from '../redux/reducers/selectedSlice.js';
+import { useDispatch, useSelector } from 'react-redux';
+
+const SortingMenu = ({ options }) => {
     const [open, setOpen] = React.useState(false);
     const anchorRef = React.useRef(null);
+    
+    const dispatch = useDispatch();
+    const selectedIndex = useSelector(state => state.selected)
 
     const handleMenuItemClick = (event, index) => {
-        setSelectedIndex(index);
+        dispatch(changeIndex(index));
         setOpen(false)
     }
 

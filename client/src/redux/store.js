@@ -5,6 +5,7 @@ import worksReducer from './reducers/worksSlice.js';
 import reviewsReducer from './reducers/reviewsSlice.js';
 import scrollReducer from './reducers/scrollSlice.js';
 import modeReducer from './reducers/modeSlice.js';
+import selectedReducer from './reducers/selectedSlice.js';
 
 import { 
     persistStore, 
@@ -23,13 +24,14 @@ const rootReducer = combineReducers({
     works: worksReducer,
     reviews: reviewsReducer,
     scroll: scrollReducer,
-    mode: modeReducer
+    mode: modeReducer,
+    selected: selectedReducer
 });
 
 const configs = {
     key: 'root',
     storage,
-    blacklist: ['user', 'scroll', 'mode']
+    blacklist: ['user', 'scroll', 'mode', 'selected']
 }
 
 const persistedReducer = persistReducer(configs, rootReducer);

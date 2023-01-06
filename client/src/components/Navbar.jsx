@@ -3,6 +3,8 @@ import React from 'react';
 //redux
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchUser, selectUserEmail } from '../redux/reducers/userSlice.js';
+import { fetchReviewsBySearch } from '../redux/reducers/reviewsSlice.js';
+import { changeIndex } from '../redux/reducers/selectedSlice.js';
 
 //css-framework
 import AppBar from '@mui/material/AppBar';
@@ -23,6 +25,7 @@ import { Search, SearchIconWrapper, StyledInputBase } from './NavBarComponents.j
 import { useTranslation } from 'react-i18next';
 
 export default function Navbar() {
+    const [search, setSearch] = React.useState('')
     const dispatch = useDispatch();
     const userEmail = useSelector(selectUserEmail)
     const userStatus = useSelector(state => state.user.status)
@@ -43,6 +46,17 @@ export default function Navbar() {
         handlePopupOpen
     }
 
+    const handleChange = (e) => {
+        setSearch(e.target.value);
+    }
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        dispatch(fetchReviewsBySearch(search))
+        dispatch(changeIndex(0))
+        setSearch('')
+    }
+
     return (
         <Box sx={{ flexGrow: 1, mb: 3 }}>
             <AppBar position="static" color="">
@@ -56,10 +70,14 @@ export default function Navbar() {
                         <SearchIconWrapper>
                             <SearchIcon />
                         </SearchIconWrapper>
-                        <StyledInputBase
-                            placeholder={t('navbar.search')}
-                            inputProps={{ 'aria-label': 'search' }}
-                        />
+                        <form onSubmit={handleSubmit}>
+                            <StyledInputBase
+                                placeholder={t('navbar.search')}
+                                inputProps={{ 'aria-label': 'search' }}
+                                value={search}
+                                onChange={handleChange}
+                            />
+                        </form>
                     </Search>
                     <Box sx={{ flexGrow: 1 }} />
                     {
