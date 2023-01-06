@@ -78,7 +78,7 @@ const MainPage = () => {
                     reviewsStatus === 'loading' ?
                         null :
                         <Container fixed align='center' sx={{ my: 2 }}>
-                            <Paper sx={{ py: 2, px: 0.2}} elevation={8}>
+                            <Paper sx={{ py: 2, px: 0.2 }} elevation={8}>
                                 <TagCloud />
                             </Paper>
                         </Container>
@@ -87,7 +87,7 @@ const MainPage = () => {
             </Box>
             {
                 reviewsStatus === 'loading' ?
-                    <Container sx={{ mt: 6 }}><CircularProgress  /></Container> :
+                    <Container sx={{ mt: 6 }}><CircularProgress /></Container> :
                     <Container fixed sx={{ mt: 3 }}>
                         <Grid
                             container
@@ -104,6 +104,15 @@ const MainPage = () => {
                                         </Grid>
                                     )
                                 })
+                            }
+                            {
+                                scrollData.length === 0 ?
+                                    <Grid item sm={12} md={6} lg={4} align="center">
+                                        <Paper sx={{p: 3}} elevation={8}>
+                                            <Typography variant="body1" sx={{whiteSpace: 'pre-line'}}> {t('zerofound')} </Typography>
+                                        </Paper>
+                                    </Grid> :
+                                    null
                             }
                         </Grid>
                         {

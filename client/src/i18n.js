@@ -86,6 +86,25 @@ i18n
                         sort: 'Sort by:',
                         date: 'Latest Date',
                         grade: 'Best Grade'
+                    },
+                    zerofound: 'Unfortunately, nothing has been found... \nPlease, try again with another request.',
+                    admin: {
+                        email: 'Email',
+                        name: 'User`s name',
+                        reviewCount: 'Reviews written',
+                        likes: 'Likes received',
+                        registration: 'Registration date',
+                        lastLogin: 'Last Login date',
+                        role: 'Role',
+                        status: 'Status',
+                        open: 'Go to the user`s account',
+                        delete: 'Delete the user',
+                        block: 'Block the user',
+                        unblock: 'Unblock the user',
+                        admin: 'Assign administrator rights',
+                        user: 'Assign user rights',
+                        refresh: 'Refresh list of authors',
+                        tableTitle: 'The list of authors'
                     }
                 }
             },
@@ -167,6 +186,25 @@ i18n
                         sort: 'Сортировка по:',
                         date: 'Последней дате',
                         grade: 'Лучшей оценке'
+                    },
+                    zerofound: `К сожалению, ничего не удалось найти...\n Пожалуйста, измените свой запрос.`,
+                    admin: {
+                        email: 'Почта',
+                        name: 'Имя пользователя',
+                        reviewCount: 'Написано обзоров',
+                        likes: 'Получено лайков',
+                        registration: 'Дата регистрации',
+                        lastLogin: 'Дата последнего логина',
+                        role: 'Права',
+                        status: 'Статус',
+                        open: 'Перейти в кабинет пользователя',
+                        delete: 'Удалить пользователя',
+                        block: 'Заблокировать пользователя',
+                        unblock: 'Разблокировать пользователя',
+                        admin: 'Присвоить права администратора',
+                        user: 'Присвоить права пользователя',
+                        refresh: 'Обновить список авторов',
+                        tableTitle: 'Список пользователей'
                     }
                 }
             }

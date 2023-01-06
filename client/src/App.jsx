@@ -3,8 +3,8 @@ import React from 'react';
 import './App.css';
 import Navbar from './components/Navbar.jsx'
 import MainPage from './pages/MainPage.jsx';
-import PersonalAccount from './pages/PersonalAccount';
-import AdminPanel from './pages/AdminPanel';
+import PersonalAccount from './pages/PersonalAccount/PersonalAccount.jsx';
+import AdminPanel from './pages/AdminPanel/AdminPanel.jsx';
 import CreateReview from './pages/CreateReview/CreateReview.jsx';
 
 import { Routes, Route } from 'react-router-dom';
