@@ -17,6 +17,7 @@ import workRouter from "./routes/work.route.js";
 
 import mustAuthenticated from './middleware/authMiddleware.js';
 import mustBeAdmin from './middleware/adminMiddleware.js';
+import checkBlocked from './middleware/checkBlocked.js';
 
 import { sync, select } from './void.js'
 

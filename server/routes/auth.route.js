@@ -34,7 +34,7 @@ authRouter.get('/oauth2/redirect/google',
         successRedirect: redirectURL
     }),
     function (req, res) {
-        console.log('Uset: ', req.user);
+        console.log('User: ', req.user);
         res.send('Thank you for signing in')
     })
 
@@ -49,7 +49,7 @@ authRouter.get('/vkontakte/callback',
         successRedirect: redirectURL
     }),
     function (req, res) {
-        console.log('Uset: ', req.user);
+        console.log('User: ', req.user);
         res.send('Thank you for signing in')
     }
 )

@@ -53,7 +53,7 @@ export default new GoogleStrategy({
                         },
                         raw: true
                     })
-                    if (!user) return cb(null, false);
+                    if (!(user[0])) return cb(null, false);
                     return cb(null, user[0]);
 
                 } catch(err) {

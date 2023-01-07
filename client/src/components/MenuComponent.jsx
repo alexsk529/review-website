@@ -1,8 +1,10 @@
 import React from 'react';
 
+import MessageBlocked from './MessageBlocked.jsx';
+
 //redux
 import { useSelector, useDispatch } from 'react-redux';
-import { logout, selectUserRole } from '../redux/reducers/userSlice.js';
+import { logout, selectUserRole, selectUserStatus } from '../redux/reducers/userSlice.js';
 
 //css-framework
 import Tooltip from '@mui/material/Tooltip';
@@ -23,7 +25,10 @@ import { Link } from 'react-router-dom';
 
 const MenuComponent = ({ isMobile, popupProfile }) => {
     const dispatch = useDispatch();
-    const userRole = useSelector(selectUserRole)
+    const userRole = useSelector(selectUserRole);
+    const userStatus = useSelector(selectUserStatus);
+
+    const [blockedOpen, setBlockedOpen] = React.useState(false)
 
     const menuId = 'primary-search-account-menu';
 
@@ -91,16 +96,29 @@ const MenuComponent = ({ isMobile, popupProfile }) => {
             >
                 {
                     userRole === "admin" &&
-                    <Link to="/admin">
-                        <MenuItem onClick={handleMenuClose}>
-                            <AdminPanelSettingsIcon color="error" sx={{ mr: 1, height: 30, width: 30 }} />{t('navbar.admin')}
-                        </MenuItem>
-                    </Link>
+                    (
+
+                        userStatus === 'blocked' ?
+                            <MenuItem onClick={() => {handleMenuClose(); setBlockedOpen(true)}}>
+                                <AdminPanelSettingsIcon color="error" sx={{ mr: 1, height: 30, width: 30 }} />{t('navbar.admin')}
+                            </MenuItem> :
+                            <Link to="/admin">
+                                <MenuItem onClick={handleMenuClose}>
+                                    <AdminPanelSettingsIcon color="error" sx={{ mr: 1, height: 30, width: 30 }} />{t('navbar.admin')}
+                                </MenuItem>
+                            </Link>
+
+                    )
                 }
                 <MenuItem
                     onClick={() => {
-                        handlePopupOpen();
-                        handleMenuClose();
+                        if (userStatus === 'blocked') {
+                            handleMenuClose();
+                            setBlockedOpen(true)
+                        } else {
+                            handleMenuClose();
+                            handlePopupOpen();
+                        }
                     }}
                 >
                     <AssignmentIndIcon color="error" sx={{ mr: 1, height: 30, width: 30 }} /> {t('navbar.profile')}
@@ -115,11 +133,17 @@ const MenuComponent = ({ isMobile, popupProfile }) => {
                         </Link> :
                         null
                 }
-                <Link to="/account">
-                    <MenuItem onClick={handleMenuClose}>
-                        <ModeIcon sx={{ mr: 1, height: 30, width: 30 }} color="primary" /> {t('navbar.account')}
-                    </MenuItem>
-                </Link>
+                {
+                    userStatus === 'blocked' ?
+                        <MenuItem onClick={() => {handleMenuClose(); setBlockedOpen(true)}}>
+                            <ModeIcon sx={{ mr: 1, height: 30, width: 30 }} color="primary" /> {t('navbar.account')}
+                        </MenuItem> :
+                        <Link to="/account">
+                            <MenuItem onClick={handleMenuClose}>
+                                <ModeIcon sx={{ mr: 1, height: 30, width: 30 }} color="primary" /> {t('navbar.account')}
+                            </MenuItem>
+                        </Link>
+                }
                 {
                     isMobile ?
                         <MenuItem onClick={() => {
@@ -134,6 +158,10 @@ const MenuComponent = ({ isMobile, popupProfile }) => {
                         null
                 }
             </Menu>
+            <MessageBlocked
+                blockedOpen={blockedOpen}
+                setBlockedOpen={setBlockedOpen}
+            />
         </React.Fragment>
     );
 }

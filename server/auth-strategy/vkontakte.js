@@ -52,7 +52,7 @@ export default new VkStrategy({
                         },
                         raw: true
                     })
-                    if (!user) return cb(null, false);
+                    if (!(user[0])) return cb(null, false);
                     console.log(user[0]);
                     return cb(null, user[0])
                 } catch(e) {

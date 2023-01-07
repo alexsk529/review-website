@@ -66,3 +66,5 @@ export const selectUserEmail = state => state.user.user?.email;
 
 export const selectUserRole = state => state.user.user?.role;
 
+export const selectUserStatus = state => state.user.user?.status;
+

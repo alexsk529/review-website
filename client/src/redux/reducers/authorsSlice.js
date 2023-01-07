@@ -18,6 +18,16 @@ export const deleteAuthor = createAsyncThunk('authors/deleteAuthor', async (emai
     return response.data
 })
 
+export const blockAuthor = createAsyncThunk('authors/blockAuthor', async (emails) => {
+    const response = await axios.patch('/api/admin/block', {emails}, {withCredentials: true})
+    return response.data
+})
+
+export const unblockAuthor = createAsyncThunk('authors/unblockAuthor', async (emails) => {
+    const response = await axios.patch('/api/admin/unblock', {emails}, {withCredentials: true})
+    return response.data
+})
+
 export const authorsSlice = createSlice({
     name: 'authors',
     initialState,
@@ -52,6 +62,32 @@ export const authorsSlice = createSlice({
             .addCase(deleteAuthor.fulfilled, (state, action) =>{
                 state.toolbarStatus = 'idle'
                 state.data = state.data.filter(author => !action.payload.emails.includes(author.email));
+                state.error = null;
+            })
+
+            .addCase(blockAuthor.pending, (state) => {
+                state.toolbarStatus = 'blocking'
+            })
+            .addCase(blockAuthor.rejected, (state, action) => {
+                state.toolbarStatus = 'idle'
+                state.error = action.error.message
+            })
+            .addCase(blockAuthor.fulfilled, (state, action) => {
+                state.toolbarStatus = 'idle';
+                state.data = action.payload.authors;
+                state.error = null;
+            })
+
+            .addCase(unblockAuthor.pending, (state) => {
+                state.toolbarStatus = 'unblocking'
+            })
+            .addCase(unblockAuthor.rejected, (state, action) => {
+                state.toolbarStatus = 'idle'
+                state.error = action.error.message
+            })
+            .addCase(unblockAuthor.fulfilled, (state, action) => {
+                state.toolbarStatus = 'idle';
+                state.data = action.payload.authors;
                 state.error = null;
             })
     }

@@ -105,6 +105,12 @@ i18n
                         user: 'Assign user rights',
                         refresh: 'Refresh list of authors',
                         tableTitle: 'The list of authors'
+                    },
+                    block: {
+                        title: 'You have been blocked!',
+                        prohibited: 'You are not allowed to:',
+                        review: '- create and edit reviews;',
+                        like: '- like and evaluate reviews and pieces of arts.'
                     }
                 }
             },
@@ -205,6 +211,12 @@ i18n
                         user: 'Присвоить права пользователя',
                         refresh: 'Обновить список авторов',
                         tableTitle: 'Список пользователей'
+                    },
+                    block: {
+                        title: 'Вы были заблокированы!',
+                        prohibited: 'Вы не можете:',
+                        review: '- создавать и редактировать обзоры;',
+                        like: '- лайкать и оценивать обзоры и произведения.'
                     }
                 }
             }

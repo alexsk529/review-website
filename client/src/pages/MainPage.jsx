@@ -4,6 +4,7 @@ import ReviewExcerpt from '../components/ReviewExcerpt.jsx';
 import SortingMenu from '../components/SortingMenu.jsx';
 import ScrollTop from '../components/ScrollTop.jsx';
 import TagCloud from '../components/TagCloud.jsx';
+import MessageBlocked from '../components/MessageBlocked.jsx';
 
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
@@ -12,6 +13,7 @@ import Grid from '@mui/material/Grid';
 import CircularProgress from '@mui/material/CircularProgress';
 
 import { fetchReviews, fetchReviewsByBestGrade, selectAllReviews, statusRefreshed } from '../redux/reducers/reviewsSlice';
+import { selectUserStatus } from '../redux/reducers/userSlice.js';
 import { fetchWorks } from '../redux/reducers/worksSlice';
 import { loadMore, resetScroll, selectScroll, selectScrollStatus } from '../redux/reducers/scrollSlice.js';
 import { useDispatch, useSelector } from 'react-redux';
@@ -26,13 +28,20 @@ const MainPage = () => {
     const [readyToScroll, setReadyToScroll] = React.useState(false)
     const reviewsStatus = useSelector(state => state.reviews.status);
     const reviews = useSelector(selectAllReviews);
+    const userStatus = useSelector(selectUserStatus);
     const LIMIT = 3;
 
     const { t } = useTranslation();
 
+    const [blockedOpen, setBlockedOpen] = React.useState(false)
+
     const selectedIndex = useSelector(state => state.selected)
 
     const options = [t('sorting.sort'), t('sorting.date'), t('sorting.grade')]
+
+    React.useEffect(()=> {
+        userStatus === 'blocked' && setBlockedOpen(true)
+    }, [userStatus])
 
     React.useEffect(() => {
         dispatch(statusRefreshed())
@@ -122,6 +131,10 @@ const MainPage = () => {
                         }
                     </Container>
             }
+            <MessageBlocked
+                blockedOpen={blockedOpen}
+                setBlockedOpen={setBlockedOpen}
+            />
         </Box>
     );
 }
