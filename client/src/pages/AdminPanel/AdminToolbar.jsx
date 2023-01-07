@@ -9,17 +9,19 @@ import LockOpenIcon from '@mui/icons-material/LockOpen';
 import EngineeringIcon from '@mui/icons-material/Engineering';
 import PersonIcon from '@mui/icons-material/Person';
 
-import { fetchAuthors, selectAuthorsStatus, selectAuthors } from '../../redux/reducers/authorsSlice.js';
+import { deleteAuthor,  selectToolbarStatus } from '../../redux/reducers/authorsSlice.js';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { useTranslation } from 'react-i18next';
 
 
-const AdminToolbar = () => {
-    const authorsStatus = useSelector(selectAuthorsStatus);
+const AdminToolbar = ({selected}) => {
+    const toolbarStatus = useSelector(selectToolbarStatus);
     const { t } = useTranslation();
-
+    const dispatch = useDispatch();
+    
     const handleDelete = () => {
+        dispatch(deleteAuthor(selected))
     }
 
     const handleBlock = () => {
@@ -41,7 +43,7 @@ const AdminToolbar = () => {
     return ( 
         <React.Fragment>
                             {
-                                authorsStatus === 'deleting' ?
+                                toolbarStatus === 'deleting' ?
                                     <CircularProgress /> :
                                     <Tooltip title={t('admin.delete')} align='left' placement='left'>
                                         <IconButton
@@ -53,7 +55,7 @@ const AdminToolbar = () => {
                                     </Tooltip>
                             }
                             {
-                                authorsStatus === 'blocking' ?
+                                toolbarStatus === 'blocking' ?
                                     <CircularProgress /> :
                                     <Tooltip title={t('admin.block')} align='left' placement='top'>
                                         <IconButton
@@ -65,7 +67,7 @@ const AdminToolbar = () => {
                                     </Tooltip>
                             }
                             {
-                                authorsStatus === 'unblocking' ?
+                                toolbarStatus === 'unblocking' ?
                                     <CircularProgress /> :
                                     <Tooltip title={t('admin.unblock')} align='left' placement='top'>
                                         <IconButton
@@ -77,7 +79,7 @@ const AdminToolbar = () => {
                                     </Tooltip>
                             }
                             {
-                                authorsStatus === 'admining' ?
+                                toolbarStatus === 'admining' ?
                                     <CircularProgress /> :
                                     <Tooltip title={t('admin.admin')} align='left' placement='top'>
                                         <IconButton
@@ -89,7 +91,7 @@ const AdminToolbar = () => {
                                     </Tooltip>
                             }
                             {
-                                authorsStatus === 'usering' ?
+                                toolbarStatus === 'usering' ?
                                     <CircularProgress /> :
                                     <Tooltip title={t('admin.user')} align='left' placement='right'>
                                         <IconButton

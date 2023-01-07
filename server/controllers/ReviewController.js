@@ -170,6 +170,18 @@ class ReviewController {
 
         return ids
     }
+
+    async getIdsByEmail(email) {
+        let ids = await Review.findAll({
+            attributes: ['review_id'],
+            where: {
+                email: email
+            },
+            raw: true
+        })
+        ids = ids.map(id => id.review_id)
+        return ids;
+    }
 }
 
 export default new ReviewController();

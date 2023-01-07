@@ -18,7 +18,7 @@ export default new GoogleStrategy({
                 },
                 raw: true
             })
-            if (!cred) {
+            if (!(cred[0])) {
                 try {
                     await Author.create({
                         author_name: profile.displayName,

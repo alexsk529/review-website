@@ -17,7 +17,7 @@ export default new VkStrategy({
                 },
                 raw: true
             })
-            if (!cred) {
+            if (!(cred[0])) {
                 try{
                     await Author.create({
                         author_name: profile.displayName,

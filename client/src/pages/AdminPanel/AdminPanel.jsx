@@ -16,6 +16,7 @@ import { useAdminColumns } from './useAdminColumns.js';
 import AdminToolbar from './AdminToolbar.jsx';
 
 import { fetchAuthors, authorsStatusRefreshed, selectAuthorsStatus, selectAuthors } from '../../redux/reducers/authorsSlice.js';
+import { selectUserEmail } from '../../redux/reducers/userSlice.js';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { useTheme } from '@mui/material/styles';
@@ -32,6 +33,7 @@ const AdminPanel = () => {
 
     const authorsStatus = useSelector(selectAuthorsStatus);
     const authors = useSelector(selectAuthors);
+    const userEmail = useSelector(selectUserEmail);
 
     React.useEffect(()=> {
         dispatch(authorsStatusRefreshed())
@@ -55,6 +57,7 @@ const AdminPanel = () => {
     }));
 
     const handleRefresh = () => {
+        dispatch(fetchAuthors())
     }
 
     return (
@@ -63,7 +66,7 @@ const AdminPanel = () => {
                 {
                     authorsStatus === 'loading' ?
                         null :
-                        <AdminToolbar />
+                        <AdminToolbar selected={selected} setSelected={setSelected} />
                 }
                 <Typography variant='h1' sx={{ fontSize: 20, color: '#5c5c5c', width: '100%' }} align='center'>
                     {t('admin.tableTitle')}
@@ -89,6 +92,17 @@ const AdminPanel = () => {
                             rowHeight={40}
                             onSelectionModelChange={(newSelection) => {
                                 setSelected(newSelection)
+                            }}
+                            isRowSelectable={(params) => params.row.email !== userEmail}
+                            initialState={{
+                                sorting: {
+                                    sortModel: [
+                                        {
+                                            field: 'registration',
+                                            sort: 'asc'
+                                        }
+                                    ]
+                                }
                             }}
                         />
                 }

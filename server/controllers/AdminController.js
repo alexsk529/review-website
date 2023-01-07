@@ -1,4 +1,5 @@
 import { Author, Comments, db, Review, ReviewTag } from '../db.js';
+import ReviewController from './ReviewController.js';
 
 class AdminController {
     async getAuthors() {
@@ -18,14 +19,15 @@ class AdminController {
         return authors
     }
 
-    async deleteAuthor(req, res) {
-        const email = req.params.id.slice(1);
-        const reviewId = Review.findOne({ where: { email: email } });
-        await ReviewTag.destroy({ where: { review_id: reviewId } });
-        await Comments.destroy({ where: { review_id: reviewId } });
-        await Review.destroy({ where: { review_id: reviewId } });
-        await Author.destroy({ where: { review_id: reviewId } });
-        res.send('Author has been deleted')
+    async deleteAuthor(emails) {
+        const ids = await Promise.all(emails.map(email => ReviewController.getIdsByEmail(email)));
+        await Promise.all(
+            ids.map(reviews => {
+                if ( reviews.length !== 0 ) ReviewController.deleteReview(reviews)
+            })
+        )
+        await Promise.all(emails.map(email => Author.destroy({where: {email: email}}))) 
+        return 'The author and their reviews have been deleted'
     }
 }
 
