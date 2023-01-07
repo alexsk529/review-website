@@ -37,6 +37,7 @@ i18n
                     account: {
                         delete: 'Delete the selected review/reviews',
                         tableTitle: 'The list of your reviews',
+                        tableTitleAdmin: 'The list of reviews of the user:',
                         title: 'Review Title',
                         category: 'Category',
                         work: 'Name of the piece of art',
@@ -46,7 +47,8 @@ i18n
                         edit: 'Edit the review',
                         open: 'Open the review',
                         create: 'Create a new review',
-                        refresh: 'Refresh your reviews'
+                        refresh: 'Refresh your reviews',
+                        refreshAdmin: 'Refresh the reviews'
                     },
                     createReview: {
                         create: 'Creation the new review',
@@ -143,6 +145,7 @@ i18n
                     account: {
                         delete: 'Удалить выбранный обзор/обзоры',
                         tableTitle: 'Список ваших обзоров',
+                        tableTitleAdmin: 'Список обзоров пользователя:',
                         title: 'Название обзора',
                         category: 'Категория',
                         work: 'Название произведения',
@@ -152,7 +155,8 @@ i18n
                         edit: 'Ред. обзор',
                         open: 'Открыть обзор',
                         create: 'Создать новый обзор',
-                        refresh: 'Обновить ваши обзоры'
+                        refresh: 'Обновить ваши обзоры',
+                        refreshAdmin: 'Обновить обзоры'
                     },
                     createReview: {
                         create: 'Создание нового обзора',

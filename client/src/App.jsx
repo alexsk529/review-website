@@ -98,7 +98,8 @@ function App() {
                                 <Route exact path='/create-review' element={<CreateReview isEdit={false} />} />
                                 <Route exact path='/edit-review/:id' element={<CreateReview isEdit={true} />} />
                                 <Route exact path='/review/:id' />
-                                {userRole === 'admin' ? <Route exact path='/admin' element={<AdminPanel />} /> : null}
+                                { userRole === 'admin' ? <Route exact path='/admin' element={<AdminPanel />} /> : null }
+                                { userRole === 'admin' ? <Route exact path='/account-admin/:email' element={<PersonalAccount />}/> : null }
                             </Routes>
                         </React.Fragment> :
                         <React.Fragment>

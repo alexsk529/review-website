@@ -5,9 +5,12 @@ import ruLocale from 'date-fns/locale/ru';
 import enLocale from 'date-fns/locale/en-US';
 import { format, parseISO } from 'date-fns';
 
+import { useSelector } from 'react-redux';
+import { selectUserEmail, selectUserRole } from '../../redux/reducers/userSlice.js';
+
 import { GridActionsCellItem } from '@mui/x-data-grid';
 import Tooltip from '@mui/material/Tooltip';
-import SearchIcon from '@mui/icons-material/Search';
+import HomeWorkIcon from '@mui/icons-material/HomeWork';
 
 export const useAdminColumns = () => {
     const locale = {
@@ -15,6 +18,9 @@ export const useAdminColumns = () => {
         en: enLocale
     }
     const { t } = useTranslation();
+
+    const userEmail = useSelector(selectUserEmail);
+    const userRole = useSelector(selectUserRole);
 
     return [
         {
@@ -80,7 +86,13 @@ export const useAdminColumns = () => {
                 <GridActionsCellItem
                     color="primary"
                     label="Observe"
-                    icon={<Link ><Tooltip placement='right' title={t('admin.open')}><SearchIcon /></Tooltip></Link>}
+                    icon={
+                        userRole === 'admin' ?
+                        params.id === userEmail ?
+                        <Link to={`/account`} ><Tooltip placement='right' title={t('admin.open')}><HomeWorkIcon /></Tooltip></Link> :
+                        <Link to={`/account-admin/${params.id}`}><Tooltip placement='right' title={t('admin.open')}><HomeWorkIcon /></Tooltip></Link> 
+                        : null
+                    }
                 />,
             ]
         }

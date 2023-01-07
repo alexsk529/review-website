@@ -26,7 +26,7 @@ reviewRouter.post('/create', async (req, res) => {
 reviewRouter.patch('/update', async (req, res) => {
     try {
         const data = req.body
-        const { email } = req.user;
+        const { email } = req.body;
         const review = await ReviewController.updateReview(data, email)
         console.log(review);
         res.status(201).send({

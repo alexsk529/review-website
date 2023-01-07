@@ -1,5 +1,5 @@
 import React from 'react';
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 
 import { useDispatch } from 'react-redux';
 import { createReview, updateReview } from '../../redux/reducers/reviewsSlice.js';
@@ -21,7 +21,6 @@ import Edit from './Edit.jsx';
 const CreateReview = ({ isEdit }) => {
     //vars
     const dispatch = useDispatch();
-    const navigate = useNavigate();
     const id = (useParams())?.id;
 
     const [work, setWork] = React.useState(JSON.parse(localStorage.getItem('work')) || '');

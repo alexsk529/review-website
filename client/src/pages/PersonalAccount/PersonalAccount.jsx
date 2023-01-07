@@ -1,6 +1,7 @@
 import React from 'react';
 
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
+
 
 import './PersonalAccount.css';
 //mui
@@ -33,10 +34,12 @@ const PersonalAccount = () => {
     const dispatch = useDispatch();
 
     const theme = useTheme();
-
+    const emailRedux = useSelector(selectUserEmail);
+    const email = (useParams())?.email;
     const columns = useAccountColumns()
-
-    const userEmail = useSelector(selectUserEmail);
+    let userEmail;
+    if (email) userEmail = email;
+    else userEmail = emailRedux;
     const reviews = useSelector(state => selectReviewsByUserEmail(state, userEmail));
     const reviewsStatus = useSelector(state => state.reviews.status);
 
@@ -79,7 +82,7 @@ const PersonalAccount = () => {
                         </React.Fragment>
                 }
                 <Typography variant='h1' sx={{ fontSize: 20, color: '#5c5c5c', width: '100%' }} align='center'>
-                    {t('account.tableTitle')}
+                    {email ? `${t('account.tableTitleAdmin')} ${email}` : t('account.tableTitle')}
                 </Typography>
             </Box>
             <Box sx={{ width: '100%', mt: 2 }}>
@@ -112,7 +115,7 @@ const PersonalAccount = () => {
                 </Button>
             </Link>
             <Button variant='contained' color="warning" endIcon={<RefreshIcon />} sx={{ mt: 2 }} size='small' onClick={handleRefresh} >
-                {t('account.refresh')}
+                {email ? t('account.refreshAdmin') : t('account.refresh')}
             </Button>
         </Container>
     );
