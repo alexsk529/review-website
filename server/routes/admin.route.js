@@ -21,26 +21,25 @@ adminRouter.delete('/delete/', async (req, res) => {
         res.status(500).send(error.message)
     }
 });
-adminRouter.patch('/block/', async (req, res) => {
+adminRouter.patch('/change-status/', async (req, res) => {
     try {
-        const { emails } = req.body;
-        const authors = await AdminController.blockUnblockAuthor(emails, 'blocked')
+        const { emails, status } = req.body;
+        const authors = await AdminController.blockUnblockAuthor(emails, status)
 
-        res.send({msg: 'The user/users have been blocked', authors})
+        res.send({msg: 'The status has been changed', authors})
     } catch (error) {
         res.status(500).send(error.message)
     }
 });
-adminRouter.patch('/unblock/', async (req, res) => {
+adminRouter.patch('/change-role/', async (req,res) => {
     try {
-        const { emails } = req.body;
-        const authors = await AdminController.blockUnblockAuthor(emails, 'unblocked')
-
-        res.send({msg: 'The user/users have been unblocked', authors})
+        const { emails, role } = req.body;
+        const authors = await AdminController.changeRole(emails, role)
+        res.send({msg: 'The role has been changed', authors})
     } catch (error) {
         res.status(500).send(error.message)
     }
-});
+})
 
 
 export default adminRouter

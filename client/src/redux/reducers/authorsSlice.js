@@ -19,12 +19,22 @@ export const deleteAuthor = createAsyncThunk('authors/deleteAuthor', async (emai
 })
 
 export const blockAuthor = createAsyncThunk('authors/blockAuthor', async (emails) => {
-    const response = await axios.patch('/api/admin/block', {emails}, {withCredentials: true})
+    const response = await axios.patch('/api/admin/change-status', {emails, status: 'blocked'}, {withCredentials: true})
     return response.data
 })
 
 export const unblockAuthor = createAsyncThunk('authors/unblockAuthor', async (emails) => {
-    const response = await axios.patch('/api/admin/unblock', {emails}, {withCredentials: true})
+    const response = await axios.patch('/api/admin/change-status', {emails, status: 'unblocked'}, {withCredentials: true})
+    return response.data
+})
+
+export const makeAdmin = createAsyncThunk('authors/makeAdmin', async (emails) => {
+    const response = await axios.patch('/api/admin/change-role', {emails, role: 'admin'}, {withCredentials: true})
+    return response.data
+})
+
+export const makeUser = createAsyncThunk('authors/makeUser', async (emails) => {
+    const response = await axios.patch('/api/admin/change-role', {emails, role: 'user'}, {withCredentials: true})
     return response.data
 })
 
@@ -86,6 +96,32 @@ export const authorsSlice = createSlice({
                 state.error = action.error.message
             })
             .addCase(unblockAuthor.fulfilled, (state, action) => {
+                state.toolbarStatus = 'idle';
+                state.data = action.payload.authors;
+                state.error = null;
+            })
+
+            .addCase(makeAdmin.pending, (state) => {
+                state.toolbarStatus = 'admining'
+            })
+            .addCase(makeAdmin.rejected, (state, action) => {
+                state.toolbarStatus = 'idle'
+                state.error = action.error.message
+            })
+            .addCase(makeAdmin.fulfilled, (state, action) => {
+                state.toolbarStatus = 'idle';
+                state.data = action.payload.authors;
+                state.error = null;
+            })
+
+            .addCase(makeUser.pending, (state) => {
+                state.toolbarStatus = 'usering'
+            })
+            .addCase(makeUser.rejected, (state, action) => {
+                state.toolbarStatus = 'idle'
+                state.error = action.error.message
+            })
+            .addCase(makeUser.fulfilled, (state, action) => {
                 state.toolbarStatus = 'idle';
                 state.data = action.payload.authors;
                 state.error = null;

@@ -9,7 +9,7 @@ import LockOpenIcon from '@mui/icons-material/LockOpen';
 import EngineeringIcon from '@mui/icons-material/Engineering';
 import PersonIcon from '@mui/icons-material/Person';
 
-import { deleteAuthor, blockAuthor, unblockAuthor,  selectToolbarStatus } from '../../redux/reducers/authorsSlice.js';
+import { deleteAuthor, blockAuthor, unblockAuthor, makeAdmin, makeUser,  selectToolbarStatus } from '../../redux/reducers/authorsSlice.js';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { useTranslation } from 'react-i18next';
@@ -33,11 +33,11 @@ const AdminToolbar = ({selected}) => {
     }
 
     const handleAdmin = () => {
-
+        dispatch(makeAdmin(selected))
     }
 
     const handleUser = () => {
-
+        dispatch(makeUser(selected))
     }
 
     return ( 

@@ -50,6 +50,23 @@ class AdminController {
         const authors = await this.getAuthors();
         return authors;
     }
+
+    async changeRole(emails, role) {
+        await Promise.all(
+            emails.map(async email => {
+                await Author.update({
+                    role: role
+                }, {
+                    where: {
+                        email: email
+                    }
+                })
+            })
+        )
+
+        const authors = await this.getAuthors();
+        return authors;
+    }
 }
 
 export default new AdminController();
