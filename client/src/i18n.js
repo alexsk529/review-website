@@ -81,7 +81,8 @@ i18n
                     },
                     excerpt: {
                         seemore: 'See More',
-                        grade: 'Author`s grade'
+                        grade: 'Author`s grade',
+                        evaluate: 'Evaluate the piece of art'
                     },
                     sorting: {
                         load: 'Download reviews by:',
@@ -189,7 +190,8 @@ i18n
                     },
                     excerpt: {
                         seemore: 'Подробнее',
-                        grade: 'Оценка автора'
+                        grade: 'Оценка автора',
+                        evaluate: 'Оценить произведение'
                     },
                     sorting: {
                         load: 'Загрузить обзоры по:',

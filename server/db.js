@@ -121,19 +121,32 @@ const Work = db.define('work', {
         allowNull: false,
         primaryKey: true
     },
-    work_rate: {
-        type: DataTypes.FLOAT,
-        defaultValue: 0
-    },
-    rate_count: {
-        type: DataTypes.INTEGER,
-        defaultValue: 0
-    },
     category: {
         type: DataTypes.STRING(30),
         allowNull: false 
     }
 },{
+    timestamps: false
+})
+
+const Rate = db.define('rate', {
+    rate_id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+    },
+    email: {
+        type: DataTypes.STRING(50),
+        allowNull: false
+    },
+    work_name: {
+        type: DataTypes.STRING(50),
+        allowNull: false
+    },
+    rate: {
+        type: DataTypes.FLOAT,
+    }
+}, {
     timestamps: false
 })
 
@@ -168,17 +181,25 @@ const ReviewTag = db.define('review_tags',{
     timestamps: false
 })
 
-Author.hasMany(Comments, {foreignKey: 'email'});
-Comments.belongsTo(Author, {foreignKey: 'email'});
 
 Author.hasMany(Review, {foreignKey: 'email'});
 Review.belongsTo(Author, {foreignKey: 'email'});
 
+Work.hasMany(Review, {foreignKey: 'work_name'});
+Review.belongsTo(Work, {foreignKey: 'work_name'});
+
+Author.hasMany(Rate, {foreignKey: 'email'});
+Rate.belongsTo(Author, {foreignKey: 'email'});
+
+Work.hasMany(Rate, {foreignKey:'work_name'});
+Rate.belongsTo(Work, {foreignKey: 'work_name'});
+
+Author.hasMany(Comments, {foreignKey: 'email'});
+Comments.belongsTo(Author, {foreignKey: 'email'});
+
 Review.hasMany(Comments, {foreignKey: 'review_id'});
 Comments.belongsTo(Review, {foreignKey: 'review_id'});
 
-Work.hasMany(Review, {foreignKey: 'work_name'});
-Review.belongsTo(Work, {foreignKey: 'work_name'});
 
 Review.belongsToMany(Tag, {through: ReviewTag, foreignKey: 'review_id', onDelete: 'CASCADE'});
 Tag.belongsToMany(Review, {through: ReviewTag, foreignKey: 'tag_name', onDelete: 'CASCADE'});
@@ -186,6 +207,6 @@ Tag.belongsToMany(Review, {through: ReviewTag, foreignKey: 'tag_name', onDelete:
 
 
 
-export { db, Author, Comments, Review, Work, Tag, ReviewTag };
+export { db, Author, Comments, Review, Work, Tag, ReviewTag, Rate };
 
 

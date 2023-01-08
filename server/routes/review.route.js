@@ -28,7 +28,6 @@ reviewRouter.patch('/update', async (req, res) => {
         const data = req.body
         const { email } = req.body;
         const review = await ReviewController.updateReview(data, email)
-        console.log(review);
         res.status(201).send({
             message: 'The review has been created',
             review: {

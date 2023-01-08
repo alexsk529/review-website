@@ -22,6 +22,14 @@ workRouter.get('/get-tags', async (req, res) => {
         res.status(500).send(error.message)
     }
 })
-workRouter.patch('/rate', mustAuthenticated);
+workRouter.patch('/rate', mustAuthenticated, async (req, res) => {
+    try {
+        const {email, rate, work_name} = req.body;
+        const response = await WorkController.rateWork(work_name, email, rate);
+        res.send(response)
+    } catch (error) {
+        res.status(500).send(error.message)
+    }
+});
 
 export default workRouter

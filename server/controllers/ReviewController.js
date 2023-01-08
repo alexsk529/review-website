@@ -6,9 +6,21 @@ import { QueryTypes } from 'sequelize';
 
 class ReviewController {
     constructor() {
+        this.getReviews = this.getReviews.bind(this);
         this.createReview = this.createReview.bind(this);
         this.updateReview = this.updateReview.bind(this);
     }
+    async reviewBrushing(items) {
+        let reviews = items.map(item =>{
+            return ({ ...item, category: item.work.dataValues.category })
+        } )
+        reviews = reviews.map(item => {
+            delete item.work
+            return item
+        })
+        return reviews;
+    }
+
     async getReviews(bestGrade) {
         let order = ['created_at', 'DESC'];
         if (bestGrade) order = ['grade', 'DESC'];
@@ -16,11 +28,7 @@ class ReviewController {
             include: Work,
             order: [order],
         })).map(item => item.dataValues)
-        reviews = reviews.map(item => ({ ...item, category: item.work.dataValues.category }))
-        reviews = reviews.map(item => {
-            delete item.work
-            return item
-        })
+        reviews = this.reviewBrushing(reviews)
         return reviews
     }
 
@@ -48,7 +56,7 @@ class ReviewController {
 
         const workName = (await WorkController.findOrCreateWork(work, category)).work_name
 
-        const review = (await Review.create({
+        let review = (await Review.create({
             work_name: workName,
             email: email,
             review_title: title,
@@ -61,7 +69,6 @@ class ReviewController {
         const id = review.review_id;
 
         TagController.addNewTags(tags, id)
-
         return review;
     }
 
@@ -91,7 +98,7 @@ class ReviewController {
             }
         })
 
-        const review = (await Review.update({
+        let review = (await Review.update({
             work_name: workName,
             email: email,
             review_title: title,
@@ -111,7 +118,6 @@ class ReviewController {
                 review_id: id
             }
         })
-
         TagController.addNewTags(tags, id)
         return review;
     }
@@ -142,11 +148,7 @@ class ReviewController {
         let reviews = (await Review.findAll({
             include: Work,
         })).map(item => item.dataValues)
-        reviews = reviews.map(item => ({ ...item, category: item.work.dataValues.category }))
-        reviews = reviews.map(item => {
-            delete item.work
-            return item
-        })
+        reviews = this.reviewBrushing(reviews)
         const result = newIds.map(id => {
             return reviews.find(review => review.review_id == id)
         })

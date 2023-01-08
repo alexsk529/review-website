@@ -68,3 +68,11 @@ export const selectUserRole = state => state.user.user?.role;
 
 export const selectUserStatus = state => state.user.user?.status;
 
+export const selectUserRateOnWork = (state, work_name) => {
+    let instance;
+    if (state.user.user) {
+    instance = state.user.user?.rates.find(rate => rate.work_name === work_name);
+    }
+    return instance?.rate
+}
+

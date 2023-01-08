@@ -1,6 +1,6 @@
 import React from 'react';
 
-import ReviewExcerpt from '../components/ReviewExcerpt.jsx';
+import ReviewExcerpt from '../components/ReviewExcerpt/ReviewExcerpt.jsx';
 import SortingMenu from '../components/SortingMenu.jsx';
 import ScrollTop from '../components/ScrollTop.jsx';
 import TagCloud from '../components/TagCloud.jsx';
@@ -13,15 +13,13 @@ import Grid from '@mui/material/Grid';
 import CircularProgress from '@mui/material/CircularProgress';
 
 import { fetchReviews, fetchReviewsByBestGrade, selectAllReviews, statusRefreshed } from '../redux/reducers/reviewsSlice';
-import { selectUserStatus } from '../redux/reducers/userSlice.js';
+import { selectUserStatus, fetchUser } from '../redux/reducers/userSlice.js';
 import { fetchWorks } from '../redux/reducers/worksSlice';
 import { loadMore, resetScroll, selectScroll, selectScrollStatus } from '../redux/reducers/scrollSlice.js';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { useTranslation } from 'react-i18next';
 import { Typography } from '@mui/material';
-
-import { BACKGROUND } from '../Const.js';
 
 const MainPage = () => {
     const dispatch = useDispatch();
@@ -51,6 +49,7 @@ const MainPage = () => {
     React.useEffect(() => {
         if (reviewsStatus === 'idle' && selectedIndex === 1) dispatch(fetchReviews())
         if (reviewsStatus === 'idle' && selectedIndex === 2) dispatch(fetchReviewsByBestGrade())
+        reviewsStatus === 'idle' && dispatch(fetchUser())
         reviewsStatus === 'idle' && dispatch(fetchWorks())
         if (reviewsStatus === 'succeded' && readyToScroll === true) {
             dispatch(resetScroll());

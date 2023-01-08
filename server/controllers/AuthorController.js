@@ -1,12 +1,19 @@
-import { Author } from '../db.js'
+import { Author, Rate, db } from '../db.js'
 
 class AuthorController {
     async getAuthor(email) {
-            const user = await Author.findOne({
+            const user = (await Author.findOne({
+                include: {
+                    model: Rate,
+                    attributes: [
+                        'work_name', 'rate'
+                    ]
+                },
                 where: {
                     email: email
                 }
-            })
+            })).dataValues
+            console.log(user);
             return user
     }
 

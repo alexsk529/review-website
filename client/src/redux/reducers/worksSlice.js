@@ -1,9 +1,14 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, current } from '@reduxjs/toolkit';
 import axios from '../../axios.js'
 
 export const fetchWorks = createAsyncThunk('works/fetchWorks', async () => {
-    const works = await axios.get('/api/work/get-works', {withCredentials: true})
+    const works = await axios.get('/api/work/get-works', { withCredentials: true })
     return works.data
+})
+
+export const hitRate = createAsyncThunk('works/hitRate', async (obj) => {
+    const response = await axios.patch('/api/work/rate', { ...obj }, { withCredentials: true });
+    return response.data;
 })
 
 const worksSlice = createSlice({
@@ -13,6 +18,15 @@ const worksSlice = createSlice({
     extraReducers(builder) {
         builder.addCase(fetchWorks.fulfilled, (state, action) => {
             return action.payload
+        })
+        builder.addCase(hitRate.fulfilled, (state, action) => {
+            const { work_name } = action.payload;
+            let existingWork = state.find(work => work.work_name === work_name);
+            if (existingWork) existingWork = { ...action.payload };
+            return state.map(work => {
+                if (work.work_name === work_name) return existingWork
+                else return work
+            })
         })
     }
 })
@@ -34,7 +48,7 @@ export const selectCategories = state => {
         result = result.map(item => item[0].toUpperCase() + item.slice(1))
         return result
     }
-    return unique(groups) 
+    return unique(groups)
 }
 
-export const selectWorkByName = (state, workName) => state.works.find(work => work.work_name === workName )
+export const selectWorkByName = (state, workName) => state.works.find(work => work.work_name === workName)
