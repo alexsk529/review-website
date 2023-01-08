@@ -15,6 +15,7 @@ import GlobalStyles from '@mui/material/GlobalStyles';
 import CssBaseLine from '@mui/material/CssBaseline';
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import ReviewMain from './pages/ReviewMain/ReviewMain';
 
 function App() {
     const userEmail = useSelector(selectUserEmail);
@@ -97,13 +98,16 @@ function App() {
                                 <Route exact path='/account' element={<PersonalAccount />} />
                                 <Route exact path='/create-review' element={<CreateReview isEdit={false} />} />
                                 <Route exact path='/edit-review/:id' element={<CreateReview isEdit={true} />} />
-                                <Route exact path='/review/:id' />
-                                { userRole === 'admin' ? <Route exact path='/admin' element={<AdminPanel />} /> : null }
-                                { userRole === 'admin' ? <Route exact path='/account-admin/:email' element={<PersonalAccount />}/> : null }
+                                <Route exact path='/review/:id' element={< ReviewMain />} />
+                                {userRole === 'admin' ? <Route exact path='/admin' element={<AdminPanel />} /> : null}
+                                {userRole === 'admin' ? <Route exact path='/account-admin/:email' element={<PersonalAccount />} /> : null}
                             </Routes>
                         </React.Fragment> :
                         <React.Fragment>
-                            <MainPage />
+                            <Routes>
+                                <Route exact path='/' element={<MainPage />} />
+                                <Route exact path='/review/:id' element={< ReviewMain />} />
+                            </Routes>
                         </React.Fragment>
                 }
             </div>

@@ -1,6 +1,7 @@
 import React from 'react';
 
 import axios from '../../axios.js'
+import useTags from '../../hooks/useTags.js';
 
 import Container from '@mui/material/Container';
 import Autocomplete from '@mui/material/Autocomplete';
@@ -23,13 +24,8 @@ const TagsGrade = (props) => {
     const { t } = useTranslation();
 
     const tagsLabel = t('createReview.tags');
-    const [tagsOptions, setTagsOptions] = React.useState([])
-
-    const getTags = async () => {
-        const res = await axios.get('/api/work/get-tags')
-        const tags = res.data.map(item => item.tag_name)
-        setTagsOptions(tags)
-    }
+    
+    const [tagsOptions, setTagsOptions, getTags] = useTags()
 
     React.useLayoutEffect(() => {
         getTags();

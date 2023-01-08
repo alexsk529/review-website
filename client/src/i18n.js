@@ -114,6 +114,13 @@ i18n
                         prohibited: 'You are not allowed to:',
                         review: '- create and edit reviews;',
                         like: '- like and evaluate reviews and pieces of arts.'
+                    },
+                    review: {
+                        author: "Review's author:",
+                        date: 'Review creation date:',
+                        work: 'The piece of art: ',
+                        rate: "The average user's rate:",
+                        like: 'Like the review'
                     }
                 }
             },
@@ -223,6 +230,13 @@ i18n
                         prohibited: 'Вы не можете:',
                         review: '- создавать и редактировать обзоры;',
                         like: '- лайкать и оценивать обзоры и произведения.'
+                    },
+                    review: {
+                        author: 'Автор обзора:',
+                        date: 'Дата написания обзора:',
+                        work: 'Произведение: ',
+                        rate: 'Средняя оценка пользователей:',
+                        like: 'Поставить лайк'
                     }
                 }
             }

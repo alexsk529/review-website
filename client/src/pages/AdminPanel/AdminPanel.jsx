@@ -1,7 +1,5 @@
 import React from 'react';
 
-import { Link } from 'react-router-dom';
-
 //mui
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -12,7 +10,7 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 
 import { DataGrid } from '@mui/x-data-grid';
 
-import { useAdminColumns } from './useAdminColumns.js';
+import { useAdminColumns } from '../../hooks/useAdminColumns.js';
 import AdminToolbar from './AdminToolbar.jsx';
 
 import { fetchAuthors, authorsStatusRefreshed, selectAuthorsStatus, selectAuthors } from '../../redux/reducers/authorsSlice.js';
