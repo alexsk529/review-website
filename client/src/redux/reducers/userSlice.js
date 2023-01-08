@@ -76,3 +76,10 @@ export const selectUserRateOnWork = (state, work_name) => {
     return instance?.rate
 }
 
+export const selectUserLikesOnReview = (state, review_id) => {
+    let instance;
+    if (state.user.user) {
+        instance = state.user.user?.likes.find(like => like.review_id == review_id);
+    }
+    return instance
+}

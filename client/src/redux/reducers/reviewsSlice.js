@@ -4,6 +4,7 @@ import axios from '../../axios.js'
 const initialState = {
     data: [],
     status: 'idle',
+    like: 'idle',
     error: null
 }
 
@@ -38,8 +39,13 @@ export const updateReview = createAsyncThunk('reviews/updateReview', async (revi
 });
 
 export const deleteReviews = createAsyncThunk('reviews/deleteReviews', async (reviewsId) => {
-    const response = await axios.delete(`/api/review/delete`, {data: reviewsId, withCredentials: true});
+    const response = await axios.delete(`/api/review/delete`, { data: reviewsId, withCredentials: true });
     return response.data
+})
+
+export const hitLike = createAsyncThunk('reviews/hitLike', async (obj) => {
+    const response = await axios.patch('api/review/like', { ...obj }, { withCredentials: true });
+    return response.data;
 })
 
 export const reviewsSlice = createSlice({
@@ -88,12 +94,12 @@ export const reviewsSlice = createSlice({
             })
             .addCase(fetchReviewsByTag.fulfilled, (state, action) => {
                 state.status = 'succeded'
-                state.data=action.payload
+                state.data = action.payload
             })
 
             .addCase(fetchReviewsBySearch.rejected, (state, action) => {
                 state.status = 'idle'
-                state.error = action.error.message 
+                state.error = action.error.message
             })
             .addCase(fetchReviewsBySearch.pending, (state) => {
                 state.status = 'loading'
@@ -125,9 +131,9 @@ export const reviewsSlice = createSlice({
             })
             .addCase(updateReview.fulfilled, (state, action) => {
                 state.status = 'idle'
-                const {id} = action.payload.review
+                const { id } = action.payload.review
                 let existingPost = state.data.find(review => review.review_id === id);
-                if (existingPost) existingPost = {...action.payload.review}
+                if (existingPost) existingPost = { ...existingPost, ...action.payload.review }
             })
 
             .addCase(deleteReviews.pending, (state) => {
@@ -140,6 +146,18 @@ export const reviewsSlice = createSlice({
             .addCase(deleteReviews.fulfilled, (state, action) => {
                 state.status = 'idle';
                 state.data = state.data.filter(review => !action.payload.selected.includes(review.review_id));
+            })
+
+            .addCase(hitLike.pending, (state) => {
+                state.like = 'loading'
+            })
+            .addCase(hitLike.fulfilled, (state, action) => {
+                state.like = 'idle'
+                const { recipient, result } = action.payload
+                state.data = state.data.map(review => {
+                    if (review.email == recipient) review.author_likes = result;
+                    return review;
+                });
             })
     }
 })
@@ -156,4 +174,9 @@ export const selectReviewsByUserEmail = (state, authorEmail) => {
     const reviews = state.reviews.data.filter(review => review.email === authorEmail)
     reviews.sort((a, b) => a.review_id - b.review_id)
     return reviews
+}
+
+export const selectAuthorLikes = (state, authorEmail) => {
+    const result = state.reviews.data.find(review => review.email === authorEmail);
+    return result.author_likes
 }

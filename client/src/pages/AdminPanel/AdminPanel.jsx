@@ -49,7 +49,6 @@ const AdminPanel = () => {
         email: row.email,
         name: row.author_name,
         reviewCount: row.reviewCount,
-        likes: row.likes,
         registration: row.created_at,
         lastLogin: row.last_login,
         role: row.role,

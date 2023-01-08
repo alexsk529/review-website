@@ -1,4 +1,4 @@
-import { ReviewTag, Review, Comments, Work, db } from '../db.js';
+import { ReviewTag, Review, Comments, Work, db, Like} from '../db.js';
 import { cloudinary } from '../cloudinary.js';
 import TagController from './TagController.js';
 import WorkController from './WorkController.js';
@@ -7,8 +7,10 @@ import { QueryTypes } from 'sequelize';
 class ReviewController {
     constructor() {
         this.getReviews = this.getReviews.bind(this);
+        this.getReviewsByIds = this.getReviewsByIds.bind(this);
         this.createReview = this.createReview.bind(this);
         this.updateReview = this.updateReview.bind(this);
+        this.getLikes = this.getLikes.bind(this);
     }
     async reviewBrushing(items) {
         let reviews = items.map(item =>{
@@ -21,6 +23,26 @@ class ReviewController {
         return reviews;
     }
 
+    async getLikesToAuthor (recipient) {
+        const like = await Like.findAll({
+            attributes: [
+                [ db.fn('COUNT', db.col('email')), 'likes' ]
+            ],
+            where:{
+                recipient: recipient
+            }
+        });
+        return like;
+    }
+
+    async getLikes (items) {
+        let likes = items.map(async item => {
+            return await this.getLikesToAuthor(item.email)
+        });
+        likes = await Promise.all(likes);
+        return likes;
+    }
+
     async getReviews(bestGrade) {
         let order = ['created_at', 'DESC'];
         if (bestGrade) order = ['grade', 'DESC'];
@@ -28,6 +50,11 @@ class ReviewController {
             include: Work,
             order: [order],
         })).map(item => item.dataValues)
+        const likes = await this.getLikes(reviews);
+        for (let i = 0; i < reviews.length; i++) {
+            let author_likes = Number(likes[i][0].dataValues.likes);
+            reviews[i].author_likes = author_likes;
+        }
         reviews = this.reviewBrushing(reviews)
         return reviews
     }
@@ -145,10 +172,7 @@ class ReviewController {
 
     async getReviewsByIds(ids) {
         const newIds = ids.map(id => id.review_id)
-        let reviews = (await Review.findAll({
-            include: Work,
-        })).map(item => item.dataValues)
-        reviews = this.reviewBrushing(reviews)
+        const reviews = await this.getReviews()
         const result = newIds.map(id => {
             return reviews.find(review => review.review_id == id)
         })
@@ -183,6 +207,23 @@ class ReviewController {
         })
         ids = ids.map(id => id.review_id)
         return ids;
+    }
+
+    async hitLike(email, review_id, recipient) {
+        let like = await Like.findOne({
+            where:{
+                email: email,
+                review_id: review_id
+            }
+        })
+        if (like) like.destroy();
+        else like = await Like.create({
+            email: email,
+            review_id: review_id,
+            recipient: recipient
+        })
+        const result = (await this.getLikesToAuthor(recipient))[0]
+        return {result: Number(result.dataValues.likes), recipient};
     }
 }
 

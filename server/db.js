@@ -1,6 +1,6 @@
 import {Sequelize, DataTypes} from 'sequelize';
 
-const db = new Sequelize('postgres://pyzrbyqn:800XiuGqvT5ifiXRGFHV4c9WN2VBwGDn@dumbo.db.elephantsql.com/pyzrbyqn', {
+export const db = new Sequelize('postgres://pyzrbyqn:800XiuGqvT5ifiXRGFHV4c9WN2VBwGDn@dumbo.db.elephantsql.com/pyzrbyqn', {
     dialect: 'postgres',
     define: {
         freezeTableName: true,
@@ -8,7 +8,7 @@ const db = new Sequelize('postgres://pyzrbyqn:800XiuGqvT5ifiXRGFHV4c9WN2VBwGDn@d
     }
 })
 
-const Author = db.define('author', {
+export const Author = db.define('author', {
     email: {
         type: DataTypes.STRING(50),
         primaryKey: true
@@ -16,10 +16,6 @@ const Author = db.define('author', {
     author_name: {
         type: DataTypes.STRING(50),
         allowNull: false
-    },
-    likes: {
-        type: DataTypes.INTEGER,
-        defaultValue: 0
     },
     created_at: {
         type: DataTypes.DATE,
@@ -55,7 +51,7 @@ const Author = db.define('author', {
     timestamps: false
 })
 
-const Comments = db.define('comments', {
+export const Comments = db.define('comments', {
     comment_id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -79,7 +75,7 @@ const Comments = db.define('comments', {
     timestamps: false 
 })
 
-const Review = db.define('review', {
+export const Review = db.define('review', {
     work_name: {
         type: DataTypes.STRING(50),
         allowNull: false
@@ -115,7 +111,7 @@ const Review = db.define('review', {
     timestamps: false
 })
 
-const Work = db.define('work', {
+export const Work = db.define('work', {
     work_name: {
         type: DataTypes.STRING(50),
         allowNull: false,
@@ -129,7 +125,7 @@ const Work = db.define('work', {
     timestamps: false
 })
 
-const Rate = db.define('rate', {
+export const Rate = db.define('rate', {
     rate_id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -150,7 +146,7 @@ const Rate = db.define('rate', {
     timestamps: false
 })
 
-const Tag = db.define('tag', {
+export const Tag = db.define('tag', {
     tag_name: {
         type: DataTypes.STRING(30),
         allowNull: false,
@@ -160,7 +156,7 @@ const Tag = db.define('tag', {
     timestamps: false
 })
 
-const ReviewTag = db.define('review_tags',{
+export const ReviewTag = db.define('review_tags',{
     review_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -176,6 +172,28 @@ const ReviewTag = db.define('review_tags',{
             model: Tag,
             key: 'tag_name'
         }
+    }
+}, {
+    timestamps: false
+})
+
+export const Like = db.define('like', {
+    rate_id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+    },
+    email: {
+        type: DataTypes.STRING(50),
+        allowNull: false,
+    },
+    review_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+    }, 
+    recipient: {
+        type: DataTypes.STRING(50),
+        allowNull: false
     }
 }, {
     timestamps: false
@@ -200,6 +218,8 @@ Comments.belongsTo(Author, {foreignKey: 'email'});
 Review.hasMany(Comments, {foreignKey: 'review_id'});
 Comments.belongsTo(Review, {foreignKey: 'review_id'});
 
+Author.hasMany(Like, {as: 'likes', foreignKey: 'email'});
+Like.belongsTo(Author, {foreignKey: 'email'});
 
 Review.belongsToMany(Tag, {through: ReviewTag, foreignKey: 'review_id', onDelete: 'CASCADE'});
 Tag.belongsToMany(Review, {through: ReviewTag, foreignKey: 'tag_name', onDelete: 'CASCADE'});
@@ -207,6 +227,5 @@ Tag.belongsToMany(Review, {through: ReviewTag, foreignKey: 'tag_name', onDelete:
 
 
 
-export { db, Author, Comments, Review, Work, Tag, ReviewTag, Rate };
 
 

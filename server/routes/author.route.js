@@ -9,7 +9,8 @@ authorRouter.get('/get-author', async (req, res) => {
         const user = await AuthorController.getAuthor(email);
         res.send(user)
     } catch (error) {
-        res.send(error.message)
+        console.log(error);
+        res.status(500).send(error.message)
     }
 })
 authorRouter.patch('/rename-author', async (req, res) => {
@@ -23,7 +24,5 @@ authorRouter.patch('/rename-author', async (req, res) => {
         res.send(error.message)
     }
 })
-authorRouter.get('/reviews/:id');
-authorRouter.patch('/rate');
 
 export default authorRouter

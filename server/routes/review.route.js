@@ -5,7 +5,6 @@ import TagController from '../controllers/TagController.js';
 
 const reviewRouter = Router();
 
-reviewRouter.get('/get/:id');
 reviewRouter.post('/create', async (req, res) => {
     try {
         const data = req.body
@@ -56,6 +55,17 @@ reviewRouter.get('/tags/:id', async (req, res) => {
         const tags = await TagController.getTagsForReview(reviewId)
         res.send(tags)
     } catch (error) {
+        res.status(500).send(error.message)
+    }
+})
+
+reviewRouter.patch('/like', async (req,res) => {
+    try {
+        const {email, review_id, recipient} = req.body;
+        const response = await ReviewController.hitLike(email, review_id, recipient);
+        res.send(response);
+    } catch (error) {
+        console.log(error);
         res.status(500).send(error.message)
     }
 })

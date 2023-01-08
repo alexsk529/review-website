@@ -9,7 +9,8 @@ mainRouter.get('/', async (req,res) => {
         const reviews = await ReviewController.getReviews(false);
         res.send({ isAuthenticated: req.isAuthenticated(), data: reviews })
     } catch (error) {
-        res.status(500).send('Something went wrong')
+        console.log(error);
+        res.status(500).send(error.message)
     }
 });
 mainRouter.get('/best-grade', async (req, res) => {
@@ -17,7 +18,7 @@ mainRouter.get('/best-grade', async (req, res) => {
         const reviews = await ReviewController.getReviews(true);
         res.send({ isAuthenticated: req.isAuthenticated(), data: reviews })
     } catch (error) {
-        res.status(500).send('Something went wrong')
+        res.status(500).send(error.message)
     }
 });
 mainRouter.get('/tags-cloud', async (req, res) =>{

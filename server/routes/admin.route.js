@@ -8,7 +8,8 @@ adminRouter.get('/', async (req, res) => {
         const authors = await AdminController.getAuthors();
         res.send(authors)     
     } catch (error) {
-        res.status(500).send(error.message)
+        console.log(error);
+        res.status(500).send(error.message);
     }
 });
 adminRouter.delete('/delete/', async (req, res) => {

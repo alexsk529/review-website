@@ -43,13 +43,6 @@ export const useAdminColumns = () => {
             align: 'center'
         },
         {
-            field: "likes",
-            headerName: t('admin.likes'),
-            flex: 1,
-            headerAlign: 'center',
-            align: 'center'
-        },
-        {
             field: "registration",
             headerName: t('admin.registration'),
             headerAlign: 'center',

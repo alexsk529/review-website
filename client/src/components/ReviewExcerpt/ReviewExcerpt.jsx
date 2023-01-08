@@ -13,10 +13,12 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import Button from '@mui/material/Button';
 import Rating from '@mui/material/Rating';
+import Badge from '@mui/material/Badge';
 
 import { useSelector, useDispatch } from 'react-redux';
+import { hitLike, selectAuthorLikes } from '../../redux/reducers/reviewsSlice';
 import { selectWorkByName, fetchWorks, hitRate } from '../../redux/reducers/worksSlice';
-import { selectUserEmail, selectUserStatus, selectUserRateOnWork } from '../../redux/reducers/userSlice';
+import { selectUserEmail, selectUserStatus, selectUserRateOnWork, selectUserLikesOnReview } from '../../redux/reducers/userSlice';
 
 import { useTranslation } from 'react-i18next';
 import { format, parseISO } from 'date-fns';
@@ -29,13 +31,17 @@ import { AdvancedImage } from '@cloudinary/react';
 import { useTheme } from '@mui/material/styles';
 
 import { LIKE, DARKGRAY } from '../../Const';
+import { CircularProgress } from '@mui/material';
 
 const ReviewExcerpt = (props) => {
-    const { image_url, created_at, email, grade } = props.review;
+    const { image_url, created_at, email, grade, review_id } = props.review;
     let { content, review_title, work_name, category } = props.review
     const workInstance = useSelector(state => selectWorkByName(state, work_name))
     const userEmail = useSelector(selectUserEmail);
     const userStatus = useSelector(selectUserStatus);
+    console.log(email);
+    const authorLikes = useSelector((state) => selectAuthorLikes(state, email));
+    const likeStatus = useSelector((state) => state.reviews.like);
 
     if (review_title[review_title.length - 1] !== '.') review_title += '.'
     work_name = work_name[0].toUpperCase() + work_name.slice(1)
@@ -46,15 +52,15 @@ const ReviewExcerpt = (props) => {
     if (content[content.length - 1] !== '.') content = content + '...';
 
     const dispatch = useDispatch();
-    const [liked, setLiked] = React.useState(false)
-    const [userRate, setUserRate] = React.useState( useSelector(state => selectUserRateOnWork(state,work_name.toLowerCase())) || 0);
+    const [liked, setLiked] = React.useState(Boolean(useSelector(state => selectUserLikesOnReview(state, review_id))) || false)
+    const [userRate, setUserRate] = React.useState(useSelector(state => selectUserRateOnWork(state, work_name.toLowerCase())) || 0);
     const { rate } = workInstance
     const theme = useTheme();
-    
+
     React.useEffect(() => {
         !workInstance && dispatch(fetchWorks())
     }, [])
-    
+
 
     const locale = {
         ru: ruLocale,
@@ -71,7 +77,12 @@ const ReviewExcerpt = (props) => {
 
     const handleRate = (e) => {
         setUserRate(Number(e.target.value))
-        dispatch(hitRate({rate: Number(e.target.value), email: userEmail, work_name: work_name.toLowerCase()}));
+        dispatch(hitRate({ rate: Number(e.target.value), email: userEmail, work_name: work_name.toLowerCase() }));
+    }
+
+    const handleLike = (e) => {
+        setLiked(prev => !prev);
+        dispatch(hitLike({ email: userEmail, review_id, recipient: email }))
     }
 
     return (
@@ -98,8 +109,15 @@ const ReviewExcerpt = (props) => {
                                     size="small"
                                 />
                             </Box>
-                            <Box sx={{ display: 'flex', justifyContent: 'space-between', fontSize: 13 }}>
-                                <Typography sx={{ fontSize: 'inherit' }}>{email}</Typography>
+                            <Box sx={{ display: 'flex', fontSize: 13 }}>
+                                <Typography sx={{ fontSize: 'inherit', mr: 1 }} color="primary" >{email}</Typography>
+                                <Badge badgeContent={authorLikes} color="primary" >
+                                    {
+                                        likeStatus === 'loading' ?
+                                            <CircularProgress color="primary" size={20}/> :
+                                            <FavoriteIcon sx={{ color: LIKE }} size="small" />
+                                    }
+                                </Badge>
                             </Box>
                         </React.Fragment>
                     }
@@ -145,8 +163,8 @@ const ReviewExcerpt = (props) => {
                         }}
                     >
                         {
-                            userEmail && userStatus !=='blocked' ?
-                                <IconButton onClick={(e) => setLiked(prev => !prev)} >
+                            userEmail && userStatus !== 'blocked' ?
+                                <IconButton onClick={handleLike} >
                                     {
                                         liked ?
                                             <FavoriteIcon sx={{ color: LIKE }} /> :
@@ -171,7 +189,7 @@ const ReviewExcerpt = (props) => {
                     <Button size="small" >{t('excerpt.seemore')}</Button>
                 </Box>
                 {
-                    userEmail && userStatus !=='blocked' ?
+                    userEmail && userStatus !== 'blocked' ?
                         <Box sx={{ display: 'flex', justifyContent: 'space-between', gap: 2 }}>
                             <Typography component="legend" >{t('excerpt.evaluate')}</Typography>
                             <Rating

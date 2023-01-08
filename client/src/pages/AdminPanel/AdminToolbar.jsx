@@ -11,6 +11,9 @@ import PersonIcon from '@mui/icons-material/Person';
 
 import { deleteAuthor, blockAuthor, unblockAuthor, makeAdmin, makeUser,  selectToolbarStatus } from '../../redux/reducers/authorsSlice.js';
 import { useSelector, useDispatch } from 'react-redux';
+import { fetchReviews } from '../../redux/reducers/reviewsSlice.js';
+import { fetchWorks } from '../../redux/reducers/worksSlice.js';
+import { resetScroll } from '../../redux/reducers/scrollSlice.js';
 
 import { useTranslation } from 'react-i18next';
 
@@ -22,6 +25,9 @@ const AdminToolbar = ({selected}) => {
     
     const handleDelete = () => {
         dispatch(deleteAuthor(selected))
+        dispatch(fetchReviews());
+        dispatch(fetchWorks());
+        dispatch(resetScroll());
     }
 
     const handleBlock = () => {

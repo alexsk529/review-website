@@ -13,8 +13,8 @@ const BoxLogin = ({ xs, md, alignItems, loginExists }) => {
     const [isLoadingVK, setIsLoadingVK] = React.useState(false)
 
     const handleAuthClick = (provider) => () => {
-        window.open(`https://review-website.onrender.com/api/auth/${provider}`, '_self')
         //window.open(`${process.env.REACT_APP_URL || 'http://localhost:5000'}/api/auth/${provider}`, '_self')
+        window.open(`https://review-website.onrender.com/api/auth/${provider}`, '_self')
         provider === 'google' ? setIsLoadingGoogle(true) : setIsLoadingVK(true)
     }
 
