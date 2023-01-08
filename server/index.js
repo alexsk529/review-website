@@ -65,7 +65,7 @@ app.use(logger('dev'));
 
 app.use('/', mainRouter);
 app.use('/api/auth', authRouter);
-app.use('/api/review', mustAuthenticated, reviewRouter);
+app.use('/api/review', reviewRouter);
 app.use('/api/comment', commentRouter);
 app.use('/api/admin',mustAuthenticated, mustBeAdmin, adminRouter);
 app.use('/api/author', mustAuthenticated, authorRouter);

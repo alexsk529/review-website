@@ -120,7 +120,8 @@ i18n
                         date: 'Review creation date:',
                         work: 'The piece of art: ',
                         rate: "The average user's rate:",
-                        like: 'Like the review'
+                        like: 'Like the review',
+                        tags: 'Tags:'
                     }
                 }
             },
@@ -236,7 +237,8 @@ i18n
                         date: 'Дата написания обзора:',
                         work: 'Произведение: ',
                         rate: 'Средняя оценка пользователей:',
-                        like: 'Поставить лайк'
+                        like: 'Поставить лайк',
+                        tags: 'Тэги:'
                     }
                 }
             }

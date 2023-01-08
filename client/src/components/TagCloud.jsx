@@ -6,7 +6,9 @@ import { changeIndex } from '../redux/reducers/selectedSlice.js';
 import { useDispatch, useSelector } from 'react-redux';
 import CircularProgress from '@mui/material/CircularProgress';
 
-const TagCloud = () => {
+import useTags from '../hooks/useTags.js';
+
+const TagCloud = ({disabled, tags}) => {
     const selectedIndex = useSelector(state => state.selected)
     const [tagsOptions, setTagsOptions] = React.useState([])
     const dispatch = useDispatch();
@@ -14,7 +16,6 @@ const TagCloud = () => {
     const getTags = async () => {
         const res = await axios.get('/tags-cloud');
         setTagsOptions(res.data)
-        //tagsOptions.current = res.data;
     }
 
     const handleClickGetIds = async (tag) => {
@@ -41,7 +42,10 @@ const TagCloud = () => {
             tags={tagsOptions}
             colorOptions={options}
             style={{ cursor: 'pointer' }}
-            onClick={tag => handleClickGetIds(tag)}
+            onClick={tag => {
+                if (disabled) return;
+                handleClickGetIds(tag)
+            }}
             /> :
             <CircularProgress color="secondary" /> 
         }

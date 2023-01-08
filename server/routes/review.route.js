@@ -2,10 +2,11 @@ import {Router} from 'express';
 
 import ReviewController from "../controllers/ReviewController.js";
 import TagController from '../controllers/TagController.js';
+import mustAuthenticated from '../middleware/authMiddleware.js';
 
 const reviewRouter = Router();
 
-reviewRouter.post('/create', async (req, res) => {
+reviewRouter.post('/create', mustAuthenticated, async (req, res) => {
     try {
         const data = req.body
         const { email } = req.user;
@@ -22,7 +23,7 @@ reviewRouter.post('/create', async (req, res) => {
     }
 });
 
-reviewRouter.patch('/update', async (req, res) => {
+reviewRouter.patch('/update', mustAuthenticated, async (req, res) => {
     try {
         const data = req.body
         const { email } = req.body;
@@ -39,7 +40,7 @@ reviewRouter.patch('/update', async (req, res) => {
     }
 });
 
-reviewRouter.delete('/delete', async (req, res) => {
+reviewRouter.delete('/delete', mustAuthenticated, async (req, res) => {
     try {
         const selected = req.body
         const msg = await ReviewController.deleteReview(selected)
@@ -59,7 +60,7 @@ reviewRouter.get('/tags/:id', async (req, res) => {
     }
 })
 
-reviewRouter.patch('/like', async (req,res) => {
+reviewRouter.patch('/like', mustAuthenticated, async (req,res) => {
     try {
         const {email, review_id, recipient} = req.body;
         const response = await ReviewController.hitLike(email, review_id, recipient);
