@@ -121,7 +121,10 @@ i18n
                         work: 'The piece of art: ',
                         rate: "The average user's rate:",
                         like: 'Like the review',
-                        tags: 'Tags:'
+                        tags: 'Tags:',
+                        commentsTitle: 'Comments:',
+                        typeComment: 'Type in your comment...',
+                        commentsBlank: 'There seem to be no comments... Would you like to be the first?'
                     }
                 }
             },
@@ -238,7 +241,10 @@ i18n
                         work: 'Произведение: ',
                         rate: 'Средняя оценка пользователей:',
                         like: 'Поставить лайк',
-                        tags: 'Тэги:'
+                        tags: 'Тэги:',
+                        commentsTitle: 'Комментарии:',
+                        typeComment: 'Напишите свой комментарий...',
+                        commentsBlank: 'Похоже никто не оставил комментарий. Будете первым?'
                     }
                 }
             }

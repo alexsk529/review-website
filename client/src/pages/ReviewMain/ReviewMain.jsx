@@ -7,11 +7,11 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { selectReviewById } from '../../redux/reducers/reviewsSlice';
 import { selectWorkByName } from '../../redux/reducers/worksSlice';
-import { selectUserEmail, selectUserStatus } from '../../redux/reducers/userSlice';
 
 import BackHome from '../../components/BackHome';
 import Header from './Header.jsx';
 import Content from './Content.jsx';
+import Comments from './Comments.jsx';
 
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
@@ -21,8 +21,6 @@ import Chip from '@mui/material/Chip';
 import { useTheme } from '@mui/material/styles';
 
 import { useTranslation } from 'react-i18next';
-
-import useTags from '../../hooks/useTags';
 
 const ReviewMain = () => {
     const dispatch = useDispatch();
@@ -40,12 +38,10 @@ const ReviewMain = () => {
         rate
     } = useSelector(state => selectWorkByName(state, work_name))
 
-    const userEmail = useSelector(selectUserEmail);
-    const userStatus = useSelector(selectUserStatus);
+    
 
     const [tags, setTags] = React.useState([])
     const [tagsLoading, setTagsLoading] = React.useState(true)
-    console.log(tags);
     React.useLayoutEffect(() => {
         (async () => {
             let tags = (await axios.get(`/api/review/tags/${review_id}`, { withCredentials: true })).data
@@ -67,7 +63,7 @@ const ReviewMain = () => {
                 tagsLoading === true ?
                     null :
                     <Paper elevation={8} sx={{ width: '100%', mb: 5, p: 3 }}>
-                        <Typography component='legend'>{t('review.tags')}</Typography>
+                        <Typography variant='subtitle1' sx={{ textDecoration: 'underline', fontSize: { sm: 18, xs: 14 } }}>{t('review.tags')}</Typography>
                         {tags.map(tag => {
                             return (
                                 <Chip
@@ -79,6 +75,7 @@ const ReviewMain = () => {
                         )}
                     </Paper>
             }
+            <Comments id={review_id} />
         </Container >
     );
 }
