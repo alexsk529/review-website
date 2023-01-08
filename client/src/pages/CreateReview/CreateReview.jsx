@@ -1,9 +1,10 @@
 import React from 'react';
 import { useParams } from 'react-router-dom'
 
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { createReview, updateReview } from '../../redux/reducers/reviewsSlice.js';
 import { fetchWorks } from '../../redux/reducers/worksSlice.js';
+import { selectUserEmail } from '../../redux/reducers/userSlice.js';
 
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
@@ -22,6 +23,10 @@ const CreateReview = ({ isEdit }) => {
     //vars
     const dispatch = useDispatch();
     const id = (useParams())?.id;
+    let email = (useParams())?.email;
+    const userEmail = useSelector(selectUserEmail);
+    if (!email) email = userEmail;
+    console.log(email);
 
     const [work, setWork] = React.useState(JSON.parse(localStorage.getItem('work')) || '');
     const [category, setCategory] = React.useState(JSON.parse(localStorage.getItem('category')) || '')
@@ -92,7 +97,8 @@ const CreateReview = ({ isEdit }) => {
             content,
             image,
             grade,
-            tags
+            tags, 
+            email
         };
         if (isEdit) review.id = id;
         let response;

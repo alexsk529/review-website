@@ -40,6 +40,9 @@ const MessageBlocked = ({ blockedOpen, setBlockedOpen }) => {
                         <ListItem>
                             {t('block.like')}
                         </ListItem>
+                        <ListItem>
+                            {t('block.comment')}
+                        </ListItem>
                     </List>
                 </DialogContent>
             </Dialog>

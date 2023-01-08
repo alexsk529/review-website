@@ -9,7 +9,7 @@ const reviewRouter = Router();
 reviewRouter.post('/create', mustAuthenticated, async (req, res) => {
     try {
         const data = req.body
-        const { email } = req.user;
+        const { email } = req.body;
         const review = await ReviewController.createReview(data, email)
         res.status(201).send({
             message: 'The review has been created',

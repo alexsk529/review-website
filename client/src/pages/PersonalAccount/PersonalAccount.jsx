@@ -43,7 +43,7 @@ const PersonalAccount = () => {
     const reviews = useSelector(state => selectReviewsByUserEmail(state, userEmail));
     const reviewsStatus = useSelector(state => state.reviews.status);
 
-        const rows = reviews.map((row) => ({
+    const rows = reviews.map((row) => ({
         id: row.review_id,
         title: row.review_title,
         category: row.category,
@@ -109,11 +109,19 @@ const PersonalAccount = () => {
                         />
                 }
             </Box>
-            <Link to='/create-review'>
-                <Button variant='contained' color="success" endIcon={<EditIcon />} sx={{ mt: 2, mr: 2 }} size='small' >
-                    {t('account.create')}
-                </Button>
-            </Link>
+            {
+                email ?
+                    <Link to={`/create-review/email/${email}`} >
+                        <Button variant='contained' color="success" endIcon={<EditIcon />} sx={{ mt: 2, mr: 2 }} size='small' >
+                            {t('account.create')}
+                        </Button>
+                    </Link> :
+                    <Link to={`/create-review`} >
+                        <Button variant='contained' color="success" endIcon={<EditIcon />} sx={{ mt: 2, mr: 2 }} size='small' >
+                            {t('account.create')}
+                        </Button>
+                    </Link>
+            }
             <Button variant='contained' color="warning" endIcon={<RefreshIcon />} sx={{ mt: 2 }} size='small' onClick={handleRefresh} >
                 {email ? t('account.refreshAdmin') : t('account.refresh')}
             </Button>

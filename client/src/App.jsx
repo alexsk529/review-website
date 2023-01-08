@@ -96,6 +96,7 @@ function App() {
                             <Routes>
                                 <Route exact path='/' element={<MainPage />} />
                                 <Route exact path='/account' element={<PersonalAccount />} />
+                                <Route exact path='/create-review/email/:email' element={<CreateReview isEdit={false} />} />
                                 <Route exact path='/create-review' element={<CreateReview isEdit={false} />} />
                                 <Route exact path='/edit-review/:id' element={<CreateReview isEdit={true} />} />
                                 <Route exact path='/review/:id' element={< ReviewMain />} />

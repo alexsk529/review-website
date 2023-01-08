@@ -40,8 +40,10 @@ const ReviewExcerpt = (props) => {
     const workInstance = useSelector(state => selectWorkByName(state, work_name))
     const userEmail = useSelector(selectUserEmail);
     const userStatus = useSelector(selectUserStatus);
-
-    const authorLikes = useSelector((state) => selectAuthorLikes(state, email));
+    // const authorLikes = 0
+    const likes = useSelector((state) => selectAuthorLikes(state, email));
+    let authorLikes = 0;
+    if (email) authorLikes = Number(likes)
     const likeStatus = useSelector((state) => state.reviews.like);
 
     if (review_title[review_title.length - 1] !== '.') review_title += '.'

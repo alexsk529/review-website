@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { useNavigate } from 'react-router-dom';
+
 //redux
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchUser, selectUserEmail } from '../redux/reducers/userSlice.js';
@@ -25,6 +27,7 @@ import { Search, SearchIconWrapper, StyledInputBase } from './NavBarComponents.j
 import { useTranslation } from 'react-i18next';
 
 export default function Navbar() {
+    const navigate = useNavigate();
     const [search, setSearch] = React.useState('')
     const dispatch = useDispatch();
     const userEmail = useSelector(selectUserEmail)
@@ -52,6 +55,7 @@ export default function Navbar() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        if(window.location.pathname !== '/') navigate('/')
         dispatch(fetchReviewsBySearch(search))
         dispatch(changeIndex(0))
         setSearch('')

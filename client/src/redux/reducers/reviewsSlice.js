@@ -95,6 +95,7 @@ export const reviewsSlice = createSlice({
             .addCase(fetchReviewsByTag.fulfilled, (state, action) => {
                 state.status = 'succeded'
                 state.data = action.payload
+                state.error = null
             })
 
             .addCase(fetchReviewsBySearch.rejected, (state, action) => {
@@ -178,5 +179,6 @@ export const selectReviewsByUserEmail = (state, authorEmail) => {
 
 export const selectAuthorLikes = (state, authorEmail) => {
     const result = state.reviews.data.find(review => review.email === authorEmail);
-    return result.author_likes
+    if (!result) return 0;
+    return result.author_likes;
 }

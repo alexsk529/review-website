@@ -113,7 +113,8 @@ i18n
                         title: 'You have been blocked!',
                         prohibited: 'You are not allowed to:',
                         review: '- create and edit reviews;',
-                        like: '- like and evaluate reviews and pieces of arts.'
+                        like: '- like and evaluate reviews and pieces of arts;',
+                        comment: '- comment reviews.'
                     },
                     review: {
                         author: "Review's author:",
@@ -233,7 +234,8 @@ i18n
                         title: 'Вы были заблокированы!',
                         prohibited: 'Вы не можете:',
                         review: '- создавать и редактировать обзоры;',
-                        like: '- лайкать и оценивать обзоры и произведения.'
+                        like: '- лайкать и оценивать обзоры и произведения;',
+                        comment: '- комментировать обзоры.'
                     },
                     review: {
                         author: 'Автор обзора:',
