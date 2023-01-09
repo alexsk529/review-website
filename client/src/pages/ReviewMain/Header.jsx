@@ -36,9 +36,8 @@ const Header = () => {
         grade,
         created_at,
         author_likes,
-        category
     } = review;
-    let { work_name } = review;
+    let { work_name, category } = review;
 
     const locale = {
         ru: ruLocale,
@@ -49,7 +48,8 @@ const Header = () => {
     const date = format(parseISO(created_at), 'HH:mm, dd/MMM/yy', { locale: locale[t('locale')] });
     
     
-    work_name = work_name[0].toUpperCase() + work_name.slice(1)
+    work_name = work_name[0].toUpperCase() + work_name.slice(1);
+    category = category[0].toUpperCase() + category.slice(1);
     return ( 
         <React.Fragment>
             <Typography variant='h1' sx={{ fontSize: { sm: 36, xs: 22 } }}>

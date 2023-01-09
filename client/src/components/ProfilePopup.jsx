@@ -68,7 +68,6 @@ const ProfilePopup = ({popupProfile}) => {
     }
 
     const onSubmit = async (data) => {
-        console.log(data);
         try {
             dispatch(updateUser(data.name))
             handleCancelEdit()

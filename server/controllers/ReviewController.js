@@ -216,13 +216,14 @@ class ReviewController {
                 review_id: review_id
             }
         })
-        if (like) like.destroy();
+        if (like) await like.destroy();
         else like = await Like.create({
             email: email,
             review_id: review_id,
             recipient: recipient
         })
-        const result = (await this.getLikesToAuthor(recipient))[0]
+        let result = await this.getLikesToAuthor(recipient);
+        result = result[0];
         return {result: Number(result.dataValues.likes), recipient};
     }
 }

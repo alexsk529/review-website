@@ -20,7 +20,6 @@
     "axios": "^1.2.0",
     "i18next": "^22.4.6",
     "i18next-browser-languagedetector": "^7.0.1",
-    "lexical": "^0.7.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.41.0",

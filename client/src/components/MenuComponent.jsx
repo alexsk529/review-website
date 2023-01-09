@@ -6,6 +6,8 @@ import MessageBlocked from './MessageBlocked.jsx';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout, selectUserRole, selectUserStatus } from '../redux/reducers/userSlice.js';
 
+import { useNavigate } from 'react-router-dom';
+
 //css-framework
 import Tooltip from '@mui/material/Tooltip';
 import Divider from '@mui/material/Divider';
@@ -24,6 +26,7 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
 const MenuComponent = ({ isMobile, popupProfile }) => {
+    const navigate = useNavigate();
     const dispatch = useDispatch();
     const userRole = useSelector(selectUserRole);
     const userStatus = useSelector(selectUserStatus);
@@ -52,7 +55,10 @@ const MenuComponent = ({ isMobile, popupProfile }) => {
                     null :
                     <React.Fragment>
                         <Tooltip title={t('navbar.logout')}>
-                            <IconButton onClick={() => dispatch(logout())} color='error'>
+                            <IconButton onClick={() =>{
+                                dispatch(logout());
+                                navigate('/');
+                            }} color='error'>
                                 <LogoutIcon />
                             </IconButton>
                         </Tooltip>

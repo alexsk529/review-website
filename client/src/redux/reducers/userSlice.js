@@ -52,8 +52,10 @@ const userSlice = createSlice({
                 localStorage.removeItem('user')
             })
             .addCase(updateUser.fulfilled, (state, action) => {
-                state.user = action.payload;
-                localStorage.setItem('user', JSON.stringify(action.payload))
+                state.user = {...state.user, ...action.payload};
+                console.log(state.user);
+                console.log(action.payload);
+                localStorage.setItem('user', JSON.stringify({...state.user, ...action.payload}))
             })
     }
 })

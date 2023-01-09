@@ -25,8 +25,12 @@ const CreateReview = ({ isEdit }) => {
     const id = (useParams())?.id;
     let email = (useParams())?.email;
     const userEmail = useSelector(selectUserEmail);
-    if (!email) email = userEmail;
-    console.log(email);
+    let emailSelector = useSelector (state => state.reviews.data.find(item => {
+        if (item.review_id === Number(id)) return item;
+    }))
+    if (emailSelector) emailSelector = emailSelector.email
+    if (!email && !isEdit) email = userEmail;
+    if (!email && isEdit) email = emailSelector;
 
     const [work, setWork] = React.useState(JSON.parse(localStorage.getItem('work')) || '');
     const [category, setCategory] = React.useState(JSON.parse(localStorage.getItem('category')) || '')
